@@ -19,40 +19,26 @@ namespace CarStore.DAL.Services
         }
         public void AddPerson(Person person)
         {
-
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertPerson.ToString());
-            SqlParameter FirstName = new SqlParameter
+            Dictionary<string, object> d = new Dictionary<string, object>();
+            foreach (var prop in person.GetType().GetProperties())
             {
-                ParameterName = "@"+DBColumns.FirstName,
-                Value = person.FirstName
-            };
-            command.Parameters.Add(FirstName);
-
-            SqlParameter LastName = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.LastName,
-                Value = person.LastName
-            };
-            command.Parameters.Add(LastName);
-
-            SqlParameter Phone = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.Phone,
-                Value = person.Phone
-            };
-            command.Parameters.Add(Phone);
+                d.Add(prop.Name.ToString(), prop.GetValue(person));
+            }
+            
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertPerson.ToString(),d);
+            
             command.ExecuteScalar();
-
          }
 
         public void DeletePerson(int id)
         {
-            
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString());
+            Dictionary<string, object> d = new Dictionary<string, object>() { { "id", id } };
+
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),d);
 
             SqlParameter idParam = new SqlParameter
             {
-                ParameterName = "@"+DBColumns.id,
+                ParameterName = DBColumns.id,
                 Value = id
             };
             command.Parameters.Add(idParam);
@@ -61,13 +47,9 @@ namespace CarStore.DAL.Services
 
         public Person GetPerson(int id)
         {
-           using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetPerson.ToString());
-            SqlParameter idParam = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.id,
-                Value = id
-            };
-            command.Parameters.Add(idParam);
+            Dictionary<string, object> d = new Dictionary<string, object>() { { "id", id } };
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetPerson.ToString(),d);             
+            
             var reader = command.ExecuteReader();
             Person pers = new Person();
             while (reader.Read())
@@ -83,34 +65,14 @@ namespace CarStore.DAL.Services
 
         public void UpdatePerson(Person person)
         {
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString());
-            SqlParameter idParam = new SqlParameter
+            Dictionary<string, object> d = new Dictionary<string, object>();
+            foreach (var prop in person.GetType().GetProperties())
             {
-                ParameterName = "@"+DBColumns.id,
-                Value = person.PersonID
-            };
-            command.Parameters.Add(idParam);
+                d.Add(prop.Name.ToString(), prop.GetValue(person));
+            }
 
-            SqlParameter FirstName = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.FirstName,
-                Value = person.FirstName
-            };
-            command.Parameters.Add(FirstName);
-
-            SqlParameter LastName = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.LastName,
-                Value = person.LastName
-            };
-            command.Parameters.Add(LastName);
-
-            SqlParameter Phone = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.Phone,
-                Value = person.Phone
-            };
-            command.Parameters.Add(Phone);
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),d);
+            
             command.ExecuteScalar();
         }
     }

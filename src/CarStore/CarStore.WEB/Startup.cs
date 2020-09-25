@@ -33,9 +33,9 @@ namespace CarStore.WEB
             services.AddSingleton(new SqlCommandBuild(connection));
 
             services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IPersonService, PersonService>();
-           
-            services.AddControllers();                       
+            services.AddScoped<IPersonService, PersonService>();           
+            services.AddControllers();
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +52,8 @@ namespace CarStore.WEB
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(builder => builder.AllowAnyOrigin());
 
             app.UseEndpoints(endpoints =>
             {

@@ -19,49 +19,28 @@ namespace CarStore.DAL.Services
 
         public void AddOrder(Order order)
         {
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertOrder.ToString());
-            SqlParameter orderDate = new SqlParameter
+            Dictionary<string, object> d = new Dictionary<string, object>();
+            foreach (var prop in order.GetType().GetProperties())
             {
-                ParameterName = "@"+DBColumns.OrderDate,
-                Value = order.OrderDate
-            };
-            command.Parameters.Add(orderDate);
-
-            SqlParameter CarID = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.OrderDate,
-                Value = order.CarID
-            };
-            command.Parameters.Add(CarID);
-
-            SqlParameter PersonID = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.OrderDate,
-                Value = order.PersonId
-            };
-            command.Parameters.Add(PersonID);
+                d.Add(prop.Name.ToString(), prop.GetValue(order));
+            }
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertOrder.ToString(),d);
+           
             command.ExecuteScalar();
         }
         public void DeleteOrder(int id)
         {
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeleteOrder.ToString());
-            SqlParameter idParam = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.id,
-                Value = id
-            };
-            command.Parameters.Add(idParam);
+            Dictionary<string, object> d = new Dictionary<string, object>() { { "id", id } };
+
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeleteOrder.ToString(),d);
+
             command.ExecuteScalar();
         }
         public Order GetOrder(int id)
         {
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrder.ToString());
-            SqlParameter idParam = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.id,
-                Value = id
-            };
-            command.Parameters.Add(idParam);
+            Dictionary<string, object> d = new Dictionary<string, object>() { { "id", id } };
+
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrder.ToString(),d);
             var reader = command.ExecuteReader();
             Order ord = new Order();
             while (reader.Read())
@@ -76,34 +55,14 @@ namespace CarStore.DAL.Services
 
         public void UpdateOrder(Order order)
         {
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_UpdateOrder.ToString());
-            SqlParameter idParam = new SqlParameter
+            Dictionary<string, object> d = new Dictionary<string, object>();
+            foreach (var prop in order.GetType().GetProperties())
             {
-                ParameterName = "@"+DBColumns.id,
-                Value = order.OrderID
-            };
-            command.Parameters.Add(idParam);
+                d.Add(prop.Name.ToString(), prop.GetValue(order));
+            }
 
-            SqlParameter OrderDate = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.OrderDate,
-                Value = order.OrderDate
-            };
-            command.Parameters.Add(OrderDate);
-
-            SqlParameter CarID = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.CarID,
-                Value = order.CarID
-            };
-            command.Parameters.Add(CarID);
-
-            SqlParameter PersonID = new SqlParameter
-            {
-                ParameterName = "@"+DBColumns.PersonID,
-                Value = order.PersonId
-            };
-            command.Parameters.Add(PersonID);
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_UpdateOrder.ToString(),d);
+            
             command.ExecuteScalar();
         }
     }
