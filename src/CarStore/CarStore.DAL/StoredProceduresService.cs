@@ -5,17 +5,17 @@ using System.Data;
 using System.Data.SqlClient;
 using CarStore.DAL.Enums;
 using System.Text;
+using CarStore.DAL.Interfaces;
 
 namespace CarStore.DAL
 {
-    public class StoredProceduresService
+    public class StoredProceduresService : IStoredProceduresService
     {
-
-        private const string connectionString = @"Data Source=DESKTOP-8GOTM1U\SQLEXPRESS; Initial Catalog=carstore; Integrated Security=True; Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
-        public static Order GetOrder(int id)
+        public string DefaultConnection { get; set; }
+       
+        public  Order GetOrder(int id)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(DefaultConnection))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(StoredProceduresNames.sp_GetOrder.ToString(), connection);
@@ -39,9 +39,9 @@ namespace CarStore.DAL
                 return ord;
             }
          }
-        public static Person GetPerson(int id)
+        public  Person GetPerson(int id)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(DefaultConnection))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(StoredProceduresNames.sp_GetPerson.ToString(), connection);
@@ -66,9 +66,9 @@ namespace CarStore.DAL
             }
             
         }
-        public static void AddOrder(Order order)
+        public  void AddOrder(Order order)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(DefaultConnection))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(StoredProceduresNames.sp_InsertOrder.ToString(), connection);
@@ -97,9 +97,9 @@ namespace CarStore.DAL
                 
             }
         }
-        public static void AddPerson(Person person)
+        public  void AddPerson(Person person)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(DefaultConnection))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(StoredProceduresNames.sp_InsertPerson.ToString(), connection);
@@ -128,9 +128,9 @@ namespace CarStore.DAL
 
             }
         }
-        public static void DeletePerson(int id)
+        public  void DeletePerson(int id)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(DefaultConnection))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(StoredProceduresNames.sp_DeletePerson.ToString(), connection);
@@ -144,9 +144,9 @@ namespace CarStore.DAL
                 command.ExecuteScalar();
             }
         }
-        public static void DeleteOrder(int id)
+        public  void DeleteOrder(int id)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(DefaultConnection))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(StoredProceduresNames.sp_DeleteOrder.ToString(), connection);
@@ -161,9 +161,9 @@ namespace CarStore.DAL
             }
         }
 
-        public static void UpdateOrder(Order order)
+        public  void UpdateOrder(Order order)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(DefaultConnection))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), connection);
@@ -199,9 +199,9 @@ namespace CarStore.DAL
             }
         }
 
-        public static void UpdatePerson(Person person)
+        public  void UpdatePerson(Person person)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(DefaultConnection))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(StoredProceduresNames.sp_UpdatePerson.ToString(), connection);
