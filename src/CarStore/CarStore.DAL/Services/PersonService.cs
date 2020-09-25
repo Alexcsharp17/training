@@ -19,30 +19,31 @@ namespace CarStore.DAL.Services
         }
         public void AddPerson(Person person)
         {
-            Dictionary<string, object> d = new Dictionary<string, object>();
-            foreach(var prop in person.GetType().GetProperties())
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                d.Add(prop.Name.ToString(), prop.GetValue(person));
-            }
-            
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertPerson.ToString(),d);
+                {DBColumns.FIRST_NAME, person.FirstName },
+                {DBColumns.LAST_NAME, person.LastName},
+                {DBColumns.PHONE, person.Phone}
+            };
+
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertPerson.ToString(),parameters);
             
             command.ExecuteScalar();
          }
 
         public void DeletePerson(int id)
         {
-            Dictionary<string, object> d = new Dictionary<string, object>() { { "id", id } };
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { {DBColumns.ID, id } };
 
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),d);
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),parameters);
           
             command.ExecuteScalar();
         }
 
         public Person GetPerson(int id)
         {
-            Dictionary<string, object> d = new Dictionary<string, object>() { { "id", id } };
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetPerson.ToString(),d);             
+            Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetPerson.ToString(),parameters);             
             
             var reader = command.ExecuteReader();
             Person pers = new Person();
@@ -58,13 +59,14 @@ namespace CarStore.DAL.Services
 
         public void UpdatePerson(Person person)
         {
-            Dictionary<string, object> d = new Dictionary<string, object>();
-            foreach(var prop in person.GetType().GetProperties())
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                d.Add(prop.Name.ToString(), prop.GetValue(person));
-            }
+                {DBColumns.FIRST_NAME, person.FirstName },
+                {DBColumns.LAST_NAME, person.LastName},
+                {DBColumns.PHONE, person.Phone}
+            };
 
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),d);
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),parameters);
             
             command.ExecuteScalar();
         }
