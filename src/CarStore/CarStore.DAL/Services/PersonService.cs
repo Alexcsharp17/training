@@ -20,7 +20,7 @@ namespace CarStore.DAL.Services
         public void AddPerson(Person person)
         {
             Dictionary<string, object> d = new Dictionary<string, object>();
-            foreach (var prop in person.GetType().GetProperties())
+            foreach(var prop in person.GetType().GetProperties())
             {
                 d.Add(prop.Name.ToString(), prop.GetValue(person));
             }
@@ -35,13 +35,7 @@ namespace CarStore.DAL.Services
             Dictionary<string, object> d = new Dictionary<string, object>() { { "id", id } };
 
             using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),d);
-
-            SqlParameter idParam = new SqlParameter
-            {
-                ParameterName = DBColumns.id,
-                Value = id
-            };
-            command.Parameters.Add(idParam);
+          
             command.ExecuteScalar();
         }
 
@@ -52,7 +46,7 @@ namespace CarStore.DAL.Services
             
             var reader = command.ExecuteReader();
             Person pers = new Person();
-            while (reader.Read())
+            while(reader.Read())
             {
                 pers.PersonID = reader.GetInt32(0);
                 pers.FirstName = reader.GetString(1);
@@ -60,13 +54,12 @@ namespace CarStore.DAL.Services
                 pers.Phone = reader.GetString(3);
             }
             return pers;
-
         }
 
         public void UpdatePerson(Person person)
         {
             Dictionary<string, object> d = new Dictionary<string, object>();
-            foreach (var prop in person.GetType().GetProperties())
+            foreach(var prop in person.GetType().GetProperties())
             {
                 d.Add(prop.Name.ToString(), prop.GetValue(person));
             }

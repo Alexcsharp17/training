@@ -31,7 +31,5 @@ namespace CarStore.WEB.Controllers
             StoredProcedures.AddOrder(order);
             return Ok();
         }
-        
-
     }
 }

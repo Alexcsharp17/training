@@ -6,18 +6,18 @@ namespace CarStore.DAL.Util
 {
     public static class DBColumns
     {
-        public  const string id = "@id";
+        public  const string ID = "@id";
                 
-        public  const string OrderDate = "@OrderDate";
+        public  const string ORDER_DATE = "@OrderDate";
                
-        public  const string CarID = "@CarID";
+        public  const string CAR_ID = "@CarID";
                 
-        public  const string PersonID = "@PersonID";
+        public  const string PERSON_ID = "@PersonID";
                 
-        public  const string FirstName = "@FirstName";
+        public  const string FIRST_NAME = "@FirstName";
                 
-        public  const string LastName = "@LastName";
+        public  const string LAST_NAME = "@LastName";
                 
-        public  const string Phone = "@Phone";
+        public  const string PHONE= "@Phone";
     }
 }

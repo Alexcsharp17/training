@@ -20,7 +20,7 @@ namespace CarStore.DAL.Services
         public void AddOrder(Order order)
         {
             Dictionary<string, object> d = new Dictionary<string, object>();
-            foreach (var prop in order.GetType().GetProperties())
+            foreach(var prop in order.GetType().GetProperties())
             {
                 d.Add(prop.Name.ToString(), prop.GetValue(order));
             }
@@ -30,7 +30,7 @@ namespace CarStore.DAL.Services
         }
         public void DeleteOrder(int id)
         {
-            Dictionary<string, object> d = new Dictionary<string, object>() { { "id", id } };
+            Dictionary<string, object> d = new Dictionary<string, object>(){ { "id", id } };
 
             using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeleteOrder.ToString(),d);
 
@@ -43,7 +43,7 @@ namespace CarStore.DAL.Services
             using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrder.ToString(),d);
             var reader = command.ExecuteReader();
             Order ord = new Order();
-            while (reader.Read())
+            while(reader.Read())
             {
                 ord.OrderID = reader.GetInt32(0);
                 ord.OrderDate = reader.GetDateTime(1);
@@ -56,7 +56,7 @@ namespace CarStore.DAL.Services
         public void UpdateOrder(Order order)
         {
             Dictionary<string, object> d = new Dictionary<string, object>();
-            foreach (var prop in order.GetType().GetProperties())
+            foreach(var prop in order.GetType().GetProperties())
             {
                 d.Add(prop.Name.ToString(), prop.GetValue(order));
             }
