@@ -5,21 +5,13 @@ using System.Text;
 
 namespace CarStore.DAL.Interfaces
 {
-    public interface IStoredProceduresService
+    public interface IPersonService
     {
-        Order GetOrder(int id);
-
         Person GetPerson(int id);
-
-        void AddOrder(Order order);
 
         void AddPerson(Person person);
 
-         void DeletePerson(int id);
-
-        void DeleteOrder(int id);
-
-        void UpdateOrder(Order order);
+        void DeletePerson(int id);
 
         void UpdatePerson(Person person);
     }

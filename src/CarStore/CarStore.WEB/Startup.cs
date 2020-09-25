@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CarStore.DAL;
+using CarStore.DAL.Services;
 using CarStore.DAL.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using CarStore.DAL.Util;
 
 namespace CarStore.WEB
 {
@@ -27,8 +29,12 @@ namespace CarStore.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<StoredProceduresService>(Configuration.GetSection("DefaultConnection"));
-            services.AddScoped<IStoredProceduresService,StoredProceduresService>();
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddSingleton(new SqlCommandBuild(connection));
+
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IPersonService, PersonService>();
+           
             services.AddControllers();                       
         }
 
@@ -52,7 +58,7 @@ namespace CarStore.WEB
                 endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Order}/{action=GetOrder}/{id?}");
+                    pattern: "api/{controller=Order}/{action=GetOrder}/{id?}");
             });
         }
     }

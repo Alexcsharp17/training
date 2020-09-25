@@ -10,27 +10,28 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarStore.WEB.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class OrderController : ControllerBase
+    [ApiController]
+    public class OrderController : Controller
     {
-        private IStoredProceduresService StoredProcedures;
-        public OrderController(IStoredProceduresService storedProcedures)
+        private IOrderService StoredProcedures;
+        public OrderController(IOrderService storedProcedures)
         {
             this.StoredProcedures = storedProcedures;
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public string GetOrder([FromQuery]int id)
         {
             return JsonSerializer.Serialize( StoredProcedures.GetOrder(id));
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public IActionResult AddOrder([FromBody] Order order)
         {
             StoredProcedures.AddOrder(order);
             return Ok();
         }
         
+
     }
 }

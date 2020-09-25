@@ -14,22 +14,22 @@ namespace CarStore.WEB.Controllers
     [Route("api/[controller]")]
     public class PersonController : ControllerBase
     {
-        private IStoredProceduresService StoredProcedures;
-        public PersonController(IStoredProceduresService storedProcedures)
+        private IPersonService PersonService;
+        public PersonController(IPersonService personService)
         {
-            this.StoredProcedures = storedProcedures;
+            this.PersonService = personService;
         }
 
         [HttpGet]
         public string GetPerson([FromQuery]int id)
         {
-            return JsonSerializer.Serialize(StoredProcedures.GetPerson(id));
+            return JsonSerializer.Serialize(PersonService.GetPerson(id));
         }
 
         [HttpPost]
-        public IActionResult AddOrder([FromBody] Order order)
+        public IActionResult AddPerson([FromBody] Person person)
         {
-            StoredProcedures.AddOrder(order);
+            PersonService.AddPerson(person);
             return Ok();
         }
 
