@@ -47,7 +47,7 @@ namespace CarStore.DAL.Services
             
             var reader = command.ExecuteReader();
             Person pers = new Person();
-            while(reader.Read())
+            if(reader.Read())
             {
                 pers.PersonID = reader.GetInt32(0);
                 pers.FirstName = reader.GetString(1);
@@ -69,6 +69,25 @@ namespace CarStore.DAL.Services
             using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),parameters);
             
             command.ExecuteScalar();
+        }
+        public List<Person> GetPersons()
+        {
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrders.ToString(), null);
+            List<Person> persons = new List<Person>();
+            var reader = command.ExecuteReader();
+           
+            while (reader.Read())
+            {
+                Person pers = new Person
+                {
+                    PersonID = reader.GetInt32(0),
+                    FirstName = reader.GetString(1),
+                    LastName = reader.GetString(2),
+                    Phone = reader.GetString(3)
+                };
+                persons.Add(pers);
+            }
+            return persons;
         }
     }
 }

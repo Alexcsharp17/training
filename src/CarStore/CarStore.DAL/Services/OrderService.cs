@@ -68,5 +68,25 @@ namespace CarStore.DAL.Services
             
             command.ExecuteScalar();
         }
+
+        public List<Order> GetOrders()
+        {
+            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrders.ToString());
+            List<Order> orders = new List<Order>();
+            var reader = command.ExecuteReader();
+
+            while(reader.Read())
+            {
+                Order ord = new Order
+                {
+                    OrderID = reader.GetInt32(0),
+                    OrderDate = reader.GetDateTime(1),
+                    CarID = reader.GetInt32(2),
+                    PersonId = reader.GetInt32(3)
+                };
+                orders.Add(ord);
+            }
+            return orders;
+        }
     }
 }

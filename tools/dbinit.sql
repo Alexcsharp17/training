@@ -102,3 +102,13 @@ BEGIN
 	WHERE (PersonID=@id);
 END;
 GO
+CREATE PROCEDURE [dbo].[sp_GetOrders]
+AS
+	Select * From Orders
+GO
+
+CREATE PROCEDURE [dbo].[sp_GetUsers]
+	@id int
+AS
+	Select * From Persons
+GO

@@ -25,6 +25,12 @@ namespace CarStore.WEB.Controllers
             return JsonSerializer.Serialize( StoredProcedures.GetOrder(id));
         }
 
+        [HttpGet("[action]")]
+        public string GetOrders()
+        {
+            return JsonSerializer.Serialize(StoredProcedures.GetOrders());
+        }
+
         [HttpPost("[action]")]
         public IActionResult AddOrder([FromBody] Order order)
         {

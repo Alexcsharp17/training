@@ -14,20 +14,23 @@ namespace CarStore.DAL.Util
         {
             this.DefaultConnection = connection;
         }
-        public SqlCommand Create(string procedure, Dictionary<string, object> parameters)
+        public SqlCommand Create(string procedure, Dictionary<string, object> parameters=null)
         {
             SqlConnection connection = new SqlConnection(DefaultConnection);           
             connection.Open();
             SqlCommand command = new SqlCommand(procedure, connection);
             command.CommandType = System.Data.CommandType.StoredProcedure;
-            foreach(KeyValuePair<string, object> keyValue in parameters)
+            if (parameters!=null)
             {
-                SqlParameter param = new SqlParameter
+                foreach (KeyValuePair<string, object> keyValue in parameters)
                 {
-                    ParameterName = keyValue.Key,
-                    Value = keyValue.Value
-                };
-                command.Parameters.Add(param);
+                    SqlParameter param = new SqlParameter
+                    {
+                        ParameterName = keyValue.Key,
+                        Value = keyValue.Value
+                    };
+                    command.Parameters.Add(param);
+                }
             }
             return command;                 
         }

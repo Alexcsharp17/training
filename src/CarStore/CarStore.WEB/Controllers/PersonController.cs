@@ -26,6 +26,12 @@ namespace CarStore.WEB.Controllers
             return JsonSerializer.Serialize(PersonService.GetPerson(id));
         }
 
+        [HttpGet]
+        public string GetPersons()
+        {
+            return JsonSerializer.Serialize(PersonService.GetPersons());
+        }
+
         [HttpPost]
         public IActionResult AddPerson([FromBody] Person person)
         {
