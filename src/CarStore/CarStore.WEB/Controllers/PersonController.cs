@@ -20,21 +20,35 @@ namespace CarStore.WEB.Controllers
             this.PersonService = personService;
         }
 
-        [HttpGet]
-        public string GetPerson([FromQuery]int id)
+        [HttpGet("[action]")]
+        public IActionResult GetPerson([FromQuery]int id)
         {
-            return JsonSerializer.Serialize(PersonService.GetPerson(id));
+            Person person = PersonService.GetPerson(id);
+            if (person==null)
+            {
+                return NotFound();
+            }
+            return Content(JsonSerializer.Serialize(person));
         }
 
-        [HttpGet]
-        public string GetPersons()
+        [HttpGet("[action]")]
+        public IActionResult GetPersons()
         {
-            return JsonSerializer.Serialize(PersonService.GetPersons());
+            List<Person> people = PersonService.GetPersons();
+            if (people==null)
+            {
+                return NotFound();
+            }
+            return Content(JsonSerializer.Serialize(people));
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public IActionResult AddPerson([FromBody] Person person)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             PersonService.AddPerson(person);
             return Ok();
         }

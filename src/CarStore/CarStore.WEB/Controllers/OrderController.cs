@@ -14,27 +14,54 @@ namespace CarStore.WEB.Controllers
     [ApiController]
     public class OrderController : Controller
     {
-        private IOrderService StoredProcedures;
-        public OrderController(IOrderService storedProcedures)
+        private IOrderService orderService;
+
+        private IPersonService personService;
+        public OrderController(IOrderService orderService, IPersonService personService)
         {
-            this.StoredProcedures = storedProcedures;
+            this.orderService = orderService;
+            this.personService = personService;
         }
         [HttpGet("[action]")]
-        public string GetOrder([FromQuery]int id)
+        public ActionResult GetOrder([FromQuery]int id)
         {
-            return JsonSerializer.Serialize( StoredProcedures.GetOrder(id));
+            Order order = orderService.GetOrder(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return Content(JsonSerializer.Serialize(order));
         }
 
         [HttpGet("[action]")]
-        public string GetOrders()
+        public IActionResult GetOrders()
         {
-            return JsonSerializer.Serialize(StoredProcedures.GetOrders());
+            List<Order> orders = orderService.GetOrders();
+            if (orders == null)
+            {
+                return NotFound();
+            }
+            return Content(JsonSerializer.Serialize(orders));
         }
 
         [HttpPost("[action]")]
         public IActionResult AddOrder([FromBody] Order order)
         {
-            StoredProcedures.AddOrder(order);
+            if (order.OrderDate<DateTime.UtcNow)
+            {
+                ModelState.AddModelError("OrderDate","You can't create order in past time");
+            }
+
+            if (personService.GetPerson(order.PersonId)==null)
+            {
+                ModelState.AddModelError("PersonID","Order should be created for existing person in database");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            orderService.AddOrder(order);
             return Ok();
         }
     }
