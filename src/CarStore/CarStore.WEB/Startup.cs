@@ -32,12 +32,11 @@ namespace CarStore.WEB
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            DbConnection dbConnection = new SqlConnection(connection);
-            dbConnection.Open();
 
+            DbConnection dbConnection = new SqlConnection(connection);
 
             services.AddSingleton<IOrderService, OrderService>();
-            services.AddScoped<IPersonService, PersonService>();
+            services.AddSingleton<IPersonService, PersonService>();
             services.AddSingleton<ICommandBuilder, SqlCommandBuild>();
             services.AddSingleton(dbConnection);
             services.AddControllers();
