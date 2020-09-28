@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using CarStore.DAL;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using CarStore.DAL.Util;
+using System.Data.Common;
 
 namespace CarStore.WEB
 {
@@ -30,10 +32,14 @@ namespace CarStore.WEB
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddSingleton(new SqlCommandBuild(connection));
+            DbConnection dbConnection = new SqlConnection(connection);
+            dbConnection.Open();
 
-            services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IPersonService, PersonService>();           
+
+            services.AddSingleton<IOrderService, OrderService>();
+            services.AddScoped<IPersonService, PersonService>();
+            services.AddSingleton<ICommandBuilder, SqlCommandBuild>();
+            services.AddSingleton(dbConnection);
             services.AddControllers();
             services.AddCors();
         }

@@ -4,6 +4,7 @@ using CarStore.DAL.Interfaces;
 using CarStore.DAL.Util;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -11,8 +12,8 @@ namespace CarStore.DAL.Services
 {
     public class OrderService : IOrderService
     {
-        private SqlCommandBuild comandbuilder;
-        public OrderService(SqlCommandBuild commandBuild)
+        private ICommandBuilder comandbuilder;
+        public OrderService(ICommandBuilder commandBuild)
         {
             this.comandbuilder = commandBuild;
         }
@@ -25,7 +26,7 @@ namespace CarStore.DAL.Services
                 {DBColumns.ORDER_DATE, order.OrderDate },
                 {DBColumns.CAR_ID, order.CarID }
             };
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
+            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
            
             command.ExecuteScalar();
         }
@@ -33,7 +34,7 @@ namespace CarStore.DAL.Services
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>(){ { DBColumns.ID, id } };
 
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeleteOrder.ToString(),parameters);
+            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeleteOrder.ToString(),parameters);
 
             command.ExecuteScalar();
         }
@@ -41,8 +42,8 @@ namespace CarStore.DAL.Services
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
 
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrder.ToString(),parameters);
-            var reader = command.ExecuteReader();
+            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrder.ToString(),parameters);
+            using var reader = command.ExecuteReader();
             Order ord = new Order();
             
             if(reader.Read())
@@ -64,16 +65,16 @@ namespace CarStore.DAL.Services
                 {DBColumns.CAR_ID, order.CarID }
             };
 
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_UpdateOrder.ToString(),parameters);
+            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_UpdateOrder.ToString(),parameters);
             
             command.ExecuteScalar();
         }
 
         public List<Order> GetOrders()
         {
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrders.ToString());
+            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrders.ToString());
             List<Order> orders = new List<Order>();
-            var reader = command.ExecuteReader();
+            using var reader = command.ExecuteReader();
 
             while(reader.Read())
             {

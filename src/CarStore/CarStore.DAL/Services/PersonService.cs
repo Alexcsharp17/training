@@ -5,6 +5,7 @@ using CarStore.DAL.Util;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -12,10 +13,10 @@ namespace CarStore.DAL.Services
 {
     public class PersonService : IPersonService
     {
-        private SqlCommandBuild comandbuilder;
-        public PersonService(SqlCommandBuild commandBuild)
+        private ICommandBuilder comandbuilder;
+        public PersonService(ICommandBuilder comandbuilder)
         {
-            this.comandbuilder = commandBuild;
+            this.comandbuilder = comandbuilder;
         }
         public void AddPerson(Person person)
         {
@@ -26,7 +27,7 @@ namespace CarStore.DAL.Services
                 {DBColumns.PHONE, person.Phone}
             };
 
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertPerson.ToString(),parameters);
+            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertPerson.ToString(),parameters);
             
             command.ExecuteScalar();
          }
@@ -35,7 +36,7 @@ namespace CarStore.DAL.Services
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>() { {DBColumns.ID, id } };
 
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),parameters);
+            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),parameters);
           
             command.ExecuteScalar();
         }
@@ -43,9 +44,9 @@ namespace CarStore.DAL.Services
         public Person GetPerson(int id)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetPerson.ToString(),parameters);             
+            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetPerson.ToString(),parameters);             
             
-            var reader = command.ExecuteReader();
+            using var reader = command.ExecuteReader();
             Person pers = new Person();
             if(reader.Read())
             {
@@ -66,15 +67,16 @@ namespace CarStore.DAL.Services
                 {DBColumns.PHONE, person.Phone}
             };
 
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),parameters);
-            
-            command.ExecuteScalar();
+            using (DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(), parameters))
+            {
+                command.ExecuteScalar();
+            }
         }
         public List<Person> GetPersons()
         {
-            using SqlCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrders.ToString(), null);
+            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrders.ToString(), null);
             List<Person> persons = new List<Person>();
-            var reader = command.ExecuteReader();
+            using var reader = command.ExecuteReader();
            
             while (reader.Read())
             {

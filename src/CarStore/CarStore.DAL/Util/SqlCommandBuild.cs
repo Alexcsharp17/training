@@ -1,30 +1,39 @@
 ﻿using CarStore.DAL.Enums;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
+using CarStore.DAL.Interfaces;
 
 namespace CarStore.DAL.Util
 {
-    public class SqlCommandBuild
+    public class SqlCommandBuild : ICommandBuilder
     {
-        public string DefaultConnection { get; set; }
+        public DbConnection connection { get; set; }
 
-        public SqlCommandBuild(string connection)
+        public SqlCommandBuild(DbConnection connection)
         {
-            this.DefaultConnection = connection;
+            this.connection = connection;
+            if (connection.State == ConnectionState.Closed)
+            {
+                connection.Open();
+            }
         }
-        public SqlCommand Create(string procedure, Dictionary<string, object> parameters=null)
+        
+        public DbCommand Create(string procedure, Dictionary<string, object> parameters=null)
         {
-            SqlConnection connection = new SqlConnection(DefaultConnection);           
-            connection.Open();
-            SqlCommand command = new SqlCommand(procedure, connection);
+
+            DbCommand command = new SqlCommand();
+            command.CommandText = procedure;
+            command.Connection = connection;
             command.CommandType = System.Data.CommandType.StoredProcedure;
             if (parameters!=null)
             {
                 foreach (KeyValuePair<string, object> keyValue in parameters)
                 {
-                    SqlParameter param = new SqlParameter
+                    DbParameter param = new SqlParameter
                     {
                         ParameterName = keyValue.Key,
                         Value = keyValue.Value
