@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using CarStore.DAL;
 using CarStore.DAL.Entities;
 using CarStore.DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CarStore.WEB.Controllers
 {
@@ -52,8 +54,20 @@ namespace CarStore.WEB.Controllers
             {
                 return BadRequest(ModelState);
             }
-            orderService.AddOrder(order);
-            return Ok();
+
+            try
+            {
+                orderService.AddOrder(order);
+                return Ok();
+            }
+            catch (DbException e)
+            {
+                ModelState.AddModelError("IdError",e.Message);
+                Console.Write("EXception"+e.Message);
+                return BadRequest(ModelState);
+            }
+          
+           
         }
     }
 }

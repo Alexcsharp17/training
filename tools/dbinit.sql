@@ -1,6 +1,6 @@
 use carstore
 
-CREATE TABLE Persons (
+CREATE  TABLE Persons (
     PersonID int NOT NULL IDENTITY(1,1),
 	FirstName varchar(255) NOT NULL,
     LastName varchar(255) NOT NULL,
@@ -21,18 +21,22 @@ CREATE TABLE Orders (
 
 /*Create*/
 go
-CREATE PROCEDURE [dbo].[sp_InsertOrder]
+CREATE OR ALTER PROCEDURE [dbo].[sp_InsertOrder]
     @OrderDate Datetime,
     @CarID int,
 	@PersonID int
 AS
+BEGIN TRY
     INSERT INTO Orders(OrderDate,CarID,PersonID)
     VALUES (@OrderDate,@CarID,@PersonID)
-  
+END TRY
+BEGIN CATCH
+RAISERROR ( 50001,15,1)
+END CATCH
 
 GO
 
-CREATE PROCEDURE [dbo].[sp_InsertPerson]
+CREATE OR ALTER PROCEDURE [dbo].[sp_InsertPerson]
 	@FirstName varchar(50),
 	@LastName  varchar(50),
 	@Phone varchar(50)
@@ -41,21 +45,21 @@ AS
 	VALUES(@FirstName,@LastName,@Phone)
 GO
 /*Read*/
-CREATE PROCEDURE [dbo].[sp_GetOrder]
+CREATE OR ALTER PROCEDURE [dbo].[sp_GetOrder]
 	@id int
 AS
 	Select * From Orders
 	WHERE (OrderID=@id);
 GO
 
-CREATE PROCEDURE [dbo].[sp_GetPerson]
+CREATE OR ALTER PROCEDURE [dbo].[sp_GetPerson]
 	@id int
 AS
 	Select * From Persons
 	WHERE (PersonID=@id);
 GO
 /*Update*/
-CREATE PROCEDURE [dbo].[sp_UpdateOrder]
+CREATE OR ALTER PROCEDURE [dbo].[sp_UpdateOrder]
 	@id int,
 	@OrderDate Datetime,
     @CarID int,
@@ -70,7 +74,7 @@ SET OrderDate=@OrderDate,
 END;
 GO
 
-CREATE PROCEDURE [dbo].[sp_UpdatePerson]
+CREATE OR ALTER PROCEDURE [dbo].[sp_UpdatePerson]
 	@id int,
 	@FirstName varchar(50),
 	@LastName  varchar(50),
@@ -85,7 +89,7 @@ SET FirstName=@FirstName,
 END;
 GO
 /*Delete*/
-CREATE PROCEDURE [dbo].[sp_DeleteOrder]
+CREATE OR ALTER PROCEDURE [dbo].[sp_DeleteOrder]
 	@id int
 AS
 BEGIN
@@ -94,7 +98,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE [dbo].[sp_DeletePerson]
+CREATE OR ALTER PROCEDURE [dbo].[sp_DeletePerson]
 	@id int
 AS
 BEGIN
@@ -102,12 +106,18 @@ BEGIN
 	WHERE (PersonID=@id);
 END;
 GO
-CREATE PROCEDURE [dbo].[sp_GetOrders]
+CREATE OR ALTER PROCEDURE [dbo].[sp_GetOrders]
 AS
 	Select * From Orders
 GO
 
-CREATE PROCEDURE [dbo].[sp_GetPersons]
+CREATE OR ALTER PROCEDURE [dbo].[sp_GetPersons]
 AS
 	Select * From Persons
 GO
+
+/*Exceptions*/
+EXEC sp_addmessage
+    @msgnum = 50001, 
+    @severity = 15, 
+    @msgtext = 'You cannot add order for non exestiong user';

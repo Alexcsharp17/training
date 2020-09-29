@@ -1,4 +1,4 @@
-user carstore;
+use carstore;
 INSERT INTO Persons (FirstName, LastName,  Phone)
 VALUES ('John', 'Smith', '1-01-90');
 
