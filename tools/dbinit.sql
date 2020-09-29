@@ -48,7 +48,7 @@ AS
 	WHERE (OrderID=@id);
 GO
 
-CREATE PROCEDURE [dbo].[sp_GetUser]
+CREATE PROCEDURE [dbo].[sp_GetPerson]
 	@id int
 AS
 	Select * From Persons
@@ -107,8 +107,7 @@ AS
 	Select * From Orders
 GO
 
-CREATE PROCEDURE [dbo].[sp_GetUsers]
-	@id int
+CREATE PROCEDURE [dbo].[sp_GetPersons]
 AS
 	Select * From Persons
 GO

@@ -74,7 +74,7 @@ namespace CarStore.DAL.Services
         }
         public List<Person> GetPersons()
         {
-            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrders.ToString(), null);
+            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetPersons.ToString(), null);
             List<Person> persons = new List<Person>();
             using var reader = command.ExecuteReader();
            
