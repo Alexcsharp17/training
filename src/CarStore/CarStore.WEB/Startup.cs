@@ -42,7 +42,16 @@ namespace CarStore.WEB
             services.AddSingleton(dbConnection);
             services.AddMvc().AddFluentValidation(mvcConfig=>mvcConfig.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddControllers();
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +69,7 @@ namespace CarStore.WEB
 
             app.UseAuthorization();
 
-            app.UseCors(builder => builder.AllowAnyOrigin());
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

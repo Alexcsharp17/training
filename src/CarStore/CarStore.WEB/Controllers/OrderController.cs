@@ -47,15 +47,6 @@ namespace CarStore.WEB.Controllers
         [HttpPost("[action]")]
         public IActionResult AddOrder([FromBody] Order order)
         {
-            if (order.OrderDate<DateTime.UtcNow)
-            {
-                ModelState.AddModelError("OrderDate","You can't create order in past time");
-            }
-
-            if (personService.GetPerson(order.PersonId)==null)
-            {
-                ModelState.AddModelError("PersonID","Order should be created for existing person in database");
-            }
 
             if (!ModelState.IsValid)
             {
