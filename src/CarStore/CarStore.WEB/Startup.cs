@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using CarStore.DAL.Util;
 using System.Data.Common;
+using FluentValidation.AspNetCore;
 
 namespace CarStore.WEB
 {
@@ -39,6 +40,7 @@ namespace CarStore.WEB
             services.AddSingleton<IPersonService, PersonService>();
             services.AddSingleton<ICommandBuilder, SqlCommandBuild>();
             services.AddSingleton(dbConnection);
+            services.AddMvc().AddFluentValidation(mvcConfig=>mvcConfig.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddControllers();
             services.AddCors();
         }
