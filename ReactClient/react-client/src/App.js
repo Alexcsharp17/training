@@ -1,5 +1,6 @@
 import React from 'react';
 import OrderItem from './components/orders/OrdersItem.js'
+import PersonItem from './components/persons/PersonsItem.js'
 import DashboardItem from './components/dashboard/DashboardItem.js';
 import './App.css';
 
@@ -17,6 +18,7 @@ function App() {
           <Switch>         
             <Route  path='/dashboard' component={DashboardItem} />
             <Route path='/orders' component={OrderItem} />
+            <Route path='/persons' component={PersonItem} />
             {/* <Route path='/persons' component={PersonItem} />
             <Route path='/editorder/:id' component={editOrderItem} />
             <Route path='/editperson/:id' component={editPersonItem} /> */}
