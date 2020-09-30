@@ -26,24 +26,20 @@ namespace CarStore.DAL.Services
                 {DBColumns.ORDER_DATE, order.OrderDate },
                 {DBColumns.CAR_ID, order.CarID }
             };
-            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
-           
-            command.ExecuteScalar();
+            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
         }
         public void DeleteOrder(int id)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>(){ { DBColumns.ID, id } };
 
-            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeleteOrder.ToString(),parameters);
-
-            command.ExecuteScalar();
+            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_DeleteOrder.ToString(),parameters);
         }
         public Order GetOrder(int id)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
 
-            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrder.ToString(),parameters);
-            using var reader = command.ExecuteReader();
+            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetOrder.ToString(), parameters);
+
             Order ord = new Order();
             
             if(reader.Read())
@@ -65,18 +61,15 @@ namespace CarStore.DAL.Services
                 {DBColumns.CAR_ID, order.CarID }
             };
 
-            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_UpdateOrder.ToString(),parameters);
-            
-            command.ExecuteScalar();
+            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdateOrder.ToString(),parameters);
         }
 
         public List<Order> GetOrders()
         {
-            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetOrders.ToString());
             List<Order> orders = new List<Order>();
-            using var reader = command.ExecuteReader();
+            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetOrders.ToString());
 
-            while(reader.Read())
+            while (reader.Read())
             {
                 Order ord = new Order
                 {

@@ -22,14 +22,23 @@ namespace CarStore.DAL.Util
             }
         }
         
-        public DbCommand Create(string procedure, Dictionary<string, object> parameters=null)
+        public DbDataReader DbDataRequestCommand(string procedure, Dictionary<string, object> parameters=null)
         {
 
+            return Create(procedure, parameters).ExecuteReader();
+        }
+        public object DbDataPostCommand(string procedure, Dictionary<string, object> parameters = null)
+        {
+            return Create(procedure, parameters).ExecuteScalar();
+        }
+
+        private DbCommand Create(string procedure, Dictionary<string, object> parameters = null)
+        {
             DbCommand command = new SqlCommand();
             command.CommandText = procedure;
             command.Connection = connection;
             command.CommandType = System.Data.CommandType.StoredProcedure;
-            if (parameters!=null)
+            if (parameters != null)
             {
                 foreach (KeyValuePair<string, object> keyValue in parameters)
                 {
@@ -41,7 +50,7 @@ namespace CarStore.DAL.Util
                     command.Parameters.Add(param);
                 }
             }
-            return command;                 
+            return command;
         }
     }
 }
