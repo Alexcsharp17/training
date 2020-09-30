@@ -54,7 +54,7 @@ class TableBody extends React.Component {
                                     })
                                 }
                                 <td>
-                                    <Link className="" to={'/editorder/' + item[0]}>
+                                    <Link className="" to={'/editorder/' + item[Object.keys(item)[0]]}>
                                         <span className="btn btn-warning mr-1">Edit</span>
                                     </Link>
                                     <Link className="" to="/deleteorder">
