@@ -68,7 +68,7 @@ class editOrderItem extends React.Component{
         .then((data) =>{
           this.setState({Order:data});
           this.setState({CarID:data.CarID});
-          this.setState({PersonID:data.PersonID});
+          this.setState({PersonId:data.PersonId});
           this.setState({OrderDate:data.OrderDate});
           this.setState({OrderID:data.OrderID});
           })

@@ -4,13 +4,13 @@ import { Link } from "react-router-dom"
 
 class EntityTableItem extends React.Component {
     render() {
-        const { data: { Items, fields } } =this.props
+        const { data: { Items, fields,title } } =this.props
         return (
             <div className="content" id="order_area">
                 <h2>Dashboard</h2>
                 <table className="table table-bordered table-striped">
-                    <TableHead fields={fields} />
-                    <TableBody Items={Items} />
+                    <TableHead fields={fields} title={title} />
+                    <TableBody Items={Items} title={title}/>
                 </table>
             </div>
         );
@@ -41,7 +41,7 @@ class TableHead extends React.Component {
 
 class TableBody extends React.Component {
     render() {
-        const { Items } = this.props
+        const { Items, title } = this.props
         return (
             <tbody>
                 {
@@ -54,7 +54,7 @@ class TableBody extends React.Component {
                                     })
                                 }
                                 <td>
-                                    <Link className="" to={'/editorder/' + item[Object.keys(item)[0]]}>
+                                    <Link className="" to={'/edit'+title+"/" + item[Object.keys(item)[0]]}>
                                         <span className="btn btn-warning mr-1">Edit</span>
                                     </Link>
                                     <Link className="" to="/deleteorder">

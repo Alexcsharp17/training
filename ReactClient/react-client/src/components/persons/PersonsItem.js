@@ -17,7 +17,8 @@ class PersonItem extends React.Component {
     console.log("Log from render:", this.state.Items);
     const data = {
       Items: this.state.Items,
-      fields: fields
+      fields: fields,
+      title:"person"
     }
     if (this.state.fetchData != "") {
       
