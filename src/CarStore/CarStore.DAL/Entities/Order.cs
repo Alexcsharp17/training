@@ -9,13 +9,10 @@ namespace CarStore.DAL.Entities
     {
         public int OrderID { get; set; }
 
-        [Required]
         public DateTime OrderDate { get; set; }
 
-        [Required]
         public int CarID { get; set; }
 
-        [Required]
         public int PersonId { get; set; }
     }
 }

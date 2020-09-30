@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using CarStore.DAL;
 using CarStore.DAL.Entities;
 using CarStore.DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CarStore.WEB.Controllers
 {
@@ -47,22 +49,25 @@ namespace CarStore.WEB.Controllers
         [HttpPost("[action]")]
         public IActionResult AddOrder([FromBody] Order order)
         {
-            if (order.OrderDate<DateTime.UtcNow)
-            {
-                ModelState.AddModelError("OrderDate","You can't create order in past time");
-            }
-
-            if (personService.GetPerson(order.PersonId)==null)
-            {
-                ModelState.AddModelError("PersonID","Order should be created for existing person in database");
-            }
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            orderService.AddOrder(order);
-            return Ok();
+
+            try
+            {
+                orderService.AddOrder(order);
+                return Ok();
+            }
+            catch (DbException e)
+            {
+                ModelState.AddModelError("IdError",e.Message);
+                Console.Write("EXception"+e.Message);
+                return BadRequest(ModelState);
+            }
+          
+           
         }
     }
 }

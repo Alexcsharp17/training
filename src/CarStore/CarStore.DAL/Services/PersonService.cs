@@ -27,26 +27,23 @@ namespace CarStore.DAL.Services
                 {DBColumns.PHONE, person.Phone}
             };
 
-            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_InsertPerson.ToString(),parameters);
-            
-            command.ExecuteScalar();
+            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertPerson.ToString(),parameters);
+
          }
 
         public void DeletePerson(int id)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>() { {DBColumns.ID, id } };
 
-            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(),parameters);
-          
-            command.ExecuteScalar();
+            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_DeletePerson.ToString(),parameters);
+            
         }
 
         public Person GetPerson(int id)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
-            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetPerson.ToString(),parameters);             
             
-            using var reader = command.ExecuteReader();
+            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetPerson.ToString(), parameters);
             Person pers = new Person();
             if(reader.Read())
             {
@@ -67,17 +64,15 @@ namespace CarStore.DAL.Services
                 {DBColumns.PHONE, person.Phone}
             };
 
-            using (DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_DeletePerson.ToString(), parameters))
-            {
-                command.ExecuteScalar();
-            }
+           comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_DeletePerson.ToString(), parameters);
+
         }
         public List<Person> GetPersons()
         {
-            using DbCommand command = comandbuilder.Create(StoredProceduresNames.sp_GetPersons.ToString(), null);
+          
             List<Person> persons = new List<Person>();
-            using var reader = command.ExecuteReader();
-           
+            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetPersons.ToString(), null);
+
             while (reader.Read())
             {
                 Person pers = new Person
