@@ -24,12 +24,11 @@ namespace CarStore.DAL.Util
         
         public DbDataReader DbDataRequestCommand(string procedure, Dictionary<string, object> parameters=null)
         {
-
             return Create(procedure, parameters).ExecuteReader();
         }
-        public object DbDataPostCommand(string procedure, Dictionary<string, object> parameters = null)
+        public void DbDataPostCommand(string procedure, Dictionary<string, object> parameters = null)
         {
-            return Create(procedure, parameters).ExecuteScalar();
+             Create(procedure, parameters).ExecuteScalar();
         }
 
         private DbCommand Create(string procedure, Dictionary<string, object> parameters = null)

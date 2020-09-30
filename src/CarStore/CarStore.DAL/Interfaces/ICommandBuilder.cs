@@ -8,6 +8,6 @@ namespace CarStore.DAL.Interfaces
     public interface ICommandBuilder
     {
         DbDataReader DbDataRequestCommand(string procedure, Dictionary<string, object> parameters = null);
-        object DbDataPostCommand(string procedure, Dictionary<string, object> parameters = null);
+        void DbDataPostCommand(string procedure, Dictionary<string, object> parameters = null);
     }
 }
