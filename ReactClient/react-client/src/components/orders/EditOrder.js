@@ -52,16 +52,14 @@ class editOrderItem extends React.Component{
                  PersonId:this.state.PersonId
              })
          })
-         if (!res.ok) { // код ответа не 200~ 
-             throw new Error(`Не удалось получить ${POST_URL}, статус: ${res.status}`);
-            
-         }   
+        
         }
         
         
      };
 
    async getOrder(id){
+    if(id !="" &&  id!=undefined,id!=0){
     const apiUrl = "https://localhost:5001/api/order/getorder?id="+this.props.match.params.id;
         await fetch(apiUrl)
         .then((response) => response.json())
@@ -72,6 +70,7 @@ class editOrderItem extends React.Component{
           this.setState({OrderDate:data.OrderDate});
           this.setState({OrderID:data.OrderID});
           })
+        }
     }
 
     render(props){

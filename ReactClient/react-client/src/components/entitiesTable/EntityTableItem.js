@@ -7,7 +7,12 @@ class EntityTableItem extends React.Component {
         const { data: { Items, fields,title } } =this.props
         return (
             <div className="content" id="order_area">
-                <h2>Dashboard</h2>
+                <div><h2>Dashboard</h2></div>
+                <div>
+                <Link className="" to={'/edit'+title+"/" + 0}>
+                                        <span className="btn btn-success mr-1">Add new</span>
+                                    </Link>
+                </div>
                 <table className="table table-bordered table-striped">
                     <TableHead fields={fields} title={title} />
                     <TableBody Items={Items} title={title}/>

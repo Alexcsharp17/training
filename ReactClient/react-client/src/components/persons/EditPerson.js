@@ -63,7 +63,8 @@ class editPersonItem extends React.Component{
         return <SuccessEdit/>
     };
    async getPerson(id){
-    const apiUrl = "https://localhost:5001/api/person/getperson?id="+this.props.match.params.id;
+       if(id !="" &&  id!=undefined,id!=0){
+        const apiUrl = "https://localhost:5001/api/person/getperson?id="+this.props.match.params.id;
         await fetch(apiUrl)
         .then((response) => response.json())
         .then((data) =>{
@@ -73,6 +74,7 @@ class editPersonItem extends React.Component{
           this.setState({LastName:data.LastName});
           this.setState({Phone:data.Phone});
           })
+       }
     }
 
     render(props){
