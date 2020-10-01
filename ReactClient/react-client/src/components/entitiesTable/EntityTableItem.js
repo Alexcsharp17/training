@@ -7,11 +7,12 @@ class EntityTableItem extends React.Component {
         const { data: { Items, fields,title } } =this.props
         return (
             <div className="content" id="order_area">
+                <div className="alert"></div>
                 <div><h2>Dashboard</h2></div>
                 <div>
                 <Link className="" to={'/edit'+title+"/" + 0}>
                                         <span className="btn btn-success mr-1">Add new</span>
-                                    </Link>
+                 </Link>
                 </div>
                 <table className="table table-bordered table-striped">
                     <TableHead fields={fields} title={title} />
@@ -45,12 +46,25 @@ class TableHead extends React.Component {
 }
 
 class TableBody extends React.Component {
+    constructor(props){
+        super(props);
+        this.props=props
+    }
+   deleteItem(id,title){
+        const apiUrl = 'https://localhost:5001/api/' +this.props.title+'/delete'+this.props.title+'?id='+id;
+        fetch(apiUrl,{
+            method:'DELETE'
+        });
+
+    }
     render() {
-        const { Items, title } = this.props
+       
+        const { Items,title} = this.props
         return (
             <tbody>
                 {
-                    Items.map(function (item) {
+                    Items.map((item,title)=> {
+                    
                         return (
                             <tr>
                                 {
@@ -59,12 +73,11 @@ class TableBody extends React.Component {
                                     })
                                 }
                                 <td>
-                                    <Link className="" to={'/edit'+title+"/" + item[Object.keys(item)[0]]}>
+                                    <Link className="" to={'/edit'+this.props.title+"/" + item[Object.keys(item)[0]]}>
                                         <span className="btn btn-warning mr-1">Edit</span>
                                     </Link>
-                                    <Link className="" to="/deleteorder">
-                                        <span className="btn btn-danger">Delete</span>
-                                    </Link>
+                                    <button className="btn btn-primary" onClick={()=>this.deleteItem(item[Object.keys(item)[0]],title)}>Delete</button>
+                                    
                                 </td>
                             </tr>
                         )
