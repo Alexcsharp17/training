@@ -10,7 +10,10 @@ class editPersonItem extends React.Component{
    constructor(props){
         super(props); 
         this.props=props;
-        this.state={Person:{}}
+        this.state={
+            Person:{},
+            errors:[]
+        }
         this.getPerson(this.props.match.params.id);
             console.log("Fetched order",this.state.Person);
     }
@@ -55,13 +58,22 @@ class editPersonItem extends React.Component{
                 LastName:this.state.LastName,
                 Phone:this.state.Phone
             })
-        })
-        
+        }).then((response) => response.json())
+        .then((data) =>{ 
+            if(data.errors!=null || data.errors!=undefined){
+               console.log('This is your data', data);
+           this.setState({errors:data.errors});
+            }
+            else{
+               alert("Order succesfully changed");
+                this.setState({errors:[]});
+               
+            }
+            
+           })
+       
        }
-       
-       
-        return <SuccessEdit/>
-    };
+    }
    async getPerson(id){
        if(id !="" &&  id!=undefined,id!=0){
         const apiUrl = "https://localhost:5001/api/person/getperson?id="+this.props.match.params.id;
@@ -78,12 +90,30 @@ class editPersonItem extends React.Component{
     }
 
     render(props){
+        let errors =this.state.errors;
         return( 
         <div className="mt-2 row">
         <div className="col-2 offset-5 card border-rounded p-2">
             <div className="bg-secondary"><h3 className="text-white">Edit Person</h3></div>
             <div className="p-2 d-flex flex-row-start">
             <form className="form"  >
+            <div>
+                   {
+                       
+                      Object.keys(errors).map(function(key){
+                          return(
+                            <div>
+                                {
+                                    errors[key].map(function(e){
+                                    return(<p className="text-danger">{e}</p>)
+                                    })
+                                }
+                            </div>
+                          );
+                          
+                      })
+                   }
+                </div>     
                 <div className="form-group ">  
                 <label className="col-form-label">                                
                 <p> Person id:</p> 

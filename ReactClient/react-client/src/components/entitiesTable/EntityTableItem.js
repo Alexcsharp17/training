@@ -49,7 +49,10 @@ class TableBody extends React.Component {
     constructor(props) {
         super(props);
         this.props = props
-        this.state = { confirmDelete: false };
+        this.state = { 
+            confirmDelete: false ,
+            idError:""
+        };
     }
 
     deleteItem(id, title) {
@@ -57,17 +60,34 @@ class TableBody extends React.Component {
             const apiUrl = 'https://localhost:5001/api/' + this.props.title + '/delete' + this.props.title + '?id=' + id;
             fetch(apiUrl, {
                 method: 'DELETE'
-            });
-
+            }).then((response) => response.json())
+            .then((data)=>{
+                console.log(data);
+                console.log(data[idError]);
+                if(data.idError!=undefined){
+                    this.setState({idError:"Can not delete person who has active records"})
+                
+                }
+                else{
+                    this.setState({idError:""})
+                    console.log("sucess delete");
+                    console.log(data.idError);
+                }
+                
+            })
         }
 
     }
     render() {
 
         const { Items, title } = this.props
+        if(this.state.idError!=""){
+              alert(this.state.idError);          
+        }
         return (
             <tbody>
                 {
+                    
                     Items.map((item, title) => {
                         return (
                             <tr>

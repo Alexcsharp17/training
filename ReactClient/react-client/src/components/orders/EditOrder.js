@@ -9,7 +9,10 @@ class editOrderItem extends React.Component{
    constructor(props){
         super(props); 
         this.props=props;
-        this.state={Order:{}}
+        this.state={
+            Order:{},
+            errors:[]
+    }
         this.getOrder(this.props.match.params.id);
     }
     validate=()=>{
@@ -46,13 +49,25 @@ class editOrderItem extends React.Component{
                  'Content-Type': 'application/json'
              },
              body: JSON.stringify({
-                 OrderID:this.state.OrderID,
-                 CarID:this.state.CarID,
-                 OrderDate:this.state.OrderDate,
-                 PersonId:this.state.PersonId
+                 OrderID:parseInt(this.state.OrderID),
+                 OrderDate:new Date(Date.parse(this.state.OrderDate)),
+                 CarID:parseInt(this.state.CarID),             
+                 PersonId:parseInt(this.state.PersonId)
              })
-         })
-        
+         }).then((response) => response.json())
+         .then((data) =>{ 
+             if(data.errors!=null || data.errors!=undefined){
+                console.log('This is your data', data);
+            this.setState({errors:data.errors});
+             }
+             else{
+                alert("Order succesfully changed");
+                 this.setState({errors:[]});
+                
+             }
+             
+            });
+
         }
         
         
@@ -75,13 +90,31 @@ class editOrderItem extends React.Component{
 
     render(props){
         console.log(this.state.Order.PersonId);
+        let errors =this.state.errors;
         return( 
-
+            
         <div className="mt-2 row">
-        <div className="col-2 offset-5 card border-rounded p-2">
+        <div className="col-3 offset-4 card border-rounded p-2">
             <div className="bg-secondary"><h3 className="text-white">Edit order</h3></div>
-            <div className="p-2 d-flex flex-row-start">
-            <form className="form">
+            <div className="p-2 d-flex flex-row-start">           
+            <form className="form">  
+            <div>
+                   {
+                       
+                      Object.keys(errors).map(function(key){
+                          return(
+                            <div>
+                                {
+                                    errors[key].map(function(e){
+                                    return(<p className="text-danger">{e}</p>)
+                                    })
+                                }
+                            </div>
+                          );
+                          
+                      })
+                   }
+                </div>        
                 <div className="form-group ">  
                 <label className="col-form-label">                                
                 <p> Order id:</p> 
