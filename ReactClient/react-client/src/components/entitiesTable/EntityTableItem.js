@@ -51,7 +51,7 @@ class TableBody extends React.Component {
         this.props = props
         this.state = { 
             confirmDelete: false ,
-            idError:""
+            iDError:""
         };
     }
 
@@ -63,15 +63,14 @@ class TableBody extends React.Component {
             }).then((response) => response.json())
             .then((data)=>{
                 console.log(data);
-                console.log(data[idError]);
-                if(data.idError!=undefined){
-                    this.setState({idError:"Can not delete person who has active records"})
-                
+                if(data.IdError!=undefined){
+                    this.setState({IdError:"Can not delete person who has active records"})
+                    console.log("failed delete");
                 }
                 else{
-                    this.setState({idError:""})
+                    this.setState({IdError:""})
                     console.log("sucess delete");
-                    console.log(data.idError);
+                    console.log(data.IdError);
                 }
                 
             })
@@ -81,8 +80,8 @@ class TableBody extends React.Component {
     render() {
 
         const { Items, title } = this.props
-        if(this.state.idError!=""){
-              alert(this.state.idError);          
+        if(this.state.IdError!="" && this.state.idError!=undefined){
+              alert(this.state.IdError);          
         }
         return (
             <tbody>

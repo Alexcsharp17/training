@@ -53,19 +53,19 @@ class editPersonItem extends React.Component{
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                PersonID:this.state.PersonID,
+                PersonID:parseInt(this.state.PersonID),
                 FirstName:this.state.FirstName,
                 LastName:this.state.LastName,
                 Phone:this.state.Phone
             })
         }).then((response) => response.json())
         .then((data) =>{ 
-            if(data.errors!=null || data.errors!=undefined){
+            if(data.errors!=null && data.errors!=undefined){
                console.log('This is your data', data);
            this.setState({errors:data.errors});
             }
             else{
-               alert("Order succesfully changed");
+               alert("Person succesfully changed");
                 this.setState({errors:[]});
                
             }

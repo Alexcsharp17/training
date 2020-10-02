@@ -1,7 +1,11 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import carsJson from '../../cars.json'
 import { Link } from "react-router-dom"
 
+import DatePicker from "react-datepicker";
+ 
+import "react-datepicker/dist/react-datepicker.css";
 const POST_URL=  "https://localhost:5001/api/order/addorder/";
 
 class editOrderItem extends React.Component{
@@ -9,11 +13,36 @@ class editOrderItem extends React.Component{
    constructor(props){
         super(props); 
         this.props=props;
+       
         this.state={
             Order:{},
-            errors:[]
+            errors:[],
+            Persons:[]
     }
+    this.handleChange = this.handleChange.bind(this);
         this.getOrder(this.props.match.params.id);
+        this.getPersons();
+    }
+    async getPersons(callback) {
+        const GET_URL = 'https://localhost:5001/api/person/getpersons';
+        var Persons = [];
+        await fetch(GET_URL)
+          .then((response) => response.json())
+          .then((data) => {
+            Persons = data
+          });
+          this.setState({ Persons});
+        return Persons
+      }
+
+    getSelectCarName(id){
+        return carsJson.forEach(car =>{
+            console.log("CAR NAME:",car.Name,"Car id",car.Id, "Seek id:",this.props.match.params.id);
+
+            if(car.Id==this.props.match.params.id){
+                return car.Name;
+            }
+        }) 
     }
     validate=()=>{
         let CarIDError="";
@@ -63,6 +92,7 @@ class editOrderItem extends React.Component{
              else{
                 alert("Order succesfully changed");
                  this.setState({errors:[]});
+                 this.handleChange(this.state.CarID);
                 
              }
              
@@ -79,18 +109,39 @@ class editOrderItem extends React.Component{
         await fetch(apiUrl)
         .then((response) => response.json())
         .then((data) =>{
-          this.setState({Order:data});
-          this.setState({CarID:data.CarID});
-          this.setState({PersonId:data.PersonId});
-          this.setState({OrderDate:data.OrderDate});
-          this.setState({OrderID:data.OrderID});
+          this.setState({
+              Order:data,
+              CarID:data.CarID,
+              PersonId:data.PersonId,
+              OrderDate:data.OrderDate,
+              OrderID:data.OrderID
+            });
           })
+          this.handleChange(this.state.CarID);
+          this.handlePersonChange(this.state.PersonId);
         }
+    }
+
+    handleChange(id) {
+        this.setState({
+            selectedCar: id,
+            CarID:id
+        });
+
+      }
+    handlePersonChange(id){
+        this.setState({
+            selectedPerson:id,
+            PersonId:id
+        })
     }
 
     render(props){
         console.log(this.state.Order.PersonId);
         let errors =this.state.errors;
+        let cars = carsJson;
+        let Persons=this.state.Persons
+        console.log("selected CAR", this.state.selectedCar);
         return( 
             
         <div className="mt-2 row">
@@ -127,32 +178,32 @@ class editOrderItem extends React.Component{
                 </div>
                 <div className="form-group">
                 <label>
-                    <span>Car id:</span>
-                    <input type="text" className="form-control"  name="CarID"
-                     defaultValue={this.state.Order.CarID} onChange={event=>this.setState({CarID:event.target.value})}/>
-                    <div style={{fontSize:12,color:"red"}}>
-                        {this.state.CarIDError}
-                    </div>
+                    <p>Car </p>
+                    <select value={this.state.selectedCar} onChange={(event)=>this.handleChange(event.target.value)}>
+                        {
+                            cars.map(function(car){
+                            return(<option value={car.Id}>{car.Name}</option>);
+                            })
+                        }
+                    </select>
                 </label>
                 </div>
                 <div className="form-group">
                 <label>
-                    Order Date:
-                    <input type="datetime" className="form-control"  name="OrderDate" 
-                    defaultValue={this.state.Order.OrderDate} onChange={event=>this.setState({OrderDate:event.target.value})}/>
-                    <div style={{fontSize:12,color:"red"}}>
-                        {this.state.OrderDateError}
-                    </div>
+                   <p> Order Date:</p>                 
+                    <DatePicker selected={this.state.OrderDate==undefined?new Date():new Date(this.state.OrderDate)} onChange={(date)=>this.setState({OrderDate:date})} />
                 </label>
                 </div>
                 <div className="form-group">
                 <label>
-                    Person Id:
-                    <input type="text" className="form-control"  name="PersonId"
-                     defaultValue={this.state.Order.PersonId} onChange={event=>this.setState({PersonId:event.target.value})}/>
-                    <div style={{fontSize:12,color:"red"}}>
-                        {this.state.PersonIDError}
-                    </div>
+                    <p>Person </p>
+                    <select value={this.state.selectedPerson}  onChange={(event)=>this.handlePersonChange(event.target.value)}>
+                        {
+                            Persons.map(function(person){
+                            return(<option value={person.PersonID}>{person.FirstName+" "+ person.LastName}</option>);
+                            })
+                        }
+                    </select>
                 </label>
                 </div>
                 <input type="submit" onClick={this.PostForm} value="Send" />
