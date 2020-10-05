@@ -113,7 +113,6 @@ CREATE OR ALTER PROCEDURE [dbo].[sp_GetOrders]
 AS
 BEGIN
 	DECLARE @offset int
-
 	IF (@page=0)
 		BEGIN
 		  SET @offset = @page
@@ -123,31 +122,17 @@ BEGIN
         SET @offset = (@page-1)*@PageSize
       END
 
-	IF(@sortColumn='@OrderID')
-		BEGIN
-			Select * From Orders
-			ORDER BY OrderID
-			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
-		END
-	ELSE IF(@sortColumn='@OrderDate')
-		BEGIN
-			Select * From Orders
-			ORDER BY OrderDate
-			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
-		END
-	ELSE IF(@sortColumn='@PersonID')
-		BEGIN
-			Select * From Orders
-			ORDER BY PersonID
-			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
-		END
-	ELSE 
-		BEGIN
-			Select * From Orders
-			ORDER BY CarID
-			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
-		END
-	
+	Select * From Orders
+			ORDER BY( 
+			CASE WHEN @sortColumn='@OrderID'
+				then OrderID
+			WHEN @sortColumn='@CarID'
+				then CarID
+			WHEN @sortColumn='@OrderDate'
+				then OrderDate
+			else PersonID
+			END)
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;	
 END
 GO
 
@@ -167,31 +152,15 @@ BEGIN
       BEGIN
         SET @offset = (@page-1)*@PageSize
       END
-	IF(@sortColumn='@PersonID')
-		BEGIN
 			Select * From Persons
-			ORDER BY PersonID
-			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
-		END
-	ELSE IF(@sortColumn='@FirstName')
-		BEGIN
-			Select * From Persons
-			ORDER BY PersonID
-			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
-		END
-	ELSE IF(@sortColumn='@LastName')
-		BEGIN
-			Select * From Persons
-			ORDER BY LastName
-			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
-		END
-	ELSE 
-		BEGIN
-			Select * From Persons
-			ORDER BY PersonID
-			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
-		END
-	
+			ORDER BY( 
+			CASE WHEN @sortColumn='@FirsName'
+				then PersonID
+			WHEN @sortColumn='@LastName'
+				then PersonID
+			else PersonID
+			END)
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;	
 END
 GO
 
