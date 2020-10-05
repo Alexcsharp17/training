@@ -1,11 +1,10 @@
-const GET_ORDERS_URL = 'https://localhost:5001/api/order/getorders';
-const GET_PERSONS_URL = 'https://localhost:5001/api/person/getpersons';
-const GET_PERSON_URL = "https://localhost:5001/api/person/getperson?id=";
-const GET_ORDER_URL = "https://localhost:5001/api/order/getorder?id=";
-const ADD_PERSON_URL=  "https://localhost:5001/api/person/addperson/";
-const ADD_ORDER_URL=  "https://localhost:5001/api/order/addorder/";
 const API_URL = 'https://localhost:5001/api/';
-
+const GET_ORDERS_URL = API_URL+'order/getorders';
+const GET_PERSONS_URL =API_URL+'person/getpersons';
+const GET_PERSON_URL = API_URL+"person/getperson?id=";
+const GET_ORDER_URL =API_URL+ "order/getorder?id=";
+const ADD_PERSON_URL=API_URL+ "person/addperson/";
+const ADD_ORDER_URL= API_URL+ "order/addorder/";
 
 export async function getOrders(callback) {
     var Items = [];
