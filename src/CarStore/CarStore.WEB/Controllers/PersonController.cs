@@ -32,14 +32,21 @@ namespace CarStore.WEB.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult GetPersons()
+        public IActionResult GetPersons([FromQuery]int page,[FromQuery]int pageSize=10, [FromQuery] string sort="@PersonID")
         {
-            List<Person> people = PersonService.GetPersons();
-            if (people==null)
-            {
-                return NotFound();
-            }
-            return Content(JsonSerializer.Serialize(people));
+            List<Person> people = new List<Person>();
+            try
+                {
+                    people = PersonService.GetPersons(page,pageSize,sort);
+                    Response.StatusCode = 200;
+                    return Content(JsonSerializer.Serialize(people));
+                }
+                catch (Exception e)
+                {
+                    Response.StatusCode = 400;
+                    return Content(JsonSerializer.Serialize(ModelState));
+                }
+
         }
 
         [HttpPost("[action]")]
@@ -47,10 +54,42 @@ namespace CarStore.WEB.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                Response.StatusCode = 400;
+                return Content(JsonSerializer.Serialize(ModelState));
             }
-            PersonService.AddPerson(person);
-            return Ok();
+            try
+            {
+                PersonService.AddPerson(person);
+                return Ok(JsonSerializer.Serialize(ModelState));
+            }
+            catch
+            {
+                Response.StatusCode = 400;
+                return Content(JsonSerializer.Serialize(ModelState));
+            }
+        }
+
+        [HttpDelete("[action]")]
+        public IActionResult DeletePerson([FromQuery] int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                try
+                {
+                    PersonService.DeletePerson(id);
+                    return Ok(ModelState);
+                }
+                catch
+                {
+                    Response.StatusCode = 400;
+                    ModelState.AddModelError("IdError","Canot delete person, who has active order records");
+                    return Content(JsonSerializer.Serialize(ModelState));
+                }
+            }
         }
 
     }

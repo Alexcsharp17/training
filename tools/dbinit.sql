@@ -84,7 +84,7 @@ BEGIN
 	UPDATE Persons
 SET FirstName=@FirstName,
 	LastName=@LastName,
-	@Phone=@Phone
+	Phone=@Phone
 	WHERE (PersonID=@id);
 END;
 GO
@@ -107,13 +107,92 @@ BEGIN
 END;
 GO
 CREATE OR ALTER PROCEDURE [dbo].[sp_GetOrders]
+	@page int,
+	@pageSize INT,
+	@sortColumn varchar(50)
 AS
-	Select * From Orders
+BEGIN
+	DECLARE @offset int
+
+	IF (@page=0)
+		BEGIN
+		  SET @offset = @page
+		END
+	 ELSE 
+      BEGIN
+        SET @offset = (@page-1)*@PageSize
+      END
+
+	IF(@sortColumn='@OrderID')
+		BEGIN
+			Select * From Orders
+			ORDER BY OrderID
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
+		END
+	ELSE IF(@sortColumn='@OrderDate')
+		BEGIN
+			Select * From Orders
+			ORDER BY OrderDate
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
+		END
+	ELSE IF(@sortColumn='@PersonID')
+		BEGIN
+			Select * From Orders
+			ORDER BY PersonID
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
+		END
+	ELSE 
+		BEGIN
+			Select * From Orders
+			ORDER BY CarID
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
+		END
+	
+END
 GO
 
 CREATE OR ALTER PROCEDURE [dbo].[sp_GetPersons]
+	@page int,
+	@pageSize INT,
+	@sortColumn varchar(50)
 AS
-	Select * From Persons
+BEGIN
+	DECLARE @offset int
+
+	IF (@page=0)
+		BEGIN
+		  SET @offset = @page
+		END
+	 ELSE 
+      BEGIN
+        SET @offset = (@page-1)*@PageSize
+      END
+	IF(@sortColumn='@PersonID')
+		BEGIN
+			Select * From Persons
+			ORDER BY PersonID
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
+		END
+	ELSE IF(@sortColumn='@FirstName')
+		BEGIN
+			Select * From Persons
+			ORDER BY PersonID
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
+		END
+	ELSE IF(@sortColumn='@LastName')
+		BEGIN
+			Select * From Persons
+			ORDER BY LastName
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
+		END
+	ELSE 
+		BEGIN
+			Select * From Persons
+			ORDER BY PersonID
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
+		END
+	
+END
 GO
 
 /*Exceptions*/

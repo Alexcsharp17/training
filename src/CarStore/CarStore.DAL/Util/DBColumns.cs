@@ -19,5 +19,12 @@ namespace CarStore.DAL.Util
         public  const string LAST_NAME = "@LastName";
                 
         public  const string PHONE= "@Phone";
+
+        public const string PAGE = "@page";
+
+        public const string PAGE_SIZE = "@pageSize";
+
+        public const string SORT_COLUMN = "@sortColumn";
+
     }
 }

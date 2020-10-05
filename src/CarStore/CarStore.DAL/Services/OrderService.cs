@@ -26,7 +26,16 @@ namespace CarStore.DAL.Services
                 {DBColumns.ORDER_DATE, order.OrderDate },
                 {DBColumns.CAR_ID, order.CarID }
             };
-            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
+            if (order.OrderID == 0)
+            {
+                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
+
+            }
+            else
+            {
+                parameters.Add(DBColumns.ID,order.OrderID);
+               comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), parameters);
+            }
         }
         public void DeleteOrder(int id)
         {
@@ -60,14 +69,29 @@ namespace CarStore.DAL.Services
                 {DBColumns.ORDER_DATE, order.OrderDate },
                 {DBColumns.CAR_ID, order.CarID }
             };
+            if (order.OrderID == 0)
+            {
+                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
 
-            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdateOrder.ToString(),parameters);
+            }
+            else
+            {
+                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), parameters);
+
+            }
         }
 
-        public List<Order> GetOrders()
+        public List<Order> GetOrders(int page,int pageSize,string sort)
         {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            {
+                {DBColumns.PAGE,page },
+                {DBColumns.PAGE_SIZE,pageSize},
+                {DBColumns.SORT_COLUMN,sort}
+               
+            };
             List<Order> orders = new List<Order>();
-            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetOrders.ToString());
+            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetOrders.ToString(),parameters);
 
             while (reader.Read())
             {
@@ -82,5 +106,6 @@ namespace CarStore.DAL.Services
             }
             return orders;
         }
+
     }
 }

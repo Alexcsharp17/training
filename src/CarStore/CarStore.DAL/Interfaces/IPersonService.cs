@@ -15,6 +15,6 @@ namespace CarStore.DAL.Interfaces
 
         void UpdatePerson(Person person);
 
-        List<Person> GetPersons();
+        List<Person> GetPersons(int page,int pageSize,string sort);
     }
 }

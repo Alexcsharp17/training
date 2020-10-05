@@ -27,9 +27,16 @@ namespace CarStore.DAL.Services
                 {DBColumns.PHONE, person.Phone}
             };
 
-            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertPerson.ToString(),parameters);
-
-         }
+            if (person.PersonID == 0)
+            {
+                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertPerson.ToString(), parameters);
+            }
+            else
+            {
+                parameters.Add(DBColumns.ID,person.PersonID);
+                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdatePerson.ToString(), parameters);
+            }
+        }
 
         public void DeletePerson(int id)
         {
@@ -63,15 +70,27 @@ namespace CarStore.DAL.Services
                 {DBColumns.LAST_NAME, person.LastName},
                 {DBColumns.PHONE, person.Phone}
             };
-
-           comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_DeletePerson.ToString(), parameters);
+            if (person.PersonID == 0)
+            {
+                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertPerson.ToString(), parameters);
+            }
+            else
+            {
+                parameters.Add(DBColumns.ID,person.PersonID);
+                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdatePerson.ToString(), parameters);
+            }
 
         }
-        public List<Person> GetPersons()
+        public List<Person> GetPersons(int page,int pageSize,string sort)
         {
-          
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            {
+                {DBColumns.PAGE,page },
+                {DBColumns.PAGE_SIZE,pageSize},
+                {DBColumns.SORT_COLUMN,sort}
+            };
             List<Person> persons = new List<Person>();
-            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetPersons.ToString(), null);
+            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetPersons.ToString(), parameters);
 
             while (reader.Read())
             {
