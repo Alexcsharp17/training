@@ -80,7 +80,7 @@ class TableBody extends React.Component {
     render() {
 
         const { Items, title } = this.props
-        if(this.state.IdError!="" && this.state.idError!=undefined){
+        if(this.state.IdError!="" && this.state.IdError!=undefined){
               alert(this.state.IdError);          
         }
         return (
