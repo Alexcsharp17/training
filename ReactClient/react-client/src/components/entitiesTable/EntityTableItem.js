@@ -1,6 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from "react-router-dom"
+import {TableHead} from '../entitiesTable/TableHeadItem.js';
+import {TableBody} from '../entitiesTable/TableBodyItem.js';
 
 class EntityTableItem extends React.Component {
     render() {
@@ -22,95 +24,6 @@ class EntityTableItem extends React.Component {
         );
     }
 
-}
-
-class TableHead extends React.Component {
-    render() {
-        const { fields } = this.props
-        return (
-            <thead>
-                <tr>
-                    {
-                        fields.map(function (field) {
-                            return (
-                                <td>{field}</td>
-                            )
-                        })
-                    }
-                    <td></td>
-                </tr>
-            </thead>
-        );
-
-    }
-}
-
-class TableBody extends React.Component {
-    constructor(props) {
-        super(props);
-        this.props = props
-        this.state = { 
-            confirmDelete: false ,
-            iDError:""
-        };
-    }
-
-    deleteItem(id, title) {
-        if (window.confirm("Do you want to delete this item?")) {
-            const apiUrl = 'https://localhost:5001/api/' + this.props.title + '/delete' + this.props.title + '?id=' + id;
-            fetch(apiUrl, {
-                method: 'DELETE'
-            }).then((response) => response.json())
-            .then((data)=>{
-                console.log(data);
-                if(data.IdError!=undefined){
-                    this.setState({IdError:"Can not delete person who has active records"})
-                    console.log("failed delete");
-                }
-                else{
-                    this.setState({IdError:""})
-                    console.log("sucess delete");
-                    console.log(data.IdError);
-                }
-                
-            })
-        }
-
-    }
-    render() {
-
-        const { Items, title } = this.props
-        if(this.state.IdError!="" && this.state.IdError!=undefined){
-              alert(this.state.IdError);          
-        }
-        return (
-            <tbody>
-                {
-                    
-                    Items.map((item, title) => {
-                        return (
-                            <tr>
-                                {
-                                    Object.keys(item).map(function (key, index) {
-                                        return (<td>{item[key]}</td>)
-                                    })
-                                }
-
-                                <td>
-                                    <Link className="" to={'/edit' + this.props.title + "/" + item[Object.keys(item)[0]]}>
-                                        <span className="btn btn-warning mr-1">Edit</span>
-                                    </Link>
-                                    <button className="btn btn-primary" onClick={() => this.deleteItem(item[Object.keys(item)[0]], title)}>Delete</button>
-
-                                </td>
-                            </tr>
-                        )
-                    })
-                }
-            </tbody>
-        );
-
-    }
 }
 
 export default EntityTableItem;

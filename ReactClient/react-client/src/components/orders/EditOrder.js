@@ -2,43 +2,34 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import carsJson from '../../cars.json'
 import { Link } from "react-router-dom"
-
+import{getOrder,addOrder,getPersons} from '../../dataProviders/ApiProvider.js'
+import{CreateErrorSection, createErrorSection} from '../../util/ErrorSectionBuilder.js'
 import DatePicker from "react-datepicker";
- 
 import "react-datepicker/dist/react-datepicker.css";
-const POST_URL=  "https://localhost:5001/api/order/addorder/";
 
-class editOrderItem extends React.Component{
+
+class EditOrderItem extends React.Component{
    
    constructor(props){
         super(props); 
-        this.props=props;
-       
+        this.props=props;      
         this.state={
             Order:{},
             errors:[],
             Persons:[]
+        }
+        this.handleChange = this.handleChange.bind(this);
+        getOrder(this.props.match.params.id,this.FetchRequestResponse);
+        getPersons(this.getPersonsHandler);
     }
-    this.handleChange = this.handleChange.bind(this);
-        this.getOrder(this.props.match.params.id);
-        this.getPersons();
+    
+    getPersonsHandler=(persons)=>{
+        this.setState({Persons:persons})
     }
-    async getPersons(callback) {
-        const GET_URL = 'https://localhost:5001/api/person/getpersons';
-        var Persons = [];
-        await fetch(GET_URL)
-          .then((response) => response.json())
-          .then((data) => {
-            Persons = data
-          });
-          this.setState({ Persons});
-        return Persons
-      }
 
     getSelectCarName(id){
         return carsJson.forEach(car =>{
             console.log("CAR NAME:",car.Name,"Car id",car.Id, "Seek id:",this.props.match.params.id);
-
             if(car.Id==this.props.match.params.id){
                 return car.Name;
             }
@@ -72,56 +63,39 @@ class editOrderItem extends React.Component{
         e.preventDefault();
         let isValid = this.validate();
         if(isValid){
-         const res =  fetch(POST_URL,{
-             method:'POST',
-             headers: {
-                 'Content-Type': 'application/json'
-             },
-             body: JSON.stringify({
-                 OrderID:parseInt(this.state.OrderID),
-                 OrderDate:new Date(Date.parse(this.state.OrderDate)),
-                 CarID:parseInt(this.state.CarID),             
-                 PersonId:parseInt(this.state.PersonId)
-             })
-         }).then((response) => response.json())
-         .then((data) =>{ 
-             if(data.errors!=null || data.errors!=undefined){
-                console.log('This is your data', data);
-            this.setState({errors:data.errors});
-             }
-             else{
-                alert("Order succesfully changed");
-                 this.setState({errors:[]});
-                 this.handleChange(this.state.CarID);
-                
-             }
-             
-            });
-
+         let order={
+            OrderID:parseInt(this.state.OrderID),
+            OrderDate:new Date(Date.parse(this.state.OrderDate)),
+            CarID:parseInt(this.state.CarID),             
+            PersonId:parseInt(this.state.PersonId)
+         }
+             addOrder(order,this.AddOrderHandler);
         }
-        
-        
+            
      };
+    AddOrderHandler=(data)=>{
+        if(data.errors!=null || data.errors!=undefined){
+            console.log('This is your data', data);
+        this.setState({errors:data.errors});
+         }
+         else{
+            alert("Order succesfully changed");
+             this.setState({errors:[]});
+             this.handleChange(this.state.CarID);          
+         }
+    }
 
-   async getOrder(id){
-    if(id !="" &&  id!=undefined,id!=0){
-    const apiUrl = "https://localhost:5001/api/order/getorder?id="+this.props.match.params.id;
-        await fetch(apiUrl)
-        .then((response) => response.json())
-        .then((data) =>{
-          this.setState({
+    FetchRequestResponse=(data)=>{
+        this.setState({
               Order:data,
               CarID:data.CarID,
               PersonId:data.PersonId,
               OrderDate:data.OrderDate,
               OrderID:data.OrderID
-            });
-          })
-          this.handleChange(this.state.CarID);
-          this.handlePersonChange(this.state.PersonId);
-        }
+        });
+        console.log("Fetched data",this.state.Order);
     }
-
+    
     handleChange(id) {
         this.setState({
             selectedCar: id,
@@ -137,32 +111,23 @@ class editOrderItem extends React.Component{
     }
 
     render(props){
-        console.log(this.state.Order.PersonId);
-        let errors =this.state.errors;
-        let cars = carsJson;
-        let Persons=this.state.Persons
-        console.log("selected CAR", this.state.selectedCar);
-        return( 
-            
+        const{errors}=this.state
+        return(      
         <div className="mt-2 row">
         <div className="col-3 offset-4 card border-rounded p-2">
             <div className="bg-secondary"><h3 className="text-white">Edit order</h3></div>
             <div className="p-2 d-flex flex-row-start">           
             <form className="form">  
             <div>
-                   {
-                       
+                   {                    
                       Object.keys(errors).map(function(key){
                           return(
                             <div>
                                 {
-                                    errors[key].map(function(e){
-                                    return(<p className="text-danger">{e}</p>)
-                                    })
+                                   CreateErrorSection(errors[key])
                                 }
                             </div>
-                          );
-                          
+                          );                        
                       })
                    }
                 </div>        
@@ -181,7 +146,7 @@ class editOrderItem extends React.Component{
                     <p>Car </p>
                     <select value={this.state.selectedCar} onChange={(event)=>this.handleChange(event.target.value)}>
                         {
-                            cars.map(function(car){
+                            carsJson.map(function(car){
                             return(<option value={car.Id}>{car.Name}</option>);
                             })
                         }
@@ -199,7 +164,7 @@ class editOrderItem extends React.Component{
                     <p>Person </p>
                     <select value={this.state.selectedPerson}  onChange={(event)=>this.handlePersonChange(event.target.value)}>
                         {
-                            Persons.map(function(person){
+                            this.state.Persons.map(function(person){
                             return(<option value={person.PersonID}>{person.FirstName+" "+ person.LastName}</option>);
                             })
                         }
@@ -216,4 +181,4 @@ class editOrderItem extends React.Component{
     }
 
 }
-export default editOrderItem
+export default EditOrderItem

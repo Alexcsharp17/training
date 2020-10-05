@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from "react-router-dom"
 import EntityTableItem from '../entitiesTable/EntityTableItem.js'
+import{getOrders} from '../../dataProviders/ApiProvider.js'
 
 
 class OrderItem extends React.Component {
@@ -9,10 +10,14 @@ class OrderItem extends React.Component {
     super();
     this.state = { fetchData: "" }
   }
+
+  WriteFetchedData=(Items)=>{
+    this.setState({fetchData:"rendered", Items:Items});
+  }
   render() {
     const fields = ["OrderID", "CarID", "OrderDate", "PersonID"]
     if(this.state.fetchData==""){
-      this.getOrders()
+      getOrders(this.WriteFetchedData);
     }
     console.log("Log from render:", this.state.Items);
     const data = {

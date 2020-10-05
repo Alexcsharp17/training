@@ -23,6 +23,8 @@ function App() {
             <Route path='/persons' component={PersonItem} />
             <Route path='/editorder/:id' component={editOrderItem} />
             <Route path='/editperson/:id' component={editPersonItem} />
+            <Route path='/deleteperson/:id' component={editPersonItem} />
+            <Route path='/deleteorder/:id' component={editPersonItem} />
             {/* <Route path='/persons' component={PersonItem} />
             <Route path='/editorder/:id' component={editOrderItem} />
             <Route path='/editperson/:id' component={editPersonItem} /> */}

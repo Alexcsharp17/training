@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link, Redirect } from "react-router-dom"
+import{getPerson,addPerson} from '../../dataProviders/ApiProvider.js'
 
 const POST_URL=  "https://localhost:5001/api/person/addperson/";
 const DASHBOARD='/persons'
@@ -14,8 +15,8 @@ class editPersonItem extends React.Component{
             Person:{},
             errors:[]
         }
-        this.getPerson(this.props.match.params.id);
-            console.log("Fetched order",this.state.Person);
+        getPerson(this.props.match.params.id,this.FetchRequestResponse);
+    
     }
 
     validate=()=>{
@@ -42,51 +43,41 @@ class editPersonItem extends React.Component{
 
         return true;
     }
+    AddPersonHandler=(data)=>{
+        if(data.errors!=null && data.errors!=undefined){
+            console.log('This is your data', data);
+        this.setState({errors:data.errors});
+         }
+         else{
+            alert("Person succesfully changed");
+             this.setState({errors:[]});       
+         }
+    }
     
     PostForm= e =>{
        e.preventDefault();
        let isValid = this.validate();
        if(isValid){
-        const res =  fetch(POST_URL,{
-            method:'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                PersonID:parseInt(this.state.PersonID),
-                FirstName:this.state.FirstName,
-                LastName:this.state.LastName,
-                Phone:this.state.Phone
-            })
-        }).then((response) => response.json())
-        .then((data) =>{ 
-            if(data.errors!=null && data.errors!=undefined){
-               console.log('This is your data', data);
-           this.setState({errors:data.errors});
-            }
-            else{
-               alert("Person succesfully changed");
-                this.setState({errors:[]});
-               
-            }
-            
-           })
+        let Person={
+            PersonID:this.state.PersonID,
+            FirstName:this.state.FirstName,
+            LastName:this.state.LastName,
+            Phone:this.state.Phone
+        }
+        addPerson(Person,this.AddPersonHandler)
        
        }
     }
-   async getPerson(id){
-       if(id !="" &&  id!=undefined,id!=0){
-        const apiUrl = "https://localhost:5001/api/person/getperson?id="+this.props.match.params.id;
-        await fetch(apiUrl)
-        .then((response) => response.json())
-        .then((data) =>{
-          this.setState({Person:data});
-          this.setState({PersonID:data.PersonID});
-          this.setState({FirstName:data.FirstName});
-          this.setState({LastName:data.LastName});
-          this.setState({Phone:data.Phone});
-          })
-       }
+    
+    FetchRequestResponse=(data)=>{
+        this.setState({
+            Person:data,
+            PersonID:data.PersonID,
+            FirstName:data.FirstName,
+            LastName:data.LastName,
+            Phone:data.Phone
+        });
+        console.log("Fetched data",this.state.Person);
     }
 
     render(props){
