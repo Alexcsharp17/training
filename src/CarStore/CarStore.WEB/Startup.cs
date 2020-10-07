@@ -39,6 +39,7 @@ namespace CarStore.WEB
             services.AddSingleton<IOrderService, OrderService>();
             services.AddSingleton<IPersonService, PersonService>();
             services.AddSingleton<ICommandBuilder, SqlCommandBuild>();
+      
             services.AddSingleton(dbConnection);
             services.AddMvc().AddFluentValidation(mvcConfig=>mvcConfig.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddControllers();

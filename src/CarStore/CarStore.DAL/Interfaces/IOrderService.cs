@@ -16,5 +16,7 @@ namespace CarStore.DAL.Interfaces
         void UpdateOrder(Order order);
 
         List<Order> GetOrders(int page,int pageSize,string sort);
+
+        public int GetOrdersCount();
     }
 }

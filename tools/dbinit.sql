@@ -20,7 +20,20 @@ CREATE TABLE Orders (
 /*Create stored procedures*/
 
 /*Create*/
-go
+GO
+CREATE OR ALTER PROCEDURE [dbo].[sp_GetOrdersCount]
+AS
+BEGIN 
+	select count(*) from Orders
+END
+GO
+CREATE OR ALTER PROCEDURE [dbo].[sp_GetPersonsCount]
+AS
+BEGIN 
+	select count(*) from Persons
+END
+GO
+
 CREATE OR ALTER PROCEDURE [dbo].[sp_InsertOrder]
     @OrderDate Datetime,
     @CarID int,
@@ -121,18 +134,24 @@ BEGIN
       BEGIN
         SET @offset = (@page-1)*@PageSize
       END
-
-	Select * From Orders
-			ORDER BY( 
-			CASE WHEN @sortColumn='@OrderID'
-				then OrderID
-			WHEN @sortColumn='@CarID'
-				then CarID
-			WHEN @sortColumn='@OrderDate'
-				then OrderDate
-			else PersonID
-			END)
+	  IF (@sortColumn='@CarID')
+		BEGIN
+			Select * From Orders
+			ORDER BY CarID
 			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;	
+		END
+		else IF (@sortColumn='@OrderDate')
+		BEGIN
+			Select * From Orders
+			ORDER BY OrderDate
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;	
+		END
+		else 
+		BEGIN
+			Select * From Orders
+			ORDER BY PersonID
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;	
+		END
 END
 GO
 
@@ -152,17 +171,40 @@ BEGIN
       BEGIN
         SET @offset = (@page-1)*@PageSize
       END
-			Select * From Persons
-			ORDER BY( 
-			CASE WHEN @sortColumn='@FirsName'
-				then PersonID
-			WHEN @sortColumn='@LastName'
-				then PersonID
-			else PersonID
-			END)
+	  if(@sortColumn='@FirstName')
+		begin
+		Select * From Persons
+			ORDER BY FirstName
 			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;	
+		end
+		Else if(@sortColumn='@LastName')
+		begin
+		Select * From Persons
+			ORDER BY FirstName
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;	
+		end
+			Else 
+		begin
+		Select * From Persons
+			ORDER BY PersonID
+			OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;	
+		end
 END
 GO
+
+CREATE OR ALTER PROCEDURE [dbo].[sp_GetInitialsList]
+	@id int
+AS
+BEGIN
+	select CONCAT(Persons.FirstName,' ', Persons.LastName) from Persons;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE [dbo].[sp_GetAllPersons]
+AS
+BEGIN
+	SELECT * FROM Persons;
+END
 
 /*Exceptions*/
 EXEC sp_addmessage

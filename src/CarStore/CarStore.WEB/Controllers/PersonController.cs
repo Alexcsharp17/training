@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using CarStore.DAL;
 using CarStore.DAL.Entities;
 using CarStore.DAL.Interfaces;
+using CarStore.DAL.Util;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace CarStore.WEB.Controllers
 {
@@ -20,11 +22,27 @@ namespace CarStore.WEB.Controllers
             this.PersonService = personService;
         }
 
+
         [HttpGet("[action]")]
-        public IActionResult GetPerson([FromQuery]int id)
+        public IActionResult GetPersonsCount()
+        {
+            try
+            {
+                object res = PersonService.GetPersonsCount();
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(ModelState);
+            }
+
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult GetPerson([FromQuery] int id)
         {
             Person person = PersonService.GetPerson(id);
-            if (person==null)
+            if (person == null)
             {
                 return NotFound();
             }
@@ -32,20 +50,19 @@ namespace CarStore.WEB.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult GetPersons([FromQuery]int page,[FromQuery]int pageSize=10, [FromQuery] string sort="@PersonID")
+        public IActionResult GetPersons([FromQuery] int page = 1, [FromQuery] int pageSize = 5, [FromQuery] string sort = DBColumns.PERSON_ID)
         {
             List<Person> people = new List<Person>();
             try
-                {
-                    people = PersonService.GetPersons(page,pageSize,sort);
-                    Response.StatusCode = 200;
-                    return Content(JsonSerializer.Serialize(people));
-                }
-                catch (Exception e)
-                {
-                    Response.StatusCode = 400;
-                    return Content(JsonSerializer.Serialize(ModelState));
-                }
+            {
+                page = page < 0 ? 1 : page;
+                people = PersonService.GetPersons(page, pageSize, sort);
+                return Ok(people);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(ModelState);
+            }
 
         }
 
@@ -54,18 +71,16 @@ namespace CarStore.WEB.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = 400;
-                return Content(JsonSerializer.Serialize(ModelState));
+                return BadRequest(ModelState);
             }
             try
             {
                 PersonService.AddPerson(person);
-                return Ok(JsonSerializer.Serialize(ModelState));
+                return Ok(ModelState);
             }
             catch
             {
-                Response.StatusCode = 400;
-                return Content(JsonSerializer.Serialize(ModelState));
+                return BadRequest(ModelState);
             }
         }
 
@@ -86,11 +101,24 @@ namespace CarStore.WEB.Controllers
                 catch
                 {
                     Response.StatusCode = 400;
-                    ModelState.AddModelError("IdError","Canot delete person, who has active order records");
-                    return Content(JsonSerializer.Serialize(ModelState));
+                    ModelState.AddModelError("IdError", "Canot delete person, who has active order records");
+                    return BadRequest(ModelState);
                 }
             }
         }
 
+        [HttpGet("[action]")]
+        public IActionResult GetAllPersons()
+        {
+            try
+            {
+                var persons = PersonService.GetAllPersons();
+                return Ok(persons);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 }

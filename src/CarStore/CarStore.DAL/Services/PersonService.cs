@@ -5,6 +5,7 @@ using CarStore.DAL.Util;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
@@ -92,6 +93,27 @@ namespace CarStore.DAL.Services
             List<Person> persons = new List<Person>();
             using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetPersons.ToString(), parameters);
 
+
+            while (reader.Read())
+            {
+                Person pers = new Person
+                {
+                    PersonID = reader.GetInt32(0),
+                    FirstName = reader.GetString(1),
+                    LastName = reader.GetString(2),
+                    Phone = reader.GetString(3)
+                };
+                persons.Add(pers);
+            }
+            reader.Close();
+            return persons;
+        }
+        public List<Person> GetAllPersons()
+        {
+         
+            List<Person> persons = new List<Person>();
+            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetAllPersons.ToString());
+
             while (reader.Read())
             {
                 Person pers = new Person
@@ -104,6 +126,10 @@ namespace CarStore.DAL.Services
                 persons.Add(pers);
             }
             return persons;
+        }
+        public int GetPersonsCount()
+        {
+            return comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_GetPersonsCount.ToString());
         }
     }
 }

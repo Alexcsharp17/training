@@ -27,31 +27,38 @@ namespace CarStore.WEB.Controllers
             this.personService = personService;
         }
         [HttpGet("[action]")]
-        public ActionResult GetOrder([FromQuery]int id)
+        public ActionResult GetOrder([FromQuery] int id)
         {
-            Order order = orderService.GetOrder(id);
-            if (order == null)
+
+            try
             {
-                return NotFound();
+                Order order = orderService.GetOrder(id);
+                if (order == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(order);
             }
-            return Content(JsonSerializer.Serialize(order));
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpGet("[action]")]
-        public IActionResult GetOrders([FromQuery]int page=0,[FromQuery] int pageSize=10, [FromQuery] string sort =DBColumns.PERSON_ID)
+        public IActionResult GetOrders([FromQuery] int page = 0, [FromQuery] int pageSize = 5, [FromQuery] string sort = DBColumns.PERSON_ID)
         {
             List<Order> orders = new List<Order>();
             try
-                {
-                    orders = orderService.GetOrders(page,pageSize,sort);
-                    Response.StatusCode = 200;
-                    return Content(JsonSerializer.Serialize(orders));
-                }
-                catch (Exception e)
-                {
-                    Response.StatusCode = 400;
-                    return Content(JsonSerializer.Serialize(ModelState));
-                }
+            {
+                orders = orderService.GetOrders(page, pageSize, sort);
+                return Ok(orders);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(ModelState);
+            }
 
         }
 
@@ -61,10 +68,8 @@ namespace CarStore.WEB.Controllers
 
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = 400;
-                ModelState.AddModelError("IdError","Message");
-                return Content(JsonSerializer.Serialize(ModelState));
- 
+                ModelState.AddModelError("IdError", "Message");
+                return BadRequest(ModelState);
             }
 
             try
@@ -74,10 +79,9 @@ namespace CarStore.WEB.Controllers
             }
             catch (DbException e)
             {
-                Response.StatusCode = 400;
-                return Content(JsonSerializer.Serialize(ModelState));
+                return BadRequest(ModelState);
             }
-          
+
         }
 
         [HttpDelete("[action]")]
@@ -96,11 +100,26 @@ namespace CarStore.WEB.Controllers
                 }
                 catch
                 {
-                    Response.StatusCode = 400;
-                    return Content(JsonSerializer.Serialize(ModelState));
+                    return BadRequest(ModelState);
                 }
-                
+
             }
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult GetOrdersCount()
+        {
+            try
+            {
+                int res = orderService.GetOrdersCount();
+            
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(ModelState);
+            }
+
         }
 
     }
