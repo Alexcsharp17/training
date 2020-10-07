@@ -11,8 +11,7 @@ class EntityTableItem extends React.Component {
         this.state={CurrentPage:this.props.CurrentPage}
     }
     render() {
-        const { data: { Items, fields, title},callback,CurrentPage,TotalPages } = this.props
-        console.log("CALLBACK FROM ENTITY TABLE",callback);
+        const { data: { Items, fields, title},callback,CurrentPage,TotalPages,PersonsNumber } = this.props
         return (
             <div className="content" id="order_area">
                 <div className="alert"></div>
@@ -23,7 +22,7 @@ class EntityTableItem extends React.Component {
                     </Link>
                 </div>
                 <table className="table table-bordered table-striped">
-                    <TableHead fields={fields} title={title} callback={callback} />
+                    <TableHead fields={fields} title={title} callback={callback} PersonsNumber={PersonsNumber} />
                     <TableBody Items={Items} title={title}  />
                 </table>
                 <PageLinks CurrentPage={CurrentPage} TotalPages={TotalPages} callback={callback}/>

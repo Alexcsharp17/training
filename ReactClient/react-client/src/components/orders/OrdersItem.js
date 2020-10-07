@@ -30,7 +30,8 @@ class OrderItem extends React.Component {
     if(this.state.fetchedItemsCoutn==""){
       getOrdersCount(this.writeFetchedItemsCount)
     }
-    if(this.state.fetchData==""){
+    console.log("Fethced data state :", this.state.fetchData)
+    if(this.state.fetchData=="" && this.state.fetchedItemsCoutn!=""){
       getOrders(this.WriteFetchedData,1);
     }
     console.log("Log from render:", this.state.Items);

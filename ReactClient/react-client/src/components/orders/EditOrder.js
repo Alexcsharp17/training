@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import carsJson from '../../cars.json'
 import { Link } from "react-router-dom"
-import{getOrder,addOrder,getPersons} from '../../dataProviders/ApiProvider.js'
+import{getOrder,addOrder,getAllPersons} from '../../dataProviders/ApiProvider.js'
 import{CreateErrorSection, createErrorSection} from '../../util/ErrorSectionBuilder.js'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -16,15 +16,20 @@ class EditOrderItem extends React.Component{
         this.state={
             Order:{},
             errors:[],
-            Persons:[]
+            Persons:[],
+            getPersonsState:"",
+            getPersonsCountState:""
         }
         this.handleChange = this.handleChange.bind(this);
         getOrder(this.props.match.params.id,this.FetchRequestResponse);
-        getPersons(this.getPersonsHandler);
+       
     }
     
     getPersonsHandler=(persons)=>{
-        this.setState({Persons:persons})
+        this.setState({Persons:persons, getPersonsState:"rendered"})
+    }
+    getPersonsCountHandler=(count)=>{
+        this.setState({PersonsCount:count,getPersonsCountState:"rendered"})
     }
 
     getSelectCarName(id){
@@ -109,8 +114,13 @@ class EditOrderItem extends React.Component{
             PersonId:id
         })
     }
-
+    
     render(props){
+        console.log("getPersonsCountState",this.state.getPersonsCountState);
+
+        if(this.state.getPersonsState=="" ){
+            getAllPersons(this.getPersonsHandler)
+        }
         const{errors}=this.state
         return(      
         <div className="mt-2 row">

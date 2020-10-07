@@ -7,8 +7,19 @@ const ADD_PERSON_URL=API_URL+ "person/addperson/";
 const ADD_ORDER_URL= API_URL+ "order/addorder/";
 const GET_ORDERS_COUNT_URL=API_URL+"order/getorderscount"
 const GET_PERSONS_COUNT_URL=API_URL+"person/getpersonscount"
+const GET_ALL_PERSONS_URL=API_URL+"person/getallpersons"
 
 const PersonID="@PersonID"
+
+export async function getAllPersons(callback){
+  let dat=[];
+  await fetch(GET_ALL_PERSONS_URL)
+  .then((response) => response.json())
+  .then((data) => {
+    dat = data
+  });
+callback(dat);
+}
 
 export async function getOrdersCount(callback)
 {
@@ -40,7 +51,7 @@ export async function getOrders(callback,page,sort) {
     callback(Items,page,sort);
 }
 
-export async function getPersons(callback,page,sort) {
+export async function getPersons(callback,page,sort ) {
     var Items = [];
     console.log("PAGE",page,"SORT",sort);
     await fetch(GET_PERSONS_URL+"?page="+page+"&sort="+sort)

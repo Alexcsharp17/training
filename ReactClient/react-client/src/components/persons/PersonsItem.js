@@ -33,7 +33,7 @@ class PersonItem extends React.Component {
 
       getPersonsCount(this.writeFetchedItemsCount)
     }
-    if(this.state.fetchData==""){
+    if(this.state.fetchData=="" && this.state.fetchedItemsCoutn!=""){
        getPersons(this.WriteFetchedData,1);     
     }
     console.log("Log from render:", this.state.Items);

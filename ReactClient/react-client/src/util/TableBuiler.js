@@ -4,17 +4,25 @@ import { Link } from "react-router-dom"
 import {deleteItem} from '../dataProviders/ApiProvider.js'
 
 export function  CreateTableBody(items,title,fetchHandler){
-    return(
-        <tbody>
-            {
-                items.map((item) => {
-                    return (
-                        CreateTableRow(item,title,fetchHandler)
-                    )
-                })
-            }
-        </tbody>
-    );
+    if(items==undefined){
+        return(<tbody><tr>Loading</tr></tbody>)
+    }
+    else{
+        console.log("ITEMS LOAded",items)
+        return(
+            
+            <tbody>
+                { 
+                    items.map((item) => {
+                        return (
+                            CreateTableRow(item,title,fetchHandler)
+                        )
+                    })
+                }
+            </tbody>
+        );
+    }
+    
 }
 
 function CreateTableRow(item,title,fetchHandler){
