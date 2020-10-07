@@ -5,7 +5,7 @@ export class PageLinks extends React.Component {
     constructor(props) {
         super(props)
         this.props=props;
-        this.state= { TotalPages: props.TotalPages, CurrentPage:props.CurrentPage };
+        this.state= { TotalPages: props.TotalPages, CurrentPage:props.CurrentPage};
         console.log("PROPS",this.props);
     }
     rendPrevButton = () => {
@@ -62,20 +62,9 @@ export class PageLinks extends React.Component {
                 {this.rendNextButton()}
             </div>
         )
-        
-
     }
     GoToPage(page) {
         this.props.callback(page,"default");
     }
-}
-
-
-
-function CanGoToPage(pageNumber, totalPages) {
-    if (pageNumber <= totalPages && pageNumber > 0) {
-        return true
-    }
-    return false();
 }
 

@@ -8,7 +8,7 @@ import{getOrders,getOrdersCount} from '../../dataProviders/ApiProvider.js'
 class OrderItem extends React.Component {
   constructor() {
     super();
-    this.state = { fetchData: "",fetchedItemsCoutn:"", CurrentPage:1, CurerentSort:"@PersonID" }
+    this.state = { fetchData: "",fetchedItemsCount:"", CurrentPage:1, CurerentSort:"@PersonID" }
   }
   sortData=(page,sort)=>{
     if(page=="default" || page==undefined){
@@ -17,22 +17,22 @@ class OrderItem extends React.Component {
     if(sort =="default"|| sort==undefined){
       sort=this.state.CurrentSort
     }
-    getOrders(this.WriteFetchedData,page,sort)
+    getOrders(this.writeFetchedData,page,sort)
   }
   writeFetchedItemsCount=(number)=>{
-    this.setState({fetchedItemsCoutn:"rendered",ItemsNumer:number})
+    this.setState({fetchedItemsCount:"rendered",ItemsNumer:number})
   }
-  WriteFetchedData=(Items,page,sort)=>{
+  writeFetchedData=(Items,page,sort)=>{
     this.setState({fetchData:"rendered", Items:Items,CurrentPage:page,CurrentSort:sort});
   }
   render() {
     const fields = ["OrderID", "OrderDate", "CarID", "PersonID"]
-    if(this.state.fetchedItemsCoutn==""){
+    if(this.state.fetchedItemsCount==""){
       getOrdersCount(this.writeFetchedItemsCount)
     }
     console.log("Fethced data state :", this.state.fetchData)
-    if(this.state.fetchData=="" && this.state.fetchedItemsCoutn!=""){
-      getOrders(this.WriteFetchedData,1);
+    if(this.state.fetchData=="" && this.state.fetchedItemsCount!=""){
+      getOrders(this.writeFetchedData,1);
     }
     console.log("Log from render:", this.state.Items);
     const data = {
@@ -40,7 +40,7 @@ class OrderItem extends React.Component {
       fields: fields,
       title:"order"
     }
-    if (this.state.fetchData != ""   && this.state.fetchedItemsCoutn!="") {
+    if (this.state.fetchData != ""   && this.state.fetchedItemsCount!="") {
       
       return (<EntityTableItem data={data} callback={this.sortData}
         CurrentPage={this.state.CurrentPage}  CurrentSort={this.state.CurerentSort}
