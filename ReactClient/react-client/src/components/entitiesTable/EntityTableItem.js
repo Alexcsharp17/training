@@ -3,10 +3,16 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from "react-router-dom"
 import {TableHead} from '../entitiesTable/TableHeadItem.js';
 import {TableBody} from '../entitiesTable/TableBodyItem.js';
+import {PageLinks} from '../../util/PaginationBuilder.js'
 
 class EntityTableItem extends React.Component {
+    constructor(props){
+        super(props)
+        this.state={CurrentPage:this.props.CurrentPage}
+    }
     render() {
-        const { data: { Items, fields, title } } = this.props
+        const { data: { Items, fields, title},callback,CurrentPage,TotalPages } = this.props
+        console.log("CALLBACK FROM ENTITY TABLE",callback);
         return (
             <div className="content" id="order_area">
                 <div className="alert"></div>
@@ -17,9 +23,10 @@ class EntityTableItem extends React.Component {
                     </Link>
                 </div>
                 <table className="table table-bordered table-striped">
-                    <TableHead fields={fields} title={title} />
-                    <TableBody Items={Items} title={title} />
+                    <TableHead fields={fields} title={title} callback={callback} />
+                    <TableBody Items={Items} title={title}  />
                 </table>
+                <PageLinks CurrentPage={CurrentPage} TotalPages={TotalPages} callback={callback}/>
             </div>
         );
     }

@@ -4,9 +4,10 @@ import {CreateTableHead} from "../../util/TableBuiler.js"
 
 export class TableHead extends React.Component {
     render() {
-        const { fields } = this.props
+        const { fields,callback } = this.props
+        console.log("CAAAALBAACKK FROM TABLE HEAD",callback)
         return (
-            CreateTableHead(fields)
+            CreateTableHead(fields,callback)
         );
 
     }

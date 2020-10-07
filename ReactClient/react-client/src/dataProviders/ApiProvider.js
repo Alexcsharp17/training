@@ -5,25 +5,50 @@ const GET_PERSON_URL = API_URL+"person/getperson?id=";
 const GET_ORDER_URL =API_URL+ "order/getorder?id=";
 const ADD_PERSON_URL=API_URL+ "person/addperson/";
 const ADD_ORDER_URL= API_URL+ "order/addorder/";
+const GET_ORDERS_COUNT_URL=API_URL+"order/getorderscount"
+const GET_PERSONS_COUNT_URL=API_URL+"person/getpersonscount"
 
-export async function getOrders(callback) {
+const PersonID="@PersonID"
+
+export async function getOrdersCount(callback)
+{
+  let dat=[];
+  await fetch(GET_ORDERS_COUNT_URL)
+      .then((response) => response.json())
+      .then((data) => {
+        dat = data
+      });
+    callback(dat);
+}
+export async function getPersonsCount(callback)
+{
+  let dat=[];
+  await fetch(GET_PERSONS_COUNT_URL)
+      .then((response) => response.json())
+      .then((data) => {
+        dat = data
+      });
+    callback(dat);
+}
+export async function getOrders(callback,page,sort) {
     var Items = [];
-    await fetch(GET_ORDERS_URL)
+    await fetch(GET_ORDERS_URL+"?page="+page+"&sort="+sort)
       .then((response) => response.json())
       .then((data) => {
         Items = data
       });
-    callback(Items);
+    callback(Items,page,sort);
 }
 
-export async function getPersons(callback) {
+export async function getPersons(callback,page,sort) {
     var Items = [];
-    await fetch(GET_PERSONS_URL)
+    console.log("PAGE",page,"SORT",sort);
+    await fetch(GET_PERSONS_URL+"?page="+page+"&sort="+sort)
       .then((response) => response.json())
       .then((data) => {
         Items = data
       });
-    callback(Items);
+    callback(Items,page,sort);
   }
 
 export  async function getPerson(id, callback){

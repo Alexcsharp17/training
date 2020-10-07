@@ -37,14 +37,21 @@ function CreateTableRow(item,title,fetchHandler){
     )
 }
 
-export function CreateTableHead(fields){
+export function CreateTableHead(fields,callback){
+  
     return (
+      
         <thead>
             <tr>
                 {
                     fields.map(function (field) {
                         return (
-                            <td>{field}</td>
+                            <td>
+                                <div>{field}</div>
+                              <div className=""> 
+                              <button className="btn ml-1" value={field} onClick={event=>{callback(1,"@"+field)}}
+                              ><img src="sortUP.png" alt="^" className="sortImg" /></button></div> 
+                            </td>
                         )
                     })
                 }
