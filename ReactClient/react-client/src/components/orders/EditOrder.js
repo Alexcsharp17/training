@@ -44,19 +44,20 @@ class EditOrderItem extends React.Component{
         let CarIDError="";
         let PersonIDError="";
         let OrderDateError="";
-       
-        if(this.state.CarID=="" || this.state.CarID==undefined){
+        
+        console.log("CAR id",this.state.carID);
+        if(!this.state.carID || this.state.carID==undefined){
             CarIDError="Invalid Car Id"
         }
 
-        if(this.state.PersonId=="" || this.state.PersonId==undefined){
+        if(!this.state.personId || this.state.personId==undefined){
             PersonIDError="Invalid PersonID"
         }
 
-        if(this.state.OrderDate=="" || this.state.OrderDate==undefined){
+        if(!this.state.orderDate || this.state.orderDate==undefined){
             OrderDateError="Invalid Order Date"
         }
-
+        console.log(PersonIDError,CarIDError,OrderDateError);
         if(PersonIDError || CarIDError || OrderDateError){
             this.setState({CarIDError,PersonIDError,OrderDateError})
             return false
@@ -64,16 +65,19 @@ class EditOrderItem extends React.Component{
 
         return true;
     }
-    PostForm= e =>{
+    PostForm=( e) =>{
         e.preventDefault();
+        console.log("LOG FROM POST FORM");
         let isValid = this.validate();
+        console.log("isVALID:" ,isValid);
         if(isValid){
          let order={
-            OrderID:parseInt(this.state.OrderID),
-            OrderDate:new Date(Date.parse(this.state.OrderDate)),
-            CarID:parseInt(this.state.CarID),             
-            PersonId:parseInt(this.state.PersonId)
+            orderID:parseInt(this.state.orderID),
+            orderDate:new Date(Date.parse(this.state.orderDate)),
+            carID:parseInt(this.state.carID),             
+            personId:parseInt(this.state.personId)
          }
+        
              addOrder(order,this.AddOrderHandler);
         }
             
@@ -93,10 +97,10 @@ class EditOrderItem extends React.Component{
     FetchRequestResponse=(data)=>{
         this.setState({
               Order:data,
-              CarID:data.CarID,
-              PersonId:data.PersonId,
-              OrderDate:data.OrderDate,
-              OrderID:data.OrderID
+              carID:data.carID,
+              personId:data.personId,
+              orderDate:data.orderDate,
+              orderID:data.orderID
         });
         console.log("Fetched data",this.state.Order);
     }
@@ -104,21 +108,21 @@ class EditOrderItem extends React.Component{
     handleChange(id) {
         this.setState({
             selectedCar: id,
-            CarID:id
+            carID:id
         });
 
       }
     handlePersonChange(id){
         this.setState({
             selectedPerson:id,
-            PersonId:id
+            personId:id
         })
     }
     
     render(props){
         console.log("getPersonsCountState",this.state.getPersonsCountState);
 
-        if(this.state.getPersonsState=="" ){
+        if(!this.state.getPersonsState){
             getAllPersons(this.getPersonsHandler)
         }
         const{errors}=this.state
@@ -154,10 +158,15 @@ class EditOrderItem extends React.Component{
                 <div className="form-group">
                 <label>
                     <p>Car </p>
-                    <select value={this.state.selectedCar} onChange={(event)=>this.handleChange(event.target.value)}>
+                    <select  onChange={(event)=>this.handleChange(event.target.value)}>
                         {
-                            carsJson.map(function(car){
-                            return(<option value={car.Id}>{car.Name}</option>);
+                            carsJson.map((car)=>{
+                                if(car.Id==this.state.carID){
+                                    return(<option selected="selected" value={car.Id}>{car.Name}</option>);
+                                }
+                                else{
+                                    return(<option value={car.Id}>{car.Name}</option>);
+                                }           
                             })
                         }
                     </select>
@@ -166,7 +175,7 @@ class EditOrderItem extends React.Component{
                 <div className="form-group">
                 <label>
                    <p> Order Date:</p>                 
-                    <DatePicker selected={this.state.OrderDate==undefined?new Date():new Date(this.state.OrderDate)} onChange={(date)=>this.setState({OrderDate:date})} />
+                    <DatePicker selected={this.state.orderDate==undefined?new Date():new Date(this.state.orderDate)} onChange={(date)=>this.setState({orderDate:date})} />
                 </label>
                 </div>
                 <div className="form-group">
@@ -174,14 +183,19 @@ class EditOrderItem extends React.Component{
                     <p>Person </p>
                     <select value={this.state.selectedPerson}  onChange={(event)=>this.handlePersonChange(event.target.value)}>
                         {
-                            this.state.Persons.map(function(person){
-                            return(<option value={person.PersonID}>{person.FirstName+" "+ person.LastName}</option>);
+                            this.state.Persons.map((person)=>{
+                                if(this.state.personId==person.personID){
+                                    return(<option selected="selected" value={person.personID}>{person.firstName+" "+ person.lastName}</option>);
+                                }
+                                else{
+                                    return(<option value={person.personID}>{person.firstName+" "+ person.lastName}</option>);
+                                }
                             })
                         }
                     </select>
                 </label>
                 </div>
-                <input type="submit" onClick={this.PostForm} value="Send" />
+                <button onClick={this.PostForm} type="submit">Send</button>
             </form>
             </div>
         </div>

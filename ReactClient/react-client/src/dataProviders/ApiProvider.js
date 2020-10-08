@@ -48,6 +48,7 @@ export async function getOrders(callback,page,sort) {
       .then((data) => {
         Items = data
       });
+      console.log("Items From fetch request:",Items);
     callback(Items,page,sort);
 }
 
@@ -122,10 +123,10 @@ export async function addOrder(order,callback){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-                OrderID:parseInt(order.OrderID),
-                 OrderDate:new Date(Date.parse(order.OrderDate)),
-                 CarID:parseInt(order.CarID),             
-                 PersonId:parseInt(order.PersonId)
+                OrderID:parseInt(order.orderID),
+                 OrderDate:new Date(Date.parse(order.orderDate)),
+                 CarID:parseInt(order.carID),             
+                 PersonId:parseInt(order.personId)
         })
     }).then((response) => response.json())
     .then((data) =>{ 

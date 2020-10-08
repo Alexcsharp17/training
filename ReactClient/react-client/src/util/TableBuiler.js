@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from "react-router-dom"
 import {deleteItem} from '../dataProviders/ApiProvider.js'
 
-export function  CreateTableBody(items,title,fetchHandler){
+export function  CreateTableBody(items,title,fetchHandler,PersonsNumber){
     if(items==undefined){
         return(<tbody><tr>Loading</tr></tbody>)
     }
@@ -15,7 +15,7 @@ export function  CreateTableBody(items,title,fetchHandler){
                 { 
                     items.map((item) => {
                         return (
-                            CreateTableRow(item,title,fetchHandler)
+                            CreateTableRow(item,title,fetchHandler,PersonsNumber)
                         )
                     })
                 }
@@ -54,7 +54,7 @@ export function CreateTableHead(fields,callback){
                 {
                     fields.map(function (field) {
                         return (
-                            <td>
+                            <td  key={field}>
                                 <div>{field}</div>
                               <div className=""> 
                               <button className="btn ml-1" value={field} onClick={event=>{callback(1,"@"+field)}}

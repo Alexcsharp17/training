@@ -8,7 +8,7 @@ import{ getPersons,getPersonsCount} from '../../dataProviders/ApiProvider.js'
 class PersonItem extends React.Component {
   constructor() {
     super();
-    this.state = { fetchData: "", fetchedItemsCoutn:"", CurrentPage:1,CurerentSort:"@PersonID" }
+    this.state = { fetchData: "", fetchedItemsCount:"", CurrentPage:1,CurerentSort:"@PersonID" }
   }
   sortData=(page,sort)=>{
     if(page=="default" || page==undefined){
@@ -25,15 +25,15 @@ class PersonItem extends React.Component {
     this.setState({fetchData:"rendered", Items:Items,CurrentPage:page,CurrentSort:sort});
   }
   writeFetchedItemsCount=(number)=>{
-    this.setState({fetchedItemsCoutn:"rendered",ItemsNumer:number})
+    this.setState({fetchedItemsCount:"rendered",ItemsNumer:number})
   }
   render() {
     const fields = ["PersonId", "FirstName", "LastName", "Phone"]
-    if(this.state.fetchedItemsCoutn==""){
+    if(!this.state.fetchedItemsCount){
 
       getPersonsCount(this.writeFetchedItemsCount)
     }
-    if(this.state.fetchData=="" && this.state.fetchedItemsCoutn!=""){
+    if(!this.state.fetchData && this.state.fetchedItemsCount){
        getPersons(this.WriteFetchedData,1);     
     }
     console.log("Log from render:", this.state.Items);
@@ -42,7 +42,7 @@ class PersonItem extends React.Component {
       fields: fields,
       title:"person"
     }
-    if (this.state.fetchData != "" && this.state.fetchedItemsCoutn!="") {
+    if (this.state.fetchData != "" && this.state.fetchedItemsCount!="") {
 
       return (<EntityTableItem data={data} callback={this.sortData} 
         CurrentPage={this.state.CurrentPage} CurrentSort={this.state.CurerentSort}
