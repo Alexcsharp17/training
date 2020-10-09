@@ -18,6 +18,7 @@ namespace CarStore.DAL.Enums
         sp_GetPersons,
         sp_GetPersonsCount,
         sp_GetOrdersCount,
-        sp_GetAllPersons
+        sp_GetAllPersons,
+        sp_FindPersons
     }
 }

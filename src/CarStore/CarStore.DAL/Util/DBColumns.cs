@@ -26,5 +26,7 @@ namespace CarStore.DAL.Util
 
         public const string SORT_COLUMN = "@sortColumn";
 
+        public const string PATTERN = "@pattern";
+
     }
 }

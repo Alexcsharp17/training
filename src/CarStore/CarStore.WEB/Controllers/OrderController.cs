@@ -75,7 +75,7 @@ namespace CarStore.WEB.Controllers
             try
             {
                 orderService.AddOrder(order);
-                return Ok(JsonSerializer.Serialize((ModelState)));
+                return Ok(ModelState);
             }
             catch (DbException e)
             {

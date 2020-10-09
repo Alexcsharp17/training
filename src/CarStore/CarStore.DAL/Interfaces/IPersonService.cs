@@ -20,5 +20,7 @@ namespace CarStore.DAL.Interfaces
         int GetPersonsCount();
 
         List<Person> GetAllPersons();
+
+        List<Person> FindPersons(string pattern);
     }
 }

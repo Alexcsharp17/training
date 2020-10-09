@@ -2,6 +2,7 @@
 using CarStore.DAL.Enums;
 using CarStore.DAL.Interfaces;
 using CarStore.DAL.Util;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
@@ -15,27 +16,38 @@ namespace CarStore.DAL.Services
     public class PersonService : IPersonService
     {
         private ICommandBuilder comandbuilder;
-        public PersonService(ICommandBuilder comandbuilder)
+        private IServiceScopeFactory scopeFactory;
+        public PersonService(IServiceScopeFactory scopeFactory)
         {
-            this.comandbuilder = comandbuilder;
+            this.scopeFactory = scopeFactory;
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
+
+            }
         }
         public void AddPerson(Person person)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            using (var scope = scopeFactory.CreateScope())
             {
-                {DBColumns.FIRST_NAME, person.FirstName },
-                {DBColumns.LAST_NAME, person.LastName},
-                {DBColumns.PHONE, person.Phone}
-            };
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
 
-            if (person.PersonID == 0)
-            {
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertPerson.ToString(), parameters);
-            }
-            else
-            {
-                parameters.Add(DBColumns.ID,person.PersonID);
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdatePerson.ToString(), parameters);
+                Dictionary<string, object> parameters = new Dictionary<string, object>()
+                {
+                    {DBColumns.FIRST_NAME, person.FirstName },
+                    {DBColumns.LAST_NAME, person.LastName},
+                    {DBColumns.PHONE, person.Phone}
+                };
+
+                if (person.PersonID == 0)
+                {
+                    comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertPerson.ToString(), parameters);
+                }
+                else
+                {
+                    parameters.Add(DBColumns.ID, person.PersonID);
+                    comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdatePerson.ToString(), parameters);
+                }
             }
         }
 
@@ -110,7 +122,6 @@ namespace CarStore.DAL.Services
         }
         public List<Person> GetAllPersons()
         {
-         
             List<Person> persons = new List<Person>();
             using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetAllPersons.ToString());
 
@@ -130,6 +141,28 @@ namespace CarStore.DAL.Services
         public int GetPersonsCount()
         {
             return comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_GetPersonsCount.ToString());
+        }
+
+        public List<Person> FindPersons(string pattern)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            {
+                {DBColumns.PATTERN,pattern },
+            };
+            List<Person> persons = new List<Person>();
+            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_FindPersons.ToString(),parameters);
+            while (reader.Read())
+            {
+                Person pers = new Person
+                {
+                    PersonID = reader.GetInt32(0),
+                    FirstName = reader.GetString(1),
+                    LastName = reader.GetString(2),
+                    Phone = reader.GetString(3)
+                };
+                persons.Add(pers);
+            }
+            return persons;
         }
     }
 }

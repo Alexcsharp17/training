@@ -8,8 +8,20 @@ const ADD_ORDER_URL= API_URL+ "order/addorder/";
 const GET_ORDERS_COUNT_URL=API_URL+"order/getorderscount"
 const GET_PERSONS_COUNT_URL=API_URL+"person/getpersonscount"
 const GET_ALL_PERSONS_URL=API_URL+"person/getallpersons"
+const FIND_PERSONS_URL=API_URL+'person/findpersons'
 
 const PersonID="@PersonID"
+
+export async function findPersons(callback,patern){
+  let dat=[];
+  await fetch(FIND_PERSONS_URL+"?pattern="+patern)
+  .then((response) => response.json())
+  .then((data) => {
+    dat = data
+  });
+callback(dat);
+}
+
 
 export async function getAllPersons(callback){
   let dat=[];
@@ -48,7 +60,7 @@ export async function getOrders(callback,page,sort) {
       .then((data) => {
         Items = data
       });
-      console.log("Items From fetch request:",Items);
+      
     callback(Items,page,sort);
 }
 
@@ -123,7 +135,7 @@ export async function addOrder(order,callback){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-                OrderID:parseInt(order.orderID),
+                OrderID:parseInt(order.OrderID),
                  OrderDate:new Date(Date.parse(order.orderDate)),
                  CarID:parseInt(order.carID),             
                  PersonId:parseInt(order.personId)

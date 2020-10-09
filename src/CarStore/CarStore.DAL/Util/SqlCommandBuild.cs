@@ -11,26 +11,43 @@ namespace CarStore.DAL.Util
 {
     public class SqlCommandBuild : ICommandBuilder
     {
-        public DbConnection connection { get; set; }
+        private DbConnection connection;
+        //public DbConnection Connection
+        //{
+        //    get
+        //    {
+        //        if (connection.State != ConnectionState.Open)
+        //        {
+        //            connection.Open();
+        //        }
+
+        //        return connection;
+        //    }
+        //    set
+        //    {
+        //        connection = value;
+        //    }
+            
+        //}
 
         public SqlCommandBuild(DbConnection connection)
         {
             this.connection = connection;
-            if (connection.State == ConnectionState.Closed)
-            {
-                connection.Open();
-            }
         }
         
         public DbDataReader DbDataRequestCommand(string procedure, Dictionary<string, object> parameters=null)
         {
-            return Create(procedure, parameters).ExecuteReader();
+            connection.Open();
+            var reader = Create(procedure, parameters).ExecuteReader();
+            connection.Close();
+            return reader;
         }
         public int DbDataPostCommand(string procedure, Dictionary<string, object> parameters = null)
         {
             using (var comand = Create(procedure, parameters))
             {
-                return (int) comand.ExecuteScalar();
+                var res = comand.ExecuteScalar();
+                return res == null ? 0 :(int)res;
             }
         }
 

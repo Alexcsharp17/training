@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -113,6 +114,21 @@ namespace CarStore.WEB.Controllers
             try
             {
                 var persons = PersonService.GetAllPersons();
+                return Ok(persons);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult FindPersons([FromQuery] string pattern=" ")
+        {
+            try
+            {
+                pattern = pattern == null ? " " : pattern;
+                var persons = PersonService.FindPersons(pattern);
                 return Ok(persons);
             }
             catch (Exception e)
