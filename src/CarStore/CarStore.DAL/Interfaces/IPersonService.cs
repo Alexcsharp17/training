@@ -13,8 +13,6 @@ namespace CarStore.DAL.Interfaces
 
         void DeletePerson(int id);
 
-        void UpdatePerson(Person person);
-
         List<Person> GetPersons(int page,int pageSize,string sort);
 
         int GetPersonsCount();

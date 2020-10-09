@@ -7,109 +7,146 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarStore.DAL.Services
 {
     public class OrderService : IOrderService
     {
         private ICommandBuilder comandbuilder;
-        public OrderService(ICommandBuilder commandBuild)
+        private IServiceScopeFactory scopeFactory;
+        public OrderService(IServiceScopeFactory scopeFactory)
         {
-            this.comandbuilder = commandBuild;
+            this.scopeFactory = scopeFactory;
         }
 
         public void AddOrder(Order order)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            using (var scope = scopeFactory.CreateScope())
             {
-                {DBColumns.PERSON_ID, order.PersonId },
-                {DBColumns.ORDER_DATE, order.OrderDate },
-                {DBColumns.CAR_ID, order.CarID }
-            };
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
 
-            if (order.OrderID == 0)
-            {
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
+                Dictionary<string, object> parameters = new Dictionary<string, object>()
+                {
+                    {DBColumns.PERSON_ID, order.PersonId },
+                    {DBColumns.ORDER_DATE, order.OrderDate },
+                    {DBColumns.CAR_ID, order.CarID }
+                };
+
+                if (order.OrderID == 0)
+                {
+                    comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
+                }
+                else
+                {
+                    parameters.Add(DBColumns.ID, order.OrderID);
+                    comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), parameters);
+                }
             }
-            else
-            {
-                parameters.Add(DBColumns.ID, order.OrderID);
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), parameters);
-            }
+           
         }
         public void DeleteOrder(int id)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
-            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_DeleteOrder.ToString(), parameters);
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
+
+
+                Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
+                comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_DeleteOrder.ToString(), parameters);
+            }
+
         }
         public Order GetOrder(int id)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
-
-            using (var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetOrder.ToString(), parameters))
+            using (var scope = scopeFactory.CreateScope())
             {
-                Order ord = new Order();
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
+                Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
 
-                if (reader.Read())
+                using (var dataTable = comandbuilder.DbDataReaderCommand(StoredProceduresNames.sp_GetOrder.ToString(), parameters))
                 {
-                    ord.OrderID = reader.GetInt32(0);
-                    ord.OrderDate = reader.GetDateTime(1);
-                    ord.CarID = reader.GetInt32(2);
-                    ord.PersonId = reader.GetInt32(3);
+                    Order ord = new Order();
+
+                    if (dataTable.Rows.Count == 1)
+                    {
+                        ord.OrderID =Convert.ToInt32(dataTable.Rows[0]["OrderID"]);
+                        ord.OrderDate = Convert.ToDateTime(dataTable.Rows[0]["OrderDate"]);
+                        ord.CarID = Convert.ToInt32(dataTable.Rows[0]["PersonID"]);
+                        ord.PersonId = Convert.ToInt32(dataTable.Rows[0]["PersonId"]);
+                    }
+
+                    return ord;
                 }
-                return ord;
             }
+
+           
 
         }
 
         public void UpdateOrder(Order order)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            using (var scope = scopeFactory.CreateScope())
             {
-                {DBColumns.PERSON_ID, order.PersonId },
-                {DBColumns.ORDER_DATE, order.OrderDate },
-                {DBColumns.CAR_ID, order.CarID }
-            };
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
+                Dictionary<string, object> parameters = new Dictionary<string, object>()
+                {
+                    {DBColumns.PERSON_ID, order.PersonId },
+                    {DBColumns.ORDER_DATE, order.OrderDate },
+                    {DBColumns.CAR_ID, order.CarID }
+                };
 
-            if (order.OrderID == 0)
-            {
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
+                if (order.OrderID == 0)
+                {
+                    comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
+                }
+                else
+                {
+                    comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), parameters);
+                }
             }
-            else
-            {
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), parameters);
-            }
+           
         }
 
         public List<Order> GetOrders(int page, int pageSize, string sort)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            using (var scope = scopeFactory.CreateScope())
             {
-                {DBColumns.PAGE,page },
-                {DBColumns.PAGE_SIZE,pageSize},
-                {DBColumns.SORT_COLUMN,sort}
-
-            };
-            List<Order> orders = new List<Order>();
-            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetOrders.ToString(), parameters);
-
-            while (reader.Read())
-            {
-                Order ord = new Order
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
+                Dictionary<string, object> parameters = new Dictionary<string, object>()
                 {
-                    OrderID = reader.GetInt32(0),
-                    OrderDate = reader.GetDateTime(1),
-                    CarID = reader.GetInt32(2),
-                    PersonId = reader.GetInt32(3)
+                    {DBColumns.PAGE,page },
+                    {DBColumns.PAGE_SIZE,pageSize},
+                    {DBColumns.SORT_COLUMN,sort}
+
                 };
-                orders.Add(ord);
+                List<Order> orders = new List<Order>();
+                using var dataTable = comandbuilder.DbDataReaderCommand(StoredProceduresNames.sp_GetOrders.ToString(), parameters);
+
+                foreach (var dataRow in dataTable.Rows)
+                {
+                    Order ord = new Order()
+                    {
+                        OrderID = Convert.ToInt32(dataTable.Rows[0]["OrderID"]),
+                        OrderDate = Convert.ToDateTime(dataTable.Rows[0]["OrderDate"]),
+                        CarID = Convert.ToInt32(dataTable.Rows[0]["PersonID"]),
+                        PersonId = Convert.ToInt32(dataTable.Rows[0]["PersonId"])
+                    };
+                   orders.Add(ord);
+                }
+
+                return orders;
             }
-            return orders;
+            
         }
 
         public int GetOrdersCount()
         {
-            return comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_GetOrdersCount.ToString());
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
+                return comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_GetOrdersCount.ToString());
+            }
         }
 
     }

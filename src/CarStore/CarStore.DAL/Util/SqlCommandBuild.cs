@@ -1,6 +1,7 @@
 ﻿using CarStore.DAL.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -32,23 +33,76 @@ namespace CarStore.DAL.Util
 
         public SqlCommandBuild(DbConnection connection)
         {
+          
             this.connection = connection;
         }
-        
-        public DbDataReader DbDataRequestCommand(string procedure, Dictionary<string, object> parameters=null)
+
+        public DataTable DbDataReaderCommand(string procedure, Dictionary<string, object> parameters = null)
         {
-            connection.Open();
-            var reader = Create(procedure, parameters).ExecuteReader();
-            connection.Close();
-            return reader;
-        }
-        public int DbDataPostCommand(string procedure, Dictionary<string, object> parameters = null)
-        {
-            using (var comand = Create(procedure, parameters))
+            try
             {
-                var res = comand.ExecuteScalar();
-                return res == null ? 0 :(int)res;
+                connection.Open();
+                using (var reader = Create(procedure, parameters).ExecuteReader())
+                {
+                    DataTable dtData = new DataTable("Data");
+                    DataTable dtSchema = new DataTable("Schema");
+
+                    if (reader != null)
+                    {
+                        dtSchema = reader.GetSchemaTable();
+                        foreach (DataRow schemarow in dtSchema.Rows)
+                        {
+                            dtData.Columns.Add(schemarow.ItemArray[0].ToString()
+                                    ,Type.GetType(schemarow.ItemArray[12].ToString()));
+
+                        }
+
+                        while (reader.Read())
+                        {
+                            object[] ColArray = new object[reader.FieldCount];
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                if (reader[i] != null) ColArray[i] = reader[i];
+                            }
+
+                            dtData.LoadDataRow(ColArray, true);
+                        }
+
+                        reader.Close();
+
+                    }
+
+                    return dtData;
+
+                }
             }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+        }
+    
+        public int DbDataScalarCommand(string procedure, Dictionary<string, object> parameters = null)
+        {
+            try
+            {
+                connection.Open();
+                using (var comand = Create(procedure, parameters))
+                {
+                    var res = comand.ExecuteScalar();
+                    return res == null ? 0 : (int) res;
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+            
         }
 
         private DbCommand Create(string procedure, Dictionary<string, object> parameters = null)

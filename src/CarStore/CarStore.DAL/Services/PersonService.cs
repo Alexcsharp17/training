@@ -41,128 +41,146 @@ namespace CarStore.DAL.Services
 
                 if (person.PersonID == 0)
                 {
-                    comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertPerson.ToString(), parameters);
+                    comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_InsertPerson.ToString(), parameters);
                 }
                 else
                 {
                     parameters.Add(DBColumns.ID, person.PersonID);
-                    comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdatePerson.ToString(), parameters);
+                    comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_UpdatePerson.ToString(), parameters);
                 }
             }
+
+           
         }
 
         public void DeletePerson(int id)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>() { {DBColumns.ID, id } };
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
 
-            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_DeletePerson.ToString(),parameters);
-            
+                Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
+
+                comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_DeletePerson.ToString(), parameters);
+            }
+
         }
 
         public Person GetPerson(int id)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
-            
-            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetPerson.ToString(), parameters);
-            Person pers = new Person();
-            if(reader.Read())
+            using (var scope = scopeFactory.CreateScope())
             {
-                pers.PersonID = reader.GetInt32(0);
-                pers.FirstName = reader.GetString(1);
-                pers.LastName = reader.GetString(2);
-                pers.Phone = reader.GetString(3);
-            }
-            return pers;
-        }
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
+                Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
 
-        public void UpdatePerson(Person person)
-        {
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                {DBColumns.FIRST_NAME, person.FirstName },
-                {DBColumns.LAST_NAME, person.LastName},
-                {DBColumns.PHONE, person.Phone}
-            };
-            if (person.PersonID == 0)
-            {
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertPerson.ToString(), parameters);
-            }
-            else
-            {
-                parameters.Add(DBColumns.ID,person.PersonID);
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdatePerson.ToString(), parameters);
+                using var dataTable = comandbuilder.DbDataReaderCommand(StoredProceduresNames.sp_GetPerson.ToString(), parameters);
+                Person pers = new Person();
+                if (dataTable.Rows.Count==1)
+                {
+                    pers.PersonID = Convert.ToInt32(dataTable.Rows[0]["PersonId"]);
+                    pers.FirstName = Convert.ToString(dataTable.Rows[0]["FirstName"]);
+                    pers.LastName = Convert.ToString(dataTable.Rows[0]["LastName"]);
+                    pers.Phone = Convert.ToString(dataTable.Rows[0]["Phone"]);
+                }
+                return pers;
             }
 
         }
+
         public List<Person> GetPersons(int page,int pageSize,string sort)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            using (var scope = scopeFactory.CreateScope())
             {
-                {DBColumns.PAGE,page },
-                {DBColumns.PAGE_SIZE,pageSize},
-                {DBColumns.SORT_COLUMN,sort}
-            };
-            List<Person> persons = new List<Person>();
-            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetPersons.ToString(), parameters);
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
 
-
-            while (reader.Read())
-            {
-                Person pers = new Person
+                Dictionary<string, object> parameters = new Dictionary<string, object>()
                 {
-                    PersonID = reader.GetInt32(0),
-                    FirstName = reader.GetString(1),
-                    LastName = reader.GetString(2),
-                    Phone = reader.GetString(3)
+                    {DBColumns.PAGE,page },
+                    {DBColumns.PAGE_SIZE,pageSize},
+                    {DBColumns.SORT_COLUMN,sort}
                 };
-                persons.Add(pers);
+                List<Person> persons = new List<Person>();
+                using var dataTable = comandbuilder.DbDataReaderCommand(StoredProceduresNames.sp_GetPersons.ToString(), parameters);
+
+                foreach (var dataRow in dataTable.Rows)
+                {
+                    Person pers = new Person()
+                    {
+                        PersonID = Convert.ToInt32(dataTable.Rows[0]["PersonId"]),
+                        FirstName = Convert.ToString(dataTable.Rows[0]["FirstName"]),
+                        LastName = Convert.ToString(dataTable.Rows[0]["LastName"]),
+                        Phone = Convert.ToString(dataTable.Rows[0]["Phone"]),
+                    };
+                    persons.Add(pers);
+                }
+                return persons;
             }
-            reader.Close();
-            return persons;
+
         }
         public List<Person> GetAllPersons()
         {
-            List<Person> persons = new List<Person>();
-            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetAllPersons.ToString());
-
-            while (reader.Read())
+            using (var scope = scopeFactory.CreateScope())
             {
-                Person pers = new Person
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
+                List<Person> persons = new List<Person>();
+                using var dataTable = comandbuilder.DbDataReaderCommand(StoredProceduresNames.sp_GetAllPersons.ToString());
+
+
+                foreach (var dataRow in dataTable.Rows)
                 {
-                    PersonID = reader.GetInt32(0),
-                    FirstName = reader.GetString(1),
-                    LastName = reader.GetString(2),
-                    Phone = reader.GetString(3)
-                };
-                persons.Add(pers);
+                    Person pers = new Person()
+                    {
+                        PersonID = Convert.ToInt32(dataTable.Rows[0]["PersonId"]),
+                        FirstName = Convert.ToString(dataTable.Rows[0]["FirstName"]),
+                        LastName = Convert.ToString(dataTable.Rows[0]["LastName"]),
+                        Phone = Convert.ToString(dataTable.Rows[0]["Phone"]),
+                    };
+                    persons.Add(pers);
+                }
+
+                return persons;
             }
-            return persons;
+
+           
         }
         public int GetPersonsCount()
         {
-            return comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_GetPersonsCount.ToString());
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
+                return comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_GetPersonsCount.ToString());
+            }
+
         }
 
         public List<Person> FindPersons(string pattern)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            using (var scope = scopeFactory.CreateScope())
             {
-                {DBColumns.PATTERN,pattern },
-            };
-            List<Person> persons = new List<Person>();
-            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_FindPersons.ToString(),parameters);
-            while (reader.Read())
-            {
-                Person pers = new Person
+                var comandbuilder = scope.ServiceProvider.GetService<ICommandBuilder>();
+
+                Dictionary<string, object> parameters = new Dictionary<string, object>()
                 {
-                    PersonID = reader.GetInt32(0),
-                    FirstName = reader.GetString(1),
-                    LastName = reader.GetString(2),
-                    Phone = reader.GetString(3)
+                    {DBColumns.PATTERN,pattern },
                 };
-                persons.Add(pers);
+                List<Person> persons = new List<Person>();
+                using var dataTable = comandbuilder.DbDataReaderCommand(StoredProceduresNames.sp_FindPersons.ToString(), parameters);
+
+                foreach (var dataRow in dataTable.Rows)
+                {
+                    Person pers = new Person()
+                    {
+                        PersonID = Convert.ToInt32(dataTable.Rows[0]["PersonId"]),
+                        FirstName = Convert.ToString(dataTable.Rows[0]["FirstName"]),
+                        LastName = Convert.ToString(dataTable.Rows[0]["LastName"]),
+                        Phone = Convert.ToString(dataTable.Rows[0]["Phone"]),
+                    };
+                    persons.Add(pers);
+                }
+                return persons;
             }
-            return persons;
+
+           
         }
     }
 }

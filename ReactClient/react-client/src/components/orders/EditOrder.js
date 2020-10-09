@@ -22,7 +22,7 @@ class EditOrderItem extends React.Component {
             getPersonState: "",
             getPersonsCountState: "",
             getOrderState: "",
-            showSearchState:"d-none"
+            showSearchState: "d-none"
 
         }
         this.handleChange = this.handleChange.bind(this);
@@ -36,7 +36,7 @@ class EditOrderItem extends React.Component {
         this.setState({ PersonsCount: count, getPersonsCountState: "rendered" })
     }
     fetchPersonHandler = (person) => {
-        this.setState({CurrentName : person.FirstName+" "+person.LastName, getPersonState: "rendered" })
+        this.setState({ CurrentName: person.FirstName + " " + person.LastName, getPersonState: "rendered" })
     }
 
     getSelectCarName(id) {
@@ -126,22 +126,22 @@ class EditOrderItem extends React.Component {
         this.setState({
             selectedPerson: id,
             personId: id,
-            CurrentName:name
+            CurrentName: name
         })
     }
 
     render(props) {
         console.log("final check:",);
 
-        console.log("getOrderState:",this.state.getOrderState,"getPersonState:",this.state.getPersonState,"findPersonsState",this.state.findPersonsState);
-        if(!this.state.getOrderState){
+        console.log("getOrderState:", this.state.getOrderState, "getPersonState:", this.state.getPersonState, "findPersonsState", this.state.findPersonsState);
+        if (!this.state.getOrderState) {
             getOrder(this.props.match.params.id, this.FetchRequestResponse);
         }
         if (!this.state.getPersonState && this.state.getOrderState) {
             getPerson(this.state.personId, this.fetchPersonHandler)
         }
         if (!this.state.findPersonsState && this.state.getPersonState && this.state.getOrderState) {
-            findPersons(this.findPersonsHandler,this.state.CurrentName)
+            findPersons(this.findPersonsHandler, this.state.CurrentName)
         }
         const { errors } = this.state
         if (this.state.findPersonsState && this.state.getPersonState && this.state.getOrderState) {
@@ -177,42 +177,42 @@ class EditOrderItem extends React.Component {
                                 <div className="form-group">
                                     <p>Select person</p>
                                     <div className="d-flex flex-row flex-nowrap">
-                                    <input type="text" value={this.state.CurrentName} className="form-control" onClick={()=>this.setState({showSearchState:"d-block"})}
-                                    onChange={(event)=>{this.setState({CurrentName:event.target.value}); findPersons(this.findPersonsHandler,event.target.value)}} />
-                                    <img src={closeIcon} alt="X" className={"mb-1 ml-2 "+this.state.showSearchState} onClick={()=>this.setState({showSearchState:"d-none"})}/>
+                                        <input type="text" value={this.state.CurrentName} className="form-control" onClick={() => this.setState({ showSearchState: "d-block" })}
+                                            onChange={(event) => { this.setState({ CurrentName: event.target.value }); findPersons(this.findPersonsHandler, event.target.value) }} />
+                                        <img src={closeIcon} alt="X" className={"mb-1 ml-2 " + this.state.showSearchState} onClick={() => this.setState({ showSearchState: "d-none" })} />
                                     </div>
-                                    
-                                    <div className={"overflow-auto " +this.state.showSearchState} style={{ height: '150px', width:"200px", position: "absolute", left:"40px" }}>
+
+                                    <div className={"overflow-auto " + this.state.showSearchState} style={{ height: '150px', width: "200px", position: "absolute", left: "40px" }}>
                                         {
                                             this.state.Persons.map((person) => {
-                                                return (<button type="button" value={person.personID} className="btn d-block btn-secondary w-100" 
-                                                onClick={(event) => this.handlePersonChange(event.target.value, person.firstName + " " + person.lastName)}
+                                                return (<button type="button" value={person.personID} className="btn d-block btn-secondary w-100"
+                                                    onClick={(event) => this.handlePersonChange(event.target.value, person.firstName + " " + person.lastName)}
                                                 >{person.firstName + " " + person.lastName}</button>);
                                             })
                                         }
                                     </div>
                                 </div>
-                                <div className="form-group">                                  
-                                        <p>Car </p>
-                                        <select onChange={(event) => this.handleChange(event.target.value)} className="form-control" >
-                                            {
-                                                carsJson.map((car) => {
-                                                    if (car.Id == this.state.carID) {
-                                                        return (<option selected="selected" value={car.Id}>{car.Name}</option>);
-                                                    }
-                                                    else {
-                                                        return (<option value={car.Id}>{car.Name}</option>);
-                                                    }
-                                                })
-                                            }
-                                        </select>          
+                                <div className="form-group">
+                                    <p>Car </p>
+                                    <select onChange={(event) => this.handleChange(event.target.value)} className="form-control" >
+                                        {
+                                            carsJson.map((car) => {
+                                                if (car.Id == this.state.carID) {
+                                                    return (<option selected="selected" value={car.Id}>{car.Name}</option>);
+                                                }
+                                                else {
+                                                    return (<option value={car.Id}>{car.Name}</option>);
+                                                }
+                                            })
+                                        }
+                                    </select>
                                 </div>
-                                <div className="form-group">                                   
-                                        <p> Order Date:</p>
-                                        <DatePicker selected={this.state.orderDate == undefined ? new Date() : new Date(this.state.orderDate)} 
-                                        onChange={(date) => this.setState({ orderDate: date })} className="form-control" />                               
+                                <div className="form-group">
+                                    <p> Order Date:</p>
+                                    <DatePicker selected={this.state.orderDate == undefined ? new Date() : new Date(this.state.orderDate)}
+                                        onChange={(date) => this.setState({ orderDate: date })} className="form-control" />
                                 </div>
-                               
+
                                 <button onClick={this.PostForm} className="btn btn-outline-primary" type="submit">Send</button>
                             </form>
                         </div>
@@ -220,8 +220,8 @@ class EditOrderItem extends React.Component {
                 </div>
             );
         }
-        else{
-            return(<div>Loading...</div>)
+        else {
+            return (<div>Loading...</div>)
         }
 
 
