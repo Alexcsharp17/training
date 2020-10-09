@@ -24,15 +24,15 @@ class editPersonItem extends React.Component{
         let LastNameError="";
         let PhoneError="";
        
-        if(this.state.FirstName=="" || this.state.FirstName==undefined){
+        if(!this.state.FirstName || this.state.FirstName==undefined){
             FirstNameError="Invalid First Name"
         }
 
-        if(this.state.LastName=="" || this.state.LastName==undefined){
+        if(!this.state.LastName || this.state.LastName==undefined){
             FirstNameError="Invalid Last Name"
         }
 
-        if(this.state.Phone=="" || this.state.Phone==undefined){
+        if(!this.state.Phone || this.state.Phone==undefined){
             PhoneError="Invalid Phone number"
         }
 

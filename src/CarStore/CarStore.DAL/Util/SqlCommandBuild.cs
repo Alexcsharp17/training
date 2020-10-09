@@ -26,9 +26,12 @@ namespace CarStore.DAL.Util
         {
             return Create(procedure, parameters).ExecuteReader();
         }
-        public void DbDataPostCommand(string procedure, Dictionary<string, object> parameters = null)
+        public int DbDataPostCommand(string procedure, Dictionary<string, object> parameters = null)
         {
-             Create(procedure, parameters).ExecuteScalar();
+            using (var comand = Create(procedure, parameters))
+            {
+                return (int) comand.ExecuteScalar();
+            }
         }
 
         private DbCommand Create(string procedure, Dictionary<string, object> parameters = null)

@@ -2,21 +2,39 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from "react-router-dom"
 import EntityTableItem from '../entitiesTable/EntityTableItem.js'
-import{ getPersons} from '../../dataProviders/ApiProvider.js'
+import{ getPersons,getPersonsCount} from '../../dataProviders/ApiProvider.js'
 
 
 class PersonItem extends React.Component {
   constructor() {
     super();
-    this.state = { fetchData: "" }
+    this.state = { fetchData: "", fetchedItemsCount:"", CurrentPage:1,CurerentSort:"@PersonID" }
   }
-  WriteFetchedData=(Items)=>{
-    this.setState({fetchData:"rendered", Items:Items});
+  sortData=(page,sort)=>{
+    if(page=="default" || page==undefined){
+      page=this.state.CurrentPage
+    }
+    if(sort =="default"|| sort==undefined){
+      sort=this.state.CurrentSort
+    }
+    getPersons(this.WriteFetchedData,page,sort)
+  }
+
+  WriteFetchedData=(Items,page,sort)=>{
+    console.log("PAGE AT CALLBACK",page);
+    this.setState({fetchData:"rendered", Items:Items,CurrentPage:page,CurrentSort:sort});
+  }
+  writeFetchedItemsCount=(number)=>{
+    this.setState({fetchedItemsCount:"rendered",ItemsNumer:number})
   }
   render() {
     const fields = ["PersonId", "FirstName", "LastName", "Phone"]
-    if(this.state.fetchData==""){
-       getPersons(this.WriteFetchedData);     
+    if(!this.state.fetchedItemsCount){
+
+      getPersonsCount(this.writeFetchedItemsCount)
+    }
+    if(!this.state.fetchData && this.state.fetchedItemsCount){
+       getPersons(this.WriteFetchedData,1);     
     }
     console.log("Log from render:", this.state.Items);
     const data = {
@@ -24,12 +42,14 @@ class PersonItem extends React.Component {
       fields: fields,
       title:"person"
     }
-    if (this.state.fetchData != "") {
-      
-      return (<EntityTableItem data={data} />)
+    if (this.state.fetchData != "" && this.state.fetchedItemsCount!="") {
+
+      return (<EntityTableItem data={data} callback={this.sortData} 
+        CurrentPage={this.state.CurrentPage} CurrentSort={this.state.CurerentSort}
+        TotalPages={this.state.ItemsNumer % 5!=0? (this.state.ItemsNumer % 5)+1:this.state.ItemsNumer % 5 } />)
     }
     else {
-      return(<div></div>);
+      return(<div>NO data availible</div>);
     }
     
   }
