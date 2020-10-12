@@ -70,10 +70,10 @@ namespace CarStore.DAL.Services
 
                     if (dataTable.Rows.Count == 1)
                     {
-                        ord.OrderID =Convert.ToInt32(dataTable.Rows[0]["OrderID"]);
-                        ord.OrderDate = Convert.ToDateTime(dataTable.Rows[0]["OrderDate"]);
-                        ord.CarID = Convert.ToInt32(dataTable.Rows[0]["PersonID"]);
-                        ord.PersonId = Convert.ToInt32(dataTable.Rows[0]["PersonId"]);
+                        ord.OrderID =Convert.ToInt32(dataTable.Rows[0][DBColumns.ORDER_ID.Replace("@","")]);
+                        ord.OrderDate = Convert.ToDateTime(dataTable.Rows[0][DBColumns.ORDER_DATE.Replace("@"," ")]);
+                        ord.CarID = Convert.ToInt32(dataTable.Rows[0][DBColumns.CAR_ID.Replace("@","")]);
+                        ord.PersonId = Convert.ToInt32(dataTable.Rows[0][DBColumns.PERSON_ID.Replace("@","")]);
                     }
 
                     return ord;
@@ -127,11 +127,11 @@ namespace CarStore.DAL.Services
                 {
                     Order ord = new Order()
                     {
-                        OrderID = Convert.ToInt32(dataTable.Rows[0]["OrderID"]),
-                        OrderDate = Convert.ToDateTime(dataTable.Rows[0]["OrderDate"]),
-                        CarID = Convert.ToInt32(dataTable.Rows[0]["PersonID"]),
-                        PersonId = Convert.ToInt32(dataTable.Rows[0]["PersonId"])
-                    };
+                        OrderID = Convert.ToInt32(dataTable.Rows[0][DBColumns.ORDER_ID.Replace("@", "")]),
+                        OrderDate = Convert.ToDateTime(dataTable.Rows[0][DBColumns.ORDER_DATE.Replace("@", " ")]),
+                        CarID = Convert.ToInt32(dataTable.Rows[0][DBColumns.CAR_ID.Replace("@", "")]),
+                        PersonId = Convert.ToInt32(dataTable.Rows[0][DBColumns.PERSON_ID.Replace("@", "")])
+                     };
                    orders.Add(ord);
                 }
 

@@ -7,6 +7,8 @@ namespace CarStore.DAL.Util
     public static class DBColumns
     {
         public  const string ID = "@id";
+
+        public const string ORDER_ID = "@OrderID";
                 
         public  const string ORDER_DATE = "@OrderDate";
                

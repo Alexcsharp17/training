@@ -77,10 +77,10 @@ namespace CarStore.DAL.Services
                 Person pers = new Person();
                 if (dataTable.Rows.Count==1)
                 {
-                    pers.PersonID = Convert.ToInt32(dataTable.Rows[0]["PersonId"]);
-                    pers.FirstName = Convert.ToString(dataTable.Rows[0]["FirstName"]);
-                    pers.LastName = Convert.ToString(dataTable.Rows[0]["LastName"]);
-                    pers.Phone = Convert.ToString(dataTable.Rows[0]["Phone"]);
+                    pers.PersonID = Convert.ToInt32(dataTable.Rows[0][DBColumns.PERSON_ID.Replace("@","")]);
+                    pers.FirstName = Convert.ToString(dataTable.Rows[0][DBColumns.FIRST_NAME.Replace("@","")]);
+                    pers.LastName = Convert.ToString(dataTable.Rows[0][DBColumns.LAST_NAME.Replace("@","")]);
+                    pers.Phone = Convert.ToString(dataTable.Rows[0][DBColumns.PHONE.Replace("@","")]);
                 }
                 return pers;
             }
@@ -106,11 +106,11 @@ namespace CarStore.DAL.Services
                 {
                     Person pers = new Person()
                     {
-                        PersonID = Convert.ToInt32(dataTable.Rows[0]["PersonId"]),
-                        FirstName = Convert.ToString(dataTable.Rows[0]["FirstName"]),
-                        LastName = Convert.ToString(dataTable.Rows[0]["LastName"]),
-                        Phone = Convert.ToString(dataTable.Rows[0]["Phone"]),
-                    };
+                        PersonID = Convert.ToInt32(dataTable.Rows[0][DBColumns.PERSON_ID.Replace("@", "")]),
+                        FirstName = Convert.ToString(dataTable.Rows[0][DBColumns.FIRST_NAME.Replace("@", "")]),
+                        LastName = Convert.ToString(dataTable.Rows[0][DBColumns.LAST_NAME.Replace("@", "")]),
+                        Phone = Convert.ToString(dataTable.Rows[0][DBColumns.PHONE.Replace("@", "")])
+                };
                     persons.Add(pers);
                 }
                 return persons;
@@ -130,10 +130,10 @@ namespace CarStore.DAL.Services
                 {
                     Person pers = new Person()
                     {
-                        PersonID = Convert.ToInt32(dataTable.Rows[0]["PersonId"]),
-                        FirstName = Convert.ToString(dataTable.Rows[0]["FirstName"]),
-                        LastName = Convert.ToString(dataTable.Rows[0]["LastName"]),
-                        Phone = Convert.ToString(dataTable.Rows[0]["Phone"]),
+                        PersonID = Convert.ToInt32(dataTable.Rows[0][DBColumns.PERSON_ID.Replace("@", "")]),
+                        FirstName = Convert.ToString(dataTable.Rows[0][DBColumns.FIRST_NAME.Replace("@", "")]),
+                        LastName = Convert.ToString(dataTable.Rows[0][DBColumns.LAST_NAME.Replace("@", "")]),
+                        Phone = Convert.ToString(dataTable.Rows[0][DBColumns.PHONE.Replace("@", "")])
                     };
                     persons.Add(pers);
                 }
@@ -170,10 +170,10 @@ namespace CarStore.DAL.Services
                 {
                     Person pers = new Person()
                     {
-                        PersonID = Convert.ToInt32(dataTable.Rows[0]["PersonId"]),
-                        FirstName = Convert.ToString(dataTable.Rows[0]["FirstName"]),
-                        LastName = Convert.ToString(dataTable.Rows[0]["LastName"]),
-                        Phone = Convert.ToString(dataTable.Rows[0]["Phone"]),
+                        PersonID = Convert.ToInt32(dataTable.Rows[0][DBColumns.PERSON_ID.Replace("@", "")]),
+                        FirstName = Convert.ToString(dataTable.Rows[0][DBColumns.FIRST_NAME.Replace("@", "")]),
+                        LastName = Convert.ToString(dataTable.Rows[0][DBColumns.LAST_NAME.Replace("@", "")]),
+                        Phone = Convert.ToString(dataTable.Rows[0][DBColumns.PHONE.Replace("@", "")])
                     };
                     persons.Add(pers);
                 }
