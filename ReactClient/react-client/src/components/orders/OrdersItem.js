@@ -2,8 +2,9 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from "react-router-dom"
 import EntityTableItem from '../entitiesTable/EntityTableItem.js'
-import{getOrders,getOrdersCount} from '../../dataProviders/ApiProvider.js'
-
+import{getOrdersCount} from '../../dataProviders/ApiProvider.js'
+import { connect } from 'react-redux';
+import {getOrdersAction} from '../../redux/actions.js'
 
 class OrderItem extends React.Component {
   constructor() {
@@ -12,12 +13,12 @@ class OrderItem extends React.Component {
   }
   sortData=(page,sort)=>{
     if(page=="default" || page==undefined){
-      page=this.state.CurrentPage
+      page=this.props.Pagination.CurrentPage
     }
     if(sort =="default"|| sort==undefined){
-      sort=this.state.CurrentSort
+      sort=this.props.Pagination.CurrentSort
     }
-    getOrders(this.writeFetchedData,page,sort)
+    this.props.dispatch(getOrdersAction(page,sort))
   }
   writeFetchedItemsCount=(number)=>{
     this.setState({fetchedItemsCount:"rendered",ItemsNumer:number})
@@ -31,13 +32,14 @@ class OrderItem extends React.Component {
       getOrdersCount(this.writeFetchedItemsCount)
     }
     console.log("Fethced data state :", this.state.fetchData)
-    if(!this.state.fetchData && this.state.fetchedItemsCount){
-      getOrders(this.writeFetchedData,1);
+    if(this.props.Persons==undefined  && this.state.fetchedItemsCount){
+      this.props.dispatch(getOrdersAction(1))
     }
     console.log("Log from render:", this.state.Items);
         if (this.state.fetchData  && this.state.fetchedItemsCount) {
       const data = {
-        Items: this.state.Items,
+        Items: this.props.Orders,
+        Pagination:this.props.Pagination,
         fields: fields,
         title:"order"
       }
@@ -55,4 +57,12 @@ class OrderItem extends React.Component {
 
 }
 
-export default OrderItem
+
+const mapStateToProps = (state) => {
+  return {
+    Persons:state.Persons,
+    Pagination:state.Pagination
+  };
+}
+
+export default connect(mapStateToProps)(OrderItem)

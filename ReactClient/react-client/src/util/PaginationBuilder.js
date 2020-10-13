@@ -7,7 +7,7 @@ export class PageLinks extends React.Component {
         this.props=props;
         this.state= { 
             TotalPages: props.TotalPages,
-            CurrentPage:props.CurrentPage,
+            CurrentPage:this.props.page,
             PrevButtonState:"",
             NextButtonState:""
             };

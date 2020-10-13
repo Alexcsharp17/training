@@ -2,7 +2,9 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from "react-router-dom"
 import EntityTableItem from '../entitiesTable/EntityTableItem.js'
-import{ getPersons,getPersonsCount} from '../../dataProviders/ApiProvider.js'
+import{ getPersonsCount} from '../../dataProviders/ApiProvider.js'
+import {getPersonsAction} from '../../redux/actions.js'
+import { connect } from 'react-redux';
 
 
 class PersonItem extends React.Component {
@@ -12,18 +14,15 @@ class PersonItem extends React.Component {
   }
   sortData=(page,sort)=>{
     if(page=="default" || page==undefined){
-      page=this.state.CurrentPage
+      page=this.props.Pagination.CurrentPage
     }
     if(sort =="default"|| sort==undefined){
-      sort=this.state.CurrentSort
+      sort=this.props.Pagination.CurrentSort
     }
-    getPersons(this.WriteFetchedData,page,sort)
+    this.props.dispatch(getPersonsAction(page,sort))     
   }
 
-  WriteFetchedData=(Items,page,sort)=>{
-    console.log("PAGE AT CALLBACK",page);
-    this.setState({fetchData:"rendered", Items:Items,CurrentPage:page,CurrentSort:sort});
-  }
+
   writeFetchedItemsCount=(number)=>{
     this.setState({fetchedItemsCount:"rendered",ItemsNumer:number})
   }
@@ -33,22 +32,24 @@ class PersonItem extends React.Component {
 
       getPersonsCount(this.writeFetchedItemsCount)
     }
-    if(!this.state.fetchData && this.state.fetchedItemsCount){
-       getPersons(this.WriteFetchedData,1);     
+    if(this.props.Persons==undefined && this.state.fetchedItemsCount){
+    
+       this.props.dispatch(getPersonsAction(1))     
     }
-    console.log("Log from render:", this.state.Items);
+    console.log("Log from render:", this.props.Persons);
     const data = {
-      Items: this.state.Items,
+      Items: this.props.Persons,
+      Pagination:this.props.Pagination,
       fields: fields,
       title:"person"
     }
-    if (this.state.fetchData != "" && this.state.fetchedItemsCount!="") {
-
+    if (this.props.Persons!=undefined && this.state.fetchedItemsCount!="") {
       return (<EntityTableItem data={data} callback={this.sortData} 
         CurrentPage={this.state.CurrentPage} CurrentSort={this.state.CurerentSort}
         TotalPages={this.state.ItemsNumer % 5!=0? (this.state.ItemsNumer % 5)+1:this.state.ItemsNumer % 5 } />)
     }
     else {
+      console.log("Log from render:", this.props.Persons);
       return(<div>NO data availible</div>);
     }
     
@@ -57,4 +58,11 @@ class PersonItem extends React.Component {
 
 }
 
-export default PersonItem
+const mapStateToProps = (state) => {
+  return {
+    Persons:state.Persons,
+    Pagination:state.Pagination
+  };
+}
+
+export default connect(mapStateToProps)(PersonItem) 

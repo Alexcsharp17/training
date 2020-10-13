@@ -53,27 +53,25 @@ export async function getPersonsCount(callback)
       });
     callback(dat);
 }
-export async function getOrders(callback,page,sort) {
+export async function getOrders(page,sort) {
     var Items = [];
     await fetch(GET_ORDERS_URL+"?page="+page+"&sort="+sort)
-      .then((response) => response.json())
-      .then((data) => {
-        Items = data
+      .then(async (response) => {
+        Items=await response.json();
       });
-      
-    callback(Items,page,sort);
+      return Items;
 }
 
-export async function getPersons(callback,page,sort ) {
-    var Items = [];
-    console.log("PAGE",page,"SORT",sort);
-    await fetch(GET_PERSONS_URL+"?page="+page+"&sort="+sort)
-      .then((response) => response.json())
-      .then((data) => {
-        Items = data
-      });
-    callback(Items,page,sort);
-  }
+export async function getPersons(page,sort) {
+  var Items = [];
+  console.log("PAGE",page,"SORT",sort);
+  await fetch(GET_PERSONS_URL+"?page="+page+"&sort="+sort)
+    .then(async (response) =>
+      {
+       Items = await response.json() ;
+    });
+    return Items;
+}
 
 export  async function getPerson(id, callback){
     if(id !="" &&  id!=undefined && id!=0){
