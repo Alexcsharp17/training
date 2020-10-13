@@ -33,8 +33,8 @@ namespace CarStore.WEB
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IPersonService, PersonService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IPersonService, PersonService>();
             services.AddScoped<ICommandBuilder, SqlCommandBuild>();
             services.AddScoped<DbConnection>(sp => new SqlConnection(connection));
             services.AddMvc().AddFluentValidation(mvcConfig=>mvcConfig.RegisterValidatorsFromAssemblyContaining<Startup>());
