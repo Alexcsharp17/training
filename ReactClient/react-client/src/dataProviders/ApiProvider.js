@@ -61,7 +61,6 @@ export async function getOrders(page,sort) {
 }
 
 export async function getPersons(page,sort) {
-  console.log("                                              Page:",page,"Sort",sort)
   var Items = [];
   await fetch(GET_PERSONS_URL+"?page="+page+"&sort="+sort)
     .then(async (response) =>

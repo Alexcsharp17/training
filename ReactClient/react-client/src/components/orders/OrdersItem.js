@@ -3,17 +3,20 @@ import 'bootstrap/dist/css/bootstrap.css';
 import EntityTableItem from '../entitiesTable/EntityTableItem.js'
 import { connect } from 'react-redux';
 import {getOrdersAction,getOrdersCountAction} from '../../redux/actions.js'
-import {countPages} from '../../util/PaginationHelper.js'
-import {defValueChecker} from '../../util/SortingHelper.js'
 
-class OrdersList extends React.Component {
+class OrdersListItem extends React.Component {
   constructor() {
     super();
     this.state = { fetchData: "",fetchedItemsCount:"", CurrentPage:1, CurerentSort:"@PersonID" }
   }
   sortData=(page,sort)=>{
-    const{selectPage,selectSort}= defValueChecker(page,sort,this.props.Pagination.CurrentPage,this.props.Pagination.CurrentSort);
-    this.props.dispatch(getOrdersAction(selectPage,selectSort))
+    if(page=="default" || page==undefined){
+      page=this.props.Pagination.CurrentPage
+    }
+    if(sort =="default"|| sort==undefined){
+      sort=this.props.Pagination.CurrentSort
+    }
+    this.props.dispatch(getOrdersAction(page,sort))
   }
  
   render() {
@@ -31,10 +34,10 @@ class OrdersList extends React.Component {
         fields: fields,
         title:"order"
       }
-      let totPages=countPages(this.props.ItemsCount)
+
       return (<EntityTableItem data={data} callback={this.sortData} 
         CurrentPage={this.state.CurrentPage}  CurrentSort={this.state.CurerentSort}
-        TotalPages={totPages} />);
+        TotalPages={this.props.ItemsCount % 5!=0? (Math.trunc(this.props.ItemsCount / 5))+1:Math.trunc(this.props.ItemsCount / 5) } />);
         
     }
     else {
@@ -54,4 +57,4 @@ const mapStateToProps = (state) => {
   };
 }
 
-export default connect(mapStateToProps)(OrdersList)
+export default connect(mapStateToProps)(OrdersListItem)
