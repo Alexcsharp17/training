@@ -58,7 +58,7 @@ export class PageLinks extends React.Component {
     }
 
     render() {
-        console.log("Total pages", this.state.TotalPages)
+        console.log("TOTAL PAGES TOTAL PAGES TOTTAL ", this.state.TotalPages)
         let pages = this.formPagesList();      
         return (
             <div>

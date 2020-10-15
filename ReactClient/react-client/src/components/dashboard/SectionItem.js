@@ -1,9 +1,13 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from "react-router-dom"
+import {setItemsCount} from '../../redux/actions.js'
+import { connect } from 'react-redux';
+
 
 class SectionItem extends React.Component {
     render() {
+        this.props.dispatch(setItemsCount(null))
         return (
             <div className="card m-1 d-flex ">
                 <div className="card-header text-primary">
@@ -20,4 +24,9 @@ class SectionItem extends React.Component {
     }
 }
 
-export default SectionItem;
+const mapStateToProps=(state)=>{
+    return{
+
+    }
+}
+export default connect(mapStateToProps)(SectionItem) ;

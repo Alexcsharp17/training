@@ -55,7 +55,7 @@ namespace CarStore.DAL.Services
                     if (dataTable.Rows.Count == 1)
                     {
                         ord.OrderID =Convert.ToInt32(dataTable.Rows[0][DBColumns.ORDER_ID.Replace("@","")]);
-                        ord.OrderDate = Convert.ToDateTime(dataTable.Rows[0][DBColumns.ORDER_DATE.Replace("@"," ")]);
+                        ord.OrderDate = Convert.ToDateTime(dataTable.Rows[0][DBColumns.ORDER_DATE.Replace("@","")]);
                         ord.CarID = Convert.ToInt32(dataTable.Rows[0][DBColumns.CAR_ID.Replace("@","")]);
                         ord.PersonId = Convert.ToInt32(dataTable.Rows[0][DBColumns.PERSON_ID.Replace("@","")]);
                     }
@@ -102,7 +102,7 @@ namespace CarStore.DAL.Services
                     Order ord = new Order()
                     {
                         OrderID = Convert.ToInt32(dataRow[DBColumns.ORDER_ID.Replace("@", "")]),
-                        OrderDate = Convert.ToDateTime(dataRow[DBColumns.ORDER_DATE.Replace("@", " ")]),
+                        OrderDate = Convert.ToDateTime(dataRow[DBColumns.ORDER_DATE.Replace("@", "")]),
                         CarID = Convert.ToInt32(dataRow[DBColumns.CAR_ID.Replace("@", "")]),
                         PersonId = Convert.ToInt32(dataRow[DBColumns.PERSON_ID.Replace("@", "")])
                      };
