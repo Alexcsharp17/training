@@ -8,7 +8,6 @@ export function  CreateTableBody(items,title,fetchHandler,PersonsNumber){
         return(<tbody><tr>Loading</tr></tbody>)
     }
     else{
-        console.log("ITEMS LOAded",items)
         return(
             
             <tbody>
