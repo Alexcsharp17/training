@@ -205,7 +205,15 @@ AS
 BEGIN
 	SELECT * FROM Persons;
 END
+GO
 
+CREATE OR ALTER PROCEDURE [dbo].[sp_FindPersons]
+@pattern varchar(max)
+AS
+BEGIN
+	SELECT * FROM Persons
+	where CONCAT(Persons.FirstName,Persons.LastName) LIKE '%'+@pattern+'%';
+END
 /*Exceptions*/
 EXEC sp_addmessage
     @msgnum = 50001, 

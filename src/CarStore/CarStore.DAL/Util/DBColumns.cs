@@ -7,6 +7,8 @@ namespace CarStore.DAL.Util
     public static class DBColumns
     {
         public  const string ID = "@id";
+
+        public const string ORDER_ID = "@OrderID";
                 
         public  const string ORDER_DATE = "@OrderDate";
                
@@ -25,6 +27,8 @@ namespace CarStore.DAL.Util
         public const string PAGE_SIZE = "@pageSize";
 
         public const string SORT_COLUMN = "@sortColumn";
+
+        public const string PATTERN = "@pattern";
 
     }
 }

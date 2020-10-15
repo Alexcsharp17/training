@@ -4,112 +4,117 @@ using CarStore.DAL.Interfaces;
 using CarStore.DAL.Util;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarStore.DAL.Services
 {
     public class OrderService : IOrderService
     {
         private ICommandBuilder comandbuilder;
-        public OrderService(ICommandBuilder commandBuild)
+        public OrderService(ICommandBuilder comandbuilder)
         {
-            this.comandbuilder = commandBuild;
+            this.comandbuilder = comandbuilder;
         }
 
         public void AddOrder(Order order)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                {DBColumns.PERSON_ID, order.PersonId },
-                {DBColumns.ORDER_DATE, order.OrderDate },
-                {DBColumns.CAR_ID, order.CarID }
-            };
+                {
+                    {DBColumns.PERSON_ID, order.PersonId },
+                    {DBColumns.ORDER_DATE, order.OrderDate },
+                    {DBColumns.CAR_ID, order.CarID }
+                };
 
-            if (order.OrderID == 0)
-            {
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
+                if (order.OrderID == 0)
+                {
+                    comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
+                }
+                else
+                {
+                    parameters.Add(DBColumns.ID, order.OrderID);
+                    comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), parameters);
+                }
             }
-            else
-            {
-                parameters.Add(DBColumns.ID, order.OrderID);
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), parameters);
-            }
-        }
         public void DeleteOrder(int id)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
-            comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_DeleteOrder.ToString(), parameters);
+            comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_DeleteOrder.ToString(), parameters);
         }
         public Order GetOrder(int id)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>() { { DBColumns.ID, id } };
 
-            using (var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetOrder.ToString(), parameters))
-            {
-                Order ord = new Order();
-
-                if (reader.Read())
+                using (var dataTable = comandbuilder.DbDataReaderCommand(StoredProceduresNames.sp_GetOrder.ToString(), parameters))
                 {
-                    ord.OrderID = reader.GetInt32(0);
-                    ord.OrderDate = reader.GetDateTime(1);
-                    ord.CarID = reader.GetInt32(2);
-                    ord.PersonId = reader.GetInt32(3);
-                }
-                return ord;
-            }
+                    Order ord = new Order();
 
+                    if (dataTable.Rows.Count == 1)
+                    {
+                        ord.OrderID =Convert.ToInt32(dataTable.Rows[0][DBColumns.ORDER_ID.Replace("@","")]);
+                        ord.OrderDate = Convert.ToDateTime(dataTable.Rows[0][DBColumns.ORDER_DATE.Replace("@"," ")]);
+                        ord.CarID = Convert.ToInt32(dataTable.Rows[0][DBColumns.CAR_ID.Replace("@","")]);
+                        ord.PersonId = Convert.ToInt32(dataTable.Rows[0][DBColumns.PERSON_ID.Replace("@","")]);
+                    }
+
+                    return ord;
+                }
         }
 
         public void UpdateOrder(Order order)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                {DBColumns.PERSON_ID, order.PersonId },
-                {DBColumns.ORDER_DATE, order.OrderDate },
-                {DBColumns.CAR_ID, order.CarID }
-            };
+           
+              Dictionary<string, object> parameters = new Dictionary<string, object>()
+              {
+                  {DBColumns.PERSON_ID, order.PersonId },
+                  {DBColumns.ORDER_DATE, order.OrderDate },
+                  {DBColumns.CAR_ID, order.CarID }
+              };
 
-            if (order.OrderID == 0)
-            {
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
-            }
-            else
-            {
-                comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), parameters);
-            }
+              if (order.OrderID == 0)
+              {
+                  comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_InsertOrder.ToString(), parameters);
+              }
+              else
+              {
+                  comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_UpdateOrder.ToString(), parameters);
+              }
+
         }
 
         public List<Order> GetOrders(int page, int pageSize, string sort)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                {DBColumns.PAGE,page },
-                {DBColumns.PAGE_SIZE,pageSize},
-                {DBColumns.SORT_COLUMN,sort}
-
-            };
-            List<Order> orders = new List<Order>();
-            using var reader = comandbuilder.DbDataRequestCommand(StoredProceduresNames.sp_GetOrders.ToString(), parameters);
-
-            while (reader.Read())
-            {
-                Order ord = new Order
                 {
-                    OrderID = reader.GetInt32(0),
-                    OrderDate = reader.GetDateTime(1),
-                    CarID = reader.GetInt32(2),
-                    PersonId = reader.GetInt32(3)
+                    {DBColumns.PAGE,page },
+                    {DBColumns.PAGE_SIZE,pageSize},
+                    {DBColumns.SORT_COLUMN,sort}
+
                 };
-                orders.Add(ord);
-            }
-            return orders;
+                List<Order> orders = new List<Order>();
+                using var dataTable = comandbuilder.DbDataReaderCommand(StoredProceduresNames.sp_GetOrders.ToString(), parameters);
+
+                foreach (DataRow dataRow in dataTable.Rows)
+                {
+                    Order ord = new Order()
+                    {
+                        OrderID = Convert.ToInt32(dataRow[DBColumns.ORDER_ID.Replace("@", "")]),
+                        OrderDate = Convert.ToDateTime(dataRow[DBColumns.ORDER_DATE.Replace("@", " ")]),
+                        CarID = Convert.ToInt32(dataRow[DBColumns.CAR_ID.Replace("@", "")]),
+                        PersonId = Convert.ToInt32(dataRow[DBColumns.PERSON_ID.Replace("@", "")])
+                     };
+                   orders.Add(ord);
+                }
+
+                return orders;
         }
 
         public int GetOrdersCount()
         {
-            return comandbuilder.DbDataPostCommand(StoredProceduresNames.sp_GetOrdersCount.ToString());
+            return comandbuilder.DbDataScalarCommand(StoredProceduresNames.sp_GetOrdersCount.ToString());
         }
 
     }
