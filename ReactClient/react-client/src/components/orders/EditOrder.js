@@ -59,18 +59,18 @@ class EditOrderItem extends React.Component {
     render() {
     
         console.log("getOrderState:", this.props.CurrentOrder, "getPersonState:", this.props.CurrentPerson, "findPersonsState", this.props.Persons);
-        if (this.props.CurrentOrder==undefined) {
+        if (!this.props.CurrentOrder) {
            this.props.dispatch(getOrderAction(this.props.match.params.id));
         }
-        if (this.props.CurrentPerson==undefined && this.props.CurrentOrder!=undefined) {
+        if (!this.props.CurrentPerson && this.props.CurrentOrder) {
             
            this.props.dispatch(getPersonAction(this.props.CurrentOrder.personId));
         }
-        if (this.props.Persons==undefined && this.props.CurrentPerson!=undefined && this.props.CurrentOrder!=undefined) {
+        if (!this.props.Persons && this.props.CurrentPerson  && this.props.CurrentOrder ) {
            this.props.dispatch(findPersonsAction (this.state.CurrentName));
         }
         const { errors } = this.state
-        if (this.props.Persons!=undefined && this.props.CurrentPerson!=undefined && this.props.CurrentOrder!=undefined) {
+        if (this.props.Persons  && this.props.CurrentPerson  && this.props.CurrentOrder ) {
             return (
                 <div className="mt-2 row">
                     <div className="col-2 offset-5 card border-rounded p-2">

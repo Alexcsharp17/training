@@ -4,7 +4,7 @@ import EntityTableItem from '../entitiesTable/EntityTableItem.js'
 import { connect } from 'react-redux';
 import {getOrdersAction,getOrdersCountAction} from '../../redux/actions.js'
 
-class OrderItem extends React.Component {
+class OrdersListItem extends React.Component {
   constructor() {
     super();
     this.state = { fetchData: "",fetchedItemsCount:"", CurrentPage:1, CurerentSort:"@PersonID" }
@@ -21,13 +21,13 @@ class OrderItem extends React.Component {
  
   render() {
     const fields = ["OrderID", "OrderDate", "CarID", "PersonID"]
-    if(this.props.ItemsCount==undefined){
+    if(!this.props.ItemsCount){
       this.props.dispatch(getOrdersCountAction());
     }
-    if(this.props.Orders==undefined  && this.props.ItemsCount!=undefined){
+    if(!this.props.Orders  && this.props.ItemsCount){
       this.props.dispatch(getOrdersAction(1))
     }
-    if (this.props.Orders !=undefined && this.props.ItemsCount!=undefined) {
+    if (this.props.Orders  && this.props.ItemsCount) {
       const data = {
         Items: this.props.Orders,
         Pagination:this.props.Pagination,
@@ -57,4 +57,4 @@ const mapStateToProps = (state) => {
   };
 }
 
-export default connect(mapStateToProps)(OrderItem)
+export default connect(mapStateToProps)(OrdersListItem)

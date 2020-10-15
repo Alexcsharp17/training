@@ -62,7 +62,6 @@ export async function getOrders(page,sort) {
 
 export async function getPersons(page,sort) {
   var Items = [];
-  console.log("PAGE",page,"SORT",sort);
   await fetch(GET_PERSONS_URL+"?page="+page+"&sort="+sort)
     .then(async (response) =>
       {
@@ -72,7 +71,6 @@ export async function getPersons(page,sort) {
 }
 
 export  async function getPerson(id){
-  console.log("HEEEEEEEE")
     if(id !="" &&  id!=undefined && id!=0){
      let dat=[];
      await fetch(GET_PERSON_URL+id)
@@ -106,7 +104,6 @@ export async function deleteItem(id, title,callback) {
         .then((data)=>{
            answ=data;          
         })
-        console.log(answ);
         callback(answ);
     }
 
@@ -119,10 +116,10 @@ export async function addPerson(person){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            PersonID:parseInt(person.PersonID),
-            FirstName:person.FirstName,
-            LastName:person.LastName,
-            Phone:person.Phone
+            personID:parseInt(person.PersonID),
+            firstName:person.FirstName,
+            lastName:person.LastName,
+            phone:person.Phone
         })
     }).then(async(response) => {
       res= await response.json();
@@ -137,10 +134,10 @@ export async function addOrder(order){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-                OrderID:parseInt(order.orderID),
-                 OrderDate:new Date(Date.parse(order.orderDate)),
-                 CarID:parseInt(order.carID),             
-                 PersonId:parseInt(order.personId)
+                orderID:parseInt(order.orderID),
+                orderDate:new Date(Date.parse(order.orderDate)),
+                carID:parseInt(order.carID),             
+                personId:parseInt(order.personId)
         })
     }).then(async (response) => {
       res = await response.json()

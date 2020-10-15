@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import SectionItem from '../dashboard/SectionItem.js'
 import{addOrderAction, getOrderAction,setCurrentOrder,getPersonAction,findPersonsAction, setItemsCount} from'../../redux/actions.js'
 
-
 const SECTIONS = [
     { title: 'Orders', href: '/orders' },
     { title: 'Persons', href: '/persons' }
@@ -12,7 +11,6 @@ const SECTIONS = [
 class DashboardItem extends React.Component {
     
     render() {
-        
         return (
             <div className="row mt-3 d-flex flex-row" >
             <div className="offset-3 col-6   adm_dash">

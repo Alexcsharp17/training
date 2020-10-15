@@ -5,7 +5,8 @@ import {
     SET_ITEMS_COUNT,
     SET_ERRORS,
     SET_CURRENT_PERSON,
-    SET_CURRENT_ORDER
+    SET_CURRENT_ORDER,
+    SET_CURRENT_SORT
     } from './types.js'
 import {
     getPersons,
@@ -46,7 +47,6 @@ export function setPagination(params=initialPagin) {
 }
 
 export function setItemsCount(count){
-    console.log("SET ITEMS COUNT:",count)
     return{
         type:SET_ITEMS_COUNT,
         payload: count
@@ -56,10 +56,8 @@ export function setItemsCount(count){
 export  function getPersonsAction(page,sort) {
     return async (dispatch)=>{
         let  result= await getPersons(page,sort)
-            console.log("action Log",result)        
         if(result!=undefined){
             dispatch(setPagination({page:page,sort:sort}));
-            console.log("action Log",result)    
             dispatch(setPersons(result))
        }
     }
@@ -68,10 +66,8 @@ export  function getPersonsAction(page,sort) {
 export  function getOrdersAction(page,sort) {
     return async (dispatch)=>{
         let  result= await getOrders(page,sort)
-            console.log("action Log",result)        
         if(result!=undefined){
             dispatch(setPagination({page:page,sort:sort}));
-            console.log("action Log",result)    
             dispatch(setOrders(result))
        }
     }
@@ -121,7 +117,6 @@ export function getPersonAction(id){
     return async (dispatch)=>{
         let res = await getPerson(id)
         if(res==undefined){
-            console.log("HEEEEEEEE")
             dispatch(setCurrentPerson({PersonID:0}))
         }
         else{
@@ -151,7 +146,6 @@ export function addPersonAction(person){
 }
 
 export function setCurrentOrder(order){
-    console.log("AAAAAAAAAAAAAAAAAA",order)
     if(order.orderID==undefined){
         order.orderID=null
     }
@@ -171,12 +165,10 @@ export function setCurrentOrder(order){
 }
 
 export function getOrderAction(id){
-    console.log("HEEEEEEEE",id)
     return async (dispatch)=>{
         
         let res = await getOrder(id)
        
-        console.log("BBBBBBBBBEEEEEEEEEE",res)
         if(res==undefined){
             
             dispatch(setCurrentOrder({OrderID:0}))
@@ -206,3 +198,4 @@ export function addErrors(data){
         payload:data
     }
 }
+

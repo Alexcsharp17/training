@@ -55,10 +55,10 @@ class editPersonItem extends React.Component{
     render(){
         let errors =this.state.errors;
         console.log("CurrentPers",this.props.CurrentPerson)
-        if(this.props.CurrentPerson==undefined){
+        if(!this.props.CurrentPerson){
             this.props.dispatch(getPersonAction(this.props.match.params.id))
         }
-        if(this.props.CurrentPerson!=undefined){
+        if(this.props.CurrentPerson){
             return( 
                 <div className="mt-2 row">
                 <div className="col-2 offset-5 card border-rounded p-2">

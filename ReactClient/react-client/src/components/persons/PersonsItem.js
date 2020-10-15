@@ -7,7 +7,7 @@ import {getPersonsAction,getPersonsCountAction} from '../../redux/actions.js'
 import { connect } from 'react-redux';
 
 
-class PersonItem extends React.Component {
+class PersonsListItem extends React.Component {
   constructor() {
     super();
     this.state = { CurrentPage:1,CurerentSort:"@PersonID" }
@@ -26,10 +26,10 @@ class PersonItem extends React.Component {
 
   render() {
     const fields = ["PersonId", "FirstName", "LastName", "Phone"]
-    if(this.props.ItemsCount==undefined ||this.props.ItemsCount==null){
+    if(!this.props.ItemsCount ){
       this.props.dispatch(getPersonsCountAction())
     }
-    if(this.props.Persons==undefined && this.props.ItemsCount ==undefined){
+    if(!this.props.Persons && this.props.ItemsCount){
     
        this.props.dispatch(getPersonsAction(1))     
     }
@@ -44,7 +44,7 @@ class PersonItem extends React.Component {
     if (this.props.Persons!=undefined && this.props.ItemsCount!=undefined) {
       return (<EntityTableItem data={data} callback={this.sortData} 
         CurrentPage={this.state.CurrentPage} CurrentSort={this.state.CurerentSort}
-        TotalPages={this.props.ItemsCount % 5!=0? (this.props.ItemsCount % 5)+1:this.props.ItemsCount % 5 } />)
+        TotalPages={totPages} />)
     }
     else {
       return(<div class="spinner-border" role="status">
@@ -65,4 +65,4 @@ const mapStateToProps = (state) => {
   };
 }
 
-export default connect(mapStateToProps)(PersonItem) 
+export default connect(mapStateToProps)(PersonsListItem) 
