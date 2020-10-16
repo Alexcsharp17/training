@@ -11,6 +11,7 @@ const SECTIONS = [
 class DashboardItem extends React.Component {
 
     render() {
+
         return (
             <div className="row mt-3 d-flex flex-row" >
                 <div className="offset-3 col-6   adm_dash">

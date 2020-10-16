@@ -1,4 +1,4 @@
-import { executeGetRequest,executePostRequest,executeDeleteRequest  } from '../util/FetchRequestBuilder.js'
+import { executeGetRequest, executePostRequest, executeDeleteRequest } from '../util/FetchRequestBuilder.js'
 const API_URL = 'https://localhost:5001/api/';
 const GET_ORDERS_URL = API_URL + 'order/getorders';
 const GET_PERSONS_URL = API_URL + 'person/getpersons';
@@ -8,11 +8,7 @@ const ADD_PERSON_URL = API_URL + "person/addperson/";
 const ADD_ORDER_URL = API_URL + "order/addorder/";
 const GET_ORDERS_COUNT_URL = API_URL + "order/getorderscount"
 const GET_PERSONS_COUNT_URL = API_URL + "person/getpersonscount"
-const GET_ALL_PERSONS_URL = API_URL + "person/getallpersons"
 const FIND_PERSONS_URL = API_URL + 'person/findpersons'
-
-
-const PersonID = "@PersonID"
 
 export async function findPersons(pattern) {
   return await executeGetRequest(FIND_PERSONS_URL, { pattern: pattern })
@@ -54,6 +50,7 @@ export async function deleteItem(id, title, callback) {
   }
 
 }
+
 export async function addPerson(person) {
   let res = [];
   let body = await JSON.stringify({
@@ -62,17 +59,20 @@ export async function addPerson(person) {
     lastName: person.LastName,
     phone: person.Phone
   });
+  
   res = await executePostRequest(ADD_PERSON_URL, null, body)
   return res;
 }
+
 export async function addOrder(order) {
   let res = []
-  let body =  JSON.stringify({
+  let body = JSON.stringify({
     orderID: parseInt(order.orderID),
     orderDate: new Date(Date.parse(order.orderDate)),
     carID: parseInt(order.carID),
     personId: parseInt(order.personId)
   })
-  res = await executePostRequest(ADD_ORDER_URL,null,body)
+
+  res = await executePostRequest(ADD_ORDER_URL, null, body)
   return res;
 }

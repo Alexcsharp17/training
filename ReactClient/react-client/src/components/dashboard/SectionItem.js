@@ -1,9 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from "react-router-dom"
-import {setItemsCount} from '../../redux/actions.js'
+import { setItemsCount } from '../../redux/actions.js'
 import { connect } from 'react-redux';
-
 
 class SectionItem extends React.Component {
     render() {
@@ -20,11 +19,12 @@ class SectionItem extends React.Component {
                         <span className="btn btn-success">View</span>
                     </Link>
                 </div>
-            </div>);
+            </div>
+        );
     }
 }
 
-const mapStateToProps=(state)=>{
-    return{}
+const mapStateToProps = (state) => {
+    return {}
 }
-export default connect(mapStateToProps)(SectionItem) ;
+export default connect(mapStateToProps)(SectionItem);

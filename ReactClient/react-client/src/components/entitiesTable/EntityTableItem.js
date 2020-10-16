@@ -6,12 +6,14 @@ import { TableBody } from '../entitiesTable/TableBodyItem.js';
 import { PageLinks } from '../../util/PaginationBuilder.js'
 
 class EntityTableItem extends React.Component {
+
     constructor(props) {
         super(props)
         this.state = { CurrentPage: this.props.CurrentPage }
     }
+
     render() {
-        const { data: { Items, fields, title,Pagination}, callback, CurrentPage, ItemsCount,TotalPages } = this.props
+        const { data: { Items, fields, title, Pagination }, callback, CurrentPage, ItemsCount, TotalPages } = this.props
         return (
             <div className="content" id="order_area">
                 <div className="alert"></div>

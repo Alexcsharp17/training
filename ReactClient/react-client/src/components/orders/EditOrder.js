@@ -8,7 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import closeIcon from './close.png';
 import { connect } from 'react-redux';
-import{addOrderAction, getOrderAction,setCurrentOrder,getPersonAction,findPersonsAction} from'../../redux/actions.js'
+import { addOrderAction, getOrderAction, setCurrentOrder, getPersonAction, findPersonsAction } from '../../redux/actions.js'
 
 
 
@@ -28,14 +28,15 @@ class EditOrderItem extends React.Component {
         let CarIDError = "";
         let PersonIDError = "";
         let OrderDateError = "";
-        if (this.props.CurrentOrder.carID==null|| this.props.CurrentOrder.carID==undefined) {
+
+        if (!this.props.CurrentOrder.carID) {
             CarIDError = "Invalid Car Id"
         }
-        if (this.props.CurrentOrder.personId==null || this.props.CurrentOrder.personId==undefined) {
+        if (!this.props.CurrentOrder.personId) {
             PersonIDError = "Invalid PersonID"
         }
 
-        if (this.props.CurrentOrder.orderDate==null || this.props.CurrentOrder.orderDate == undefined) {
+        if (!this.props.CurrentOrder.orderDate) {
             OrderDateError = "Invalid Order Date"
         }
         console.log(PersonIDError, CarIDError, OrderDateError);
@@ -46,31 +47,32 @@ class EditOrderItem extends React.Component {
 
         return true;
     }
+
     PostForm = (e) => {
         e.preventDefault();
         let isValid = this.validate();
+
         if (isValid) {
             this.props.dispatch(addOrderAction(this.props.CurrentOrder))
         }
-
     };
- 
+
 
     render() {
-    
         console.log("getOrderState:", this.props.CurrentOrder, "getPersonState:", this.props.CurrentPerson, "findPersonsState", this.props.Persons);
         if (!this.props.CurrentOrder) {
-           this.props.dispatch(getOrderAction(this.props.match.params.id));
+            this.props.dispatch(getOrderAction(this.props.match.params.id));
         }
         if (!this.props.CurrentPerson && this.props.CurrentOrder) {
-            
-           this.props.dispatch(getPersonAction(this.props.CurrentOrder.personId));
+
+            this.props.dispatch(getPersonAction(this.props.CurrentOrder.personId));
         }
-        if (!this.props.Persons && this.props.CurrentPerson  && this.props.CurrentOrder ) {
-           this.props.dispatch(findPersonsAction (this.state.CurrentName));
+        if (!this.props.Persons && this.props.CurrentPerson && this.props.CurrentOrder) {
+            this.props.dispatch(findPersonsAction(this.state.CurrentName));
         }
+
         const { errors } = this.state
-        if (this.props.Persons  && this.props.CurrentPerson  && this.props.CurrentOrder ) {
+        if (this.props.Persons && this.props.CurrentPerson && this.props.CurrentOrder) {
             return (
                 <div className="mt-2 row">
                     <div className="col-2 offset-5 card border-rounded p-2">
@@ -103,10 +105,12 @@ class EditOrderItem extends React.Component {
                                 <div className="form-group">
                                     <p>Select person</p>
                                     <div className="d-flex flex-row flex-nowrap">
-                                        <input type="text"  value={this.state.CurrentName==undefined?this.props.CurrentPerson.FirstName+' '+this.props.CurrentPerson.LastName:this.state.CurrentName} 
-                                        className="form-control" onClick={() => this.setState({ showSearchState: "d-block" })}
-                                            onChange={(event) => { this.setState({ CurrentName: event.target.value });
-                                            this.props.dispatch(findPersonsAction( event.target.value)) }} />
+                                        <input type="text" value={!this.state.CurrentName ? this.props.CurrentPerson.FirstName + ' ' + this.props.CurrentPerson.LastName : this.state.CurrentName}
+                                            className="form-control" onClick={() => this.setState({ showSearchState: "d-block" })}
+                                            onChange={(event) => {
+                                                this.setState({ CurrentName: event.target.value });
+                                                this.props.dispatch(findPersonsAction(event.target.value))
+                                            }} />
                                         <img src={closeIcon} alt="X" className={"mb-1 ml-2 " + this.state.showSearchState} onClick={() => this.setState({ showSearchState: "d-none" })} />
                                     </div>
 
@@ -114,12 +118,14 @@ class EditOrderItem extends React.Component {
                                         {
                                             this.props.Persons.map((person) => {
                                                 return (<button type="button" value={person.personID} className="btn d-block btn-secondary w-100"
-                                                onClick={(event) =>{this.props.dispatch(setCurrentOrder({
-                                                    orderID:this.props.CurrentOrder.orderID,
-                                                    carID:this.props.CurrentOrder.carId,
-                                                    personId:event.target.value,
-                                                    orderDate:this.props.CurrentOrder.orderDate
-                                                })); this.setState({CurrentName:person.firstName + " " + person.lastName})}}
+                                                    onClick={(event) => {
+                                                        this.props.dispatch(setCurrentOrder({
+                                                            orderID: this.props.CurrentOrder.orderID,
+                                                            carID: this.props.CurrentOrder.carId,
+                                                            personId: event.target.value,
+                                                            orderDate: this.props.CurrentOrder.orderDate
+                                                        })); this.setState({ CurrentName: person.firstName + " " + person.lastName })
+                                                    }}
                                                 >{person.firstName + " " + person.lastName}</button>);
                                             })
                                         }
@@ -127,13 +133,14 @@ class EditOrderItem extends React.Component {
                                 </div>
                                 <div className="form-group">
                                     <p>Car </p>
-                                    <select onClick={(event) =>{
-                                    this.props.dispatch(setCurrentOrder({
-                                            orderID:this.props.CurrentOrder.orderID,
-                                            carID:event.target.value,
-                                            personId:this.props.CurrentOrder.personId,
-                                            orderDate:this.props.CurrentOrder.orderDate
-                                    }))} 
+                                    <select onClick={(event) => {
+                                        this.props.dispatch(setCurrentOrder({
+                                            orderID: this.props.CurrentOrder.orderID,
+                                            carID: event.target.value,
+                                            personId: this.props.CurrentOrder.personId,
+                                            orderDate: this.props.CurrentOrder.orderDate
+                                        }))
+                                    }
                                     } className="form-control" >
                                         {
                                             carsJson.map((car) => {
@@ -149,12 +156,12 @@ class EditOrderItem extends React.Component {
                                 </div>
                                 <div className="form-group">
                                     <p> Order Date:</p>
-                                    <DatePicker selected={this.props.CurrentOrder.orderDate == undefined ? new Date() : new Date(this.props.CurrentOrder.orderDate)}
-                                        onChange={(date) =>this.props.dispatch(setCurrentOrder({
-                                            orderID:this.props.CurrentOrder.orderID,
-                                            carID:this.props.CurrentOrder.carID,
-                                            personId:this.props.CurrentOrder.personId,
-                                            orderDate:date
+                                    <DatePicker selected={!this.props.CurrentOrder.orderDate ? new Date() : new Date(this.props.CurrentOrder.orderDate)}
+                                        onChange={(date) => this.props.dispatch(setCurrentOrder({
+                                            orderID: this.props.CurrentOrder.orderID,
+                                            carID: this.props.CurrentOrder.carID,
+                                            personId: this.props.CurrentOrder.personId,
+                                            orderDate: date
                                         }))} className="form-control" />
                                 </div>
 
@@ -173,11 +180,13 @@ class EditOrderItem extends React.Component {
     }
 
 }
-const mapStateToProps=(state)=>{
-    return{
-        CurrentOrder:state.CurrentOrder,
-        CurrentPerson:state.CurrentPerson,
-        Persons:state.Persons
+
+const mapStateToProps = (state) => {
+    return {
+        CurrentOrder: state.CurrentOrder,
+        CurrentPerson: state.CurrentPerson,
+        Persons: state.Persons
     }
 }
+
 export default connect(mapStateToProps)(EditOrderItem) 
