@@ -72,7 +72,7 @@ export async function getPersons(page,sort) {
 }
 
 export  async function getPerson(id){
-    if(id !="" &&  id!=undefined && id!=0){
+    if(id !="" &&  id && id!=0){
      let dat=[];
      await fetch(GET_PERSON_URL+id)
      .then(async (response) => {
@@ -84,7 +84,7 @@ export  async function getPerson(id){
 
  export  async function getOrder(id){
   
-    if(id !="" &&  id!=undefined && id!=0){
+    if(id !="" &&  id && id!=0){
      let dat=[];
      await fetch(GET_ORDER_URL+id)
      .then(async(response) =>{
