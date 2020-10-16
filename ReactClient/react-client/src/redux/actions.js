@@ -93,17 +93,17 @@ export function getPersonsCountAction(){
 
 
 export function setCurrentPerson(person){
-    if(!person.PersonID){
-        person.PersonID=null
+    if(! person.personID){
+        person.personID=null
     }
-    if(!person.firstName){
-        person.FirstName=null
+    if(! person.firstName){
+        person.firstName=null
     }
-    if(!person.lastName){
-        person.LastName=null
+    if(! person.lastName){
+        person.lastName=null
     }
-    if(!person.phone){
-        person.Phone=null
+    if(! person.phone){
+        person.phone=null
     }
     return{
         type:SET_CURRENT_PERSON,
@@ -116,7 +116,7 @@ export function getPersonAction(id){
     
     return async (dispatch)=>{
         let res = await getPerson(id)
-        if(!res){
+        if(! res){
             dispatch(setCurrentPerson({PersonID:0}))
         }
         else{
@@ -135,7 +135,7 @@ export function findPersonsAction(patern){
 export function addPersonAction(person){
     return async(dispatch)=>{
        let data= await addPerson(person);
-       if(data.errors){
+       if(data.errors!=null && data.errors){
             dispatch(addErrors(data))    
         }
      else{
@@ -146,16 +146,16 @@ export function addPersonAction(person){
 }
 
 export function setCurrentOrder(order){
-    if(order.orderID){
+    if(! order.orderID){
         order.orderID=null
     }
-    if (order.orderDate) {
+    if (! order.orderDate) {
         order.orderDate=null
     }
-    if(order.carID){
+    if(! order.carID){
         order.carID=null
     }
-    if(order.personId){
+    if(! order.personId){
         order.personId=null
     }
     return{
@@ -169,7 +169,7 @@ export function getOrderAction(id){
         
         let res = await getOrder(id)
        
-        if(!res){
+        if(! res){
             
             dispatch(setCurrentOrder({OrderID:0}))
         }
@@ -182,7 +182,7 @@ export function getOrderAction(id){
 export function addOrderAction(order){
     return async(dispatch)=>{
        let data= await addOrder(order);
-       if(data.errors){
+       if(data.errors!=null && data.errors){
             dispatch(addErrors(data))    
         }
      else{
