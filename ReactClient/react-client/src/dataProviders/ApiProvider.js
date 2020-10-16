@@ -1,5 +1,4 @@
-import { ADD_ORDER } from '../redux/types.js';
-import { requestBuilder } from '../util/FetchRequestBuilder.js'
+import { executeGetRequest,executePostRequest,executeDeleteRequest  } from '../util/FetchRequestBuilder.js'
 const API_URL = 'https://localhost:5001/api/';
 const GET_ORDERS_URL = API_URL + 'order/getorders';
 const GET_PERSONS_URL = API_URL + 'person/getpersons';
@@ -11,40 +10,38 @@ const GET_ORDERS_COUNT_URL = API_URL + "order/getorderscount"
 const GET_PERSONS_COUNT_URL = API_URL + "person/getpersonscount"
 const GET_ALL_PERSONS_URL = API_URL + "person/getallpersons"
 const FIND_PERSONS_URL = API_URL + 'person/findpersons'
-const POST = "POST"
-const GET = "GET"
-const DELETE = "DELETE"
+
 
 const PersonID = "@PersonID"
 
 export async function findPersons(pattern) {
-  return await requestBuilder(FIND_PERSONS_URL, { pattern: pattern })
+  return await executeGetRequest(FIND_PERSONS_URL, { pattern: pattern })
 }
 
 export async function getOrdersCount() {
-  return await requestBuilder(GET_ORDERS_COUNT_URL)
+  return await executeGetRequest(GET_ORDERS_COUNT_URL)
 }
 export async function getPersonsCount() {
-  return await requestBuilder(GET_PERSONS_COUNT_URL)
+  return await executeGetRequest(GET_PERSONS_COUNT_URL)
 }
 
 export async function getOrders(page, sort) {
-  return await requestBuilder(GET_ORDERS_URL, { page: page, sort: sort })
+  return await executeGetRequest(GET_ORDERS_URL, { page: page, sort: sort })
 }
 
 export async function getPersons(page, sort) {
-  return await requestBuilder(GET_PERSONS_URL, { page: page, sort: sort });
+  return await executeGetRequest(GET_PERSONS_URL, { page: page, sort: sort });
 }
 
 export async function getPerson(id) {
   if (id != "" && id && id != 0) {
-    return await requestBuilder(GET_PERSON_URL, { id: id })
+    return await executeGetRequest(GET_PERSON_URL, { id: id })
   }
 }
 
 export async function getOrder(id) {
   if (id != "" && id && id != 0) {
-    return await requestBuilder(GET_ORDER_URL, { id: id });
+    return await executeGetRequest(GET_ORDER_URL, { id: id });
   }
 }
 
@@ -52,7 +49,7 @@ export async function deleteItem(id, title, callback) {
   if (window.confirm("Do you want to delete this item?")) {
     let answ = [];
     var requestUrl = API_URL + title + '/delete' + title;
-    answ = await requestBuilder(requestUrl, { id: id }, DELETE)
+    answ = await executeDeleteRequest(requestUrl, { id: id })
     callback(answ);
   }
 
@@ -65,7 +62,7 @@ export async function addPerson(person) {
     lastName: person.LastName,
     phone: person.Phone
   });
-  res = await requestBuilder(ADD_PERSON_URL, null, POST, body)
+  res = await executePostRequest(ADD_PERSON_URL, null, body)
   return res;
 }
 export async function addOrder(order) {
@@ -76,6 +73,6 @@ export async function addOrder(order) {
     carID: parseInt(order.carID),
     personId: parseInt(order.personId)
   })
-  res = await requestBuilder(ADD_ORDER_URL,null,POST,body)
+  res = await executePostRequest(ADD_ORDER_URL,null,body)
   return res;
 }
