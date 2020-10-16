@@ -56,7 +56,7 @@ export function setItemsCount(count){
 export  function getPersonsAction(page,sort) {
     return async (dispatch)=>{
         let  result= await getPersons(page,sort)
-        if(result!=undefined){
+        if(result){
             dispatch(setPagination({page:page,sort:sort}));
             dispatch(setPersons(result))
        }
@@ -66,7 +66,7 @@ export  function getPersonsAction(page,sort) {
 export  function getOrdersAction(page,sort) {
     return async (dispatch)=>{
         let  result= await getOrders(page,sort)
-        if(result!=undefined){
+        if(result){
             dispatch(setPagination({page:page,sort:sort}));
             dispatch(setOrders(result))
        }
@@ -76,7 +76,7 @@ export  function getOrdersAction(page,sort) {
 export function getOrdersCountAction(){
     return async (dispatch)=>{
         let res = await getOrdersCount()
-        if(res!=undefined){
+        if(res){
             dispatch(setItemsCount(res))
         }
     }
@@ -84,7 +84,7 @@ export function getOrdersCountAction(){
 export function getPersonsCountAction(){
     return async (dispatch)=>{
         let res = await getPersonsCount()
-        if(res!=undefined){
+        if(res){
 
             dispatch(setItemsCount(res))
         }
@@ -93,16 +93,16 @@ export function getPersonsCountAction(){
 
 
 export function setCurrentPerson(person){
-    if(person.PersonID==undefined){
+    if(!person.PersonID){
         person.PersonID=null
     }
-    if(person.firstName!=undefined){
+    if(!person.firstName){
         person.FirstName=null
     }
-    if(person.lastName!=undefined){
+    if(!person.lastName){
         person.LastName=null
     }
-    if(person.phone!=undefined){
+    if(!person.phone){
         person.Phone=null
     }
     return{
@@ -116,7 +116,7 @@ export function getPersonAction(id){
     
     return async (dispatch)=>{
         let res = await getPerson(id)
-        if(res==undefined){
+        if(!res){
             dispatch(setCurrentPerson({PersonID:0}))
         }
         else{
@@ -135,7 +135,7 @@ export function findPersonsAction(patern){
 export function addPersonAction(person){
     return async(dispatch)=>{
        let data= await addPerson(person);
-       if(data.errors!=null && data.errors!=undefined){
+       if(data.errors){
             dispatch(addErrors(data))    
         }
      else{
@@ -146,16 +146,16 @@ export function addPersonAction(person){
 }
 
 export function setCurrentOrder(order){
-    if(order.orderID==undefined){
+    if(order.orderID){
         order.orderID=null
     }
-    if (order.orderDate==undefined) {
+    if (order.orderDate) {
         order.orderDate=null
     }
-    if(order.carID==undefined){
+    if(order.carID){
         order.carID=null
     }
-    if(order.personId==undefined){
+    if(order.personId){
         order.personId=null
     }
     return{
@@ -169,7 +169,7 @@ export function getOrderAction(id){
         
         let res = await getOrder(id)
        
-        if(res==undefined){
+        if(!res){
             
             dispatch(setCurrentOrder({OrderID:0}))
         }
@@ -182,7 +182,7 @@ export function getOrderAction(id){
 export function addOrderAction(order){
     return async(dispatch)=>{
        let data= await addOrder(order);
-       if(data.errors!=null && data.errors!=undefined){
+       if(data.errors){
             dispatch(addErrors(data))    
         }
      else{

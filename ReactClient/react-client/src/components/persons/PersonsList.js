@@ -5,21 +5,17 @@ import EntityTableItem from '../entitiesTable/EntityTableItem.js'
 import{ getPersonsCount} from '../../dataProviders/ApiProvider.js'
 import {getPersonsAction,getPersonsCountAction} from '../../redux/actions.js'
 import { connect } from 'react-redux';
+import {countPages} from '../../util/PaginationHelper.js'
+import {defValueChecker} from '../../util/SortingHelper.js'
 
-
-class PersonsListItem extends React.Component {
+class PersonsList extends React.Component {
   constructor() {
     super();
     this.state = { CurrentPage:1,CurerentSort:"@PersonID" }
   }
   sortData=(page,sort)=>{
-    if(page=="default" || page==undefined){
-      page=this.props.Pagination.CurrentPage
-    }
-    if(sort =="default"|| sort==undefined){
-      sort=this.props.Pagination.CurrentSort
-    }
-    this.props.dispatch(getPersonsAction(page,sort))     
+    const{selectPage,selectSort}= defValueChecker(page,sort,this.props.Pagination.CurrentPage,this.props.Pagination.CurrentSort);
+    this.props.dispatch(getPersonsAction(selectPage,selectSort))
   }
 
 
@@ -39,9 +35,8 @@ class PersonsListItem extends React.Component {
       fields: fields,
       title:"person"
     }
-    let totPages= this.props.ItemsCount % 5!=0? (this.props.ItemsCount % 5)+1:this.props.ItemsCount % 5 
-   console.log("Total pages",totPages);
-    if (this.props.Persons!=undefined && this.props.ItemsCount!=undefined) {
+    let totPages= countPages(this.props.ItemsCount) 
+    if (this.props.Persons && this.props.ItemsCount) {
       return (<EntityTableItem data={data} callback={this.sortData} 
         CurrentPage={this.state.CurrentPage} CurrentSort={this.state.CurerentSort}
         TotalPages={totPages} />)
@@ -65,4 +60,4 @@ const mapStateToProps = (state) => {
   };
 }
 
-export default connect(mapStateToProps)(PersonsListItem) 
+export default connect(mapStateToProps)(PersonsList) 

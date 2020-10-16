@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import {deleteItem} from '../dataProviders/ApiProvider.js'
 
 export function  CreateTableBody(items,title,fetchHandler,PersonsNumber){
-    if(items==undefined){
+    if(!items){
         return(<tbody><tr>Loading</tr></tbody>)
     }
     else{

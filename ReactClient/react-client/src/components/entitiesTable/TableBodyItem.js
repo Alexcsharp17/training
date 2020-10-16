@@ -16,7 +16,7 @@ export class TableBody extends React.Component {
 
     FetchRequestHandler = (data) => {
         console.log(data);
-        if (data.IdError != undefined) {
+        if (data.IdError ) {
             this.setState({ IdError: "Can not delete person who has active records" })
             console.log("failed delete");
         }
@@ -31,7 +31,7 @@ export class TableBody extends React.Component {
 
         const { Items, title } = this.props
         console.log("ITEMS:" ,Items);
-        if (this.state.IdError != "" && this.state.IdError != undefined) {
+        if (this.state.IdError ) {
             alert(this.state.IdError);
         }
         if (title == "person") {
