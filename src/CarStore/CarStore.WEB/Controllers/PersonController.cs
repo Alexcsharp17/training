@@ -36,7 +36,6 @@ namespace CarStore.WEB.Controllers
             {
                 return BadRequest(ModelState);
             }
-
         }
 
         [HttpGet("[action]")]
@@ -79,7 +78,7 @@ namespace CarStore.WEB.Controllers
                 PersonService.AddPerson(person);
                 return Ok(ModelState);
             }
-            catch
+            catch(Exception e)
             {
                 return BadRequest(ModelState);
             }
@@ -108,22 +107,9 @@ namespace CarStore.WEB.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public IActionResult GetAllPersons()
-        {
-            try
-            {
-                var persons = PersonService.GetAllPersons();
-                return Ok(persons);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
 
         [HttpGet("[action]")]
-        public IActionResult FindPersons([FromQuery] string pattern=" ")
+        public IActionResult FindPersons([FromQuery] string pattern = " ")
         {
             try
             {

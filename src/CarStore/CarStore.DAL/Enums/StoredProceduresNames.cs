@@ -6,19 +6,10 @@ namespace CarStore.DAL.Enums
 {
     enum StoredProceduresNames
     {
-        sp_GetOrder,
-        sp_GetPerson,
-        sp_InsertOrder,
-        sp_InsertPerson,
-        sp_UpdateOrder,
-        sp_UpdatePerson,
-        sp_DeleteOrder,
-        sp_DeletePerson,
-        sp_GetOrders,
-        sp_GetPersons,
-        sp_GetPersonsCount,
-        sp_GetOrdersCount,
-        sp_GetAllPersons,
-        sp_FindPersons
+        sp_Get,
+        sp_Insert,
+        sp_Update,
+        sp_Delete,
+        sp_Find
     }
 }

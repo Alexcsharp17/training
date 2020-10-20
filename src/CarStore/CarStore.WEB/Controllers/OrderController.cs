@@ -29,7 +29,6 @@ namespace CarStore.WEB.Controllers
         [HttpGet("[action]")]
         public ActionResult GetOrder([FromQuery] int id)
         {
-
             try
             {
                 Order order = orderService.GetOrder(id);
@@ -59,13 +58,11 @@ namespace CarStore.WEB.Controllers
             {
                 return BadRequest(ModelState);
             }
-
         }
 
         [HttpPost("[action]")]
         public IActionResult AddOrder([FromBody] Order order)
         {
-
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("IdError", "Message");
@@ -81,7 +78,6 @@ namespace CarStore.WEB.Controllers
             {
                 return BadRequest(ModelState);
             }
-
         }
 
         [HttpDelete("[action]")]
@@ -112,7 +108,7 @@ namespace CarStore.WEB.Controllers
             try
             {
                 int res = orderService.GetOrdersCount();
-            
+
                 return Ok(res);
             }
             catch (Exception e)

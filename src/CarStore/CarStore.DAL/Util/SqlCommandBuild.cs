@@ -13,27 +13,9 @@ namespace CarStore.DAL.Util
     public class SqlCommandBuild : ICommandBuilder
     {
         private DbConnection connection;
-        //public DbConnection Connection
-        //{
-        //    get
-        //    {
-        //        if (connection.State != ConnectionState.Open)
-        //        {
-        //            connection.Open();
-        //        }
-
-        //        return connection;
-        //    }
-        //    set
-        //    {
-        //        connection = value;
-        //    }
-            
-        //}
 
         public SqlCommandBuild(DbConnection connection)
         {
-          
             this.connection = connection;
         }
 
@@ -53,7 +35,7 @@ namespace CarStore.DAL.Util
                         foreach (DataRow schemarow in dtSchema.Rows)
                         {
                             dtData.Columns.Add(schemarow.ItemArray[0].ToString()
-                                    ,Type.GetType(schemarow.ItemArray[12].ToString()));
+                                    , Type.GetType(schemarow.ItemArray[12].ToString()));
 
                         }
 
@@ -69,11 +51,9 @@ namespace CarStore.DAL.Util
                         }
 
                         reader.Close();
-
                     }
 
                     return dtData;
-
                 }
             }
             catch (Exception)
@@ -84,9 +64,8 @@ namespace CarStore.DAL.Util
             {
                 connection.Close();
             }
-
         }
-    
+
         public int DbDataScalarCommand(string procedure, Dictionary<string, object> parameters = null)
         {
             try
@@ -95,14 +74,13 @@ namespace CarStore.DAL.Util
                 using (var comand = Create(procedure, parameters))
                 {
                     var res = comand.ExecuteScalar();
-                    return res == null ? 0 : (int) res;
+                    return res == null ? 0 : (int)res;
                 }
             }
             finally
             {
                 connection.Close();
             }
-            
         }
 
         private DbCommand Create(string procedure, Dictionary<string, object> parameters = null)

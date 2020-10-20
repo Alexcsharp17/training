@@ -13,9 +13,7 @@ namespace CarStore.DAL.Interfaces
 
         void DeleteOrder(int id);
 
-        void UpdateOrder(Order order);
-
-        List<Order> GetOrders(int page,int pageSize,string sort);
+        List<Order> GetOrders(int page, int pageSize, string sort);
 
         public int GetOrdersCount();
     }
