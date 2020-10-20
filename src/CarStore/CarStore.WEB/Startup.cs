@@ -17,6 +17,9 @@ using Microsoft.Extensions.Logging;
 using CarStore.DAL.Util;
 using System.Data.Common;
 using FluentValidation.AspNetCore;
+using CarStore.DAL.Repositories;
+using CarStore.DAL.Entities;
+using CarStore.DAL.Procedures;
 
 namespace CarStore.WEB
 {
@@ -35,7 +38,12 @@ namespace CarStore.WEB
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IPersonService, PersonService>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IMapper<Person>), typeof(PersonMapper));
+            services.AddScoped(typeof(IMapper<Order>), typeof(OrderMapper));
             services.AddScoped<ICommandBuilder, SqlCommandBuild>();
+            services.AddScoped(typeof(IProcedures<Order>), typeof(OrderProceduresNames));
+            services.AddScoped(typeof(IProcedures<Person>), typeof(PersonProceduresNames));
             services.AddScoped<DbConnection>(sp => new SqlConnection(connection));
             services.AddMvc().AddFluentValidation(mvcConfig=>mvcConfig.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddControllers();
