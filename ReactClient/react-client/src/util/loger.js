@@ -1,9 +1,9 @@
-export function logger(state) {
-    return function (next) {
-        return function (action) {
-            console.log("State", state.getState());
-            console.log("Action", action);
-            return next(action);
-        }
-    }
+export default function logger(state) {
+  return (next) => (action) => {
+    // eslint-disable-next-line no-console
+    console.log('State', state.getState());
+    // eslint-disable-next-line no-console
+    console.log('Action', action);
+    return next(action);
+  };
 }
