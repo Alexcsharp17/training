@@ -1,18 +1,19 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import EntityTableItem from '../entitiesTable/EntityTableItem.js'
+import  EntityTableItem  from '../entitiesTable/EntityTableItem.jsx'
 import { getPersonsAction, getPersonsCountAction } from '../../redux/actions.js'
 import { connect } from 'react-redux';
-import { countPages } from '../../util/PaginationHelper.js'
-import { defValueChecker } from '../../util/SortingHelper.js'
+import  countPages  from '../../util/PaginationHelper.js'
+import  defValueChecker  from "../../util/SortingHelper.js"
 
 class PersonsList extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.props=props;
     this.state = { CurrentPage: 1, CurerentSort: "@PersonID" }
   }
 
-  sortData = (page, sort) => {
+  sortData=(page, sort)=>{
     const { selectPage, selectSort } =
       defValueChecker(page, sort, this.props.Pagination.CurrentPage, this.props.Pagination.CurrentSort);
     this.props.dispatch(getPersonsAction(selectPage, selectSort))
@@ -43,8 +44,8 @@ class PersonsList extends React.Component {
     }
     else {
       return (
-        <div class="spinner-border" role="status">
-          <span class="sr-only">Loading...</span>
+        <div className="spinner-border" role="status">
+          <span className="sr-only">Loading...</span>
         </div>
       );
     }

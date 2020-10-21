@@ -8,8 +8,8 @@ import { createBrowserHistory } from 'history'
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import { rootReducer } from './redux/rootReducer.js'
-import { logger } from './util/loger.js'
+import  rootReducer  from './redux/rootReducer.js'
+import  logger  from './util/loger.js'
 
 const historyr = createBrowserHistory()
 const store = createStore(rootReducer, applyMiddleware(thunk, logger));

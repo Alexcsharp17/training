@@ -42,8 +42,8 @@ namespace CarStore.WEB
             services.AddScoped(typeof(IMapper<Person>), typeof(PersonMapper));
             services.AddScoped(typeof(IMapper<Order>), typeof(OrderMapper));
             services.AddScoped<ICommandBuilder, SqlCommandBuild>();
-            services.AddScoped(typeof(IProcedures<Order>), typeof(OrderProceduresNames));
-            services.AddScoped(typeof(IProcedures<Person>), typeof(PersonProceduresNames));
+            services.AddScoped(typeof(IProceduresNames<Order>), typeof(OrderProceduresNames));
+            services.AddScoped(typeof(IProceduresNames<Person>), typeof(PersonProceduresNames));
             services.AddScoped<DbConnection>(sp => new SqlConnection(connection));
             services.AddMvc().AddFluentValidation(mvcConfig=>mvcConfig.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddControllers();
