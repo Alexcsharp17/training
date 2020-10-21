@@ -5,22 +5,23 @@ using System.Text;
 
 namespace CarStore.DAL.Procedures
 {
-    public class PersonProceduresNames : IProcedures<Person>
+    public class PersonProceduresNames : IProceduresNames<Person>
     {
-        private const string sp_InsertPerson = "sp_InsertPerson";
-        private const string sp_UpdatePerson = "sp_UpdatePerson";
-        private const string sp_DeletePerson = "sp_DeletePerson";
-        private const string sp_GetPerson = "sp_GetPerson";
-        private const string sp_GetPersons = "sp_GetPersons";
-        private const string sp_FindPersons = "sp_FindPersons";
-        private const string sp_GetPersonsCount = "sp_GetPersonsCount";
-        public string Insert => sp_InsertPerson;
-        public string Update => sp_UpdatePerson;
-        public string Delete => sp_DeletePerson;
-        public string Get => sp_GetPerson;
-        public string GetEntities => sp_GetPersons;
-        public string Find => sp_FindPersons;
-        public string Count => sp_GetPersonsCount;
+        private const string SP_INSERT_PERSON = "sp_InsertPerson";
+        private const string SP_UPDATE_PERSON = "sp_UpdatePerson";
+        private const string SP_DELETE_PERSON = "sp_DeletePerson";
+        private const string SP_GET_PERSON = "sp_GetPerson";
+        private const string SP_GET_PERSONS = "sp_GetPersons";
+        private const string SP_FIND_PERSONS = "sp_FindPersons";
+        private const string SP_GET_PERSONS_COUNT = "sp_GetPersonsCount";
+
+        public string Insert => SP_INSERT_PERSON;
+        public string Update => SP_UPDATE_PERSON;
+        public string Delete => SP_DELETE_PERSON;
+        public string Get => SP_GET_PERSON;
+        public string GetEntities => SP_GET_PERSONS;
+        public string Find => SP_FIND_PERSONS;
+        public string Count => SP_GET_PERSONS_COUNT;
 
     }
 }

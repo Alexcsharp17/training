@@ -15,8 +15,8 @@ namespace CarStore.DAL.Repositories
     {
         private IMapper<T> mapper;
         private ICommandBuilder comandbuilder;
-        private IProcedures<T> procedures;
-        public Repository(ICommandBuilder comandbuilder, IMapper<T> mapper, IProcedures<T> procedures)
+        private IProceduresNames<T> procedures;
+        public Repository(ICommandBuilder comandbuilder, IMapper<T> mapper, IProceduresNames<T> procedures)
         {
             this.comandbuilder = comandbuilder;
             this.mapper = mapper;

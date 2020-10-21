@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CarStore.DAL.Procedures
 {
-    public interface IProcedures<T>
+    public interface IProceduresNames<T>
     {
         string Insert { get; }
         string Get { get; }
