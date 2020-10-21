@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
-import { DatePicker } from 'react-datepicker';
+import  DatePicker  from 'react-datepicker';
 import carsJson from '../../cars.json';
 import CreateErrorSection from '../../util/ErrorSectionBuilder';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -21,7 +21,7 @@ class EditOrderItem extends React.Component {
     };
   }
 
-  validate() {
+  validate=()=> {
     let CarIDError = '';
     let PersonIDError = '';
     let OrderDateError = '';
@@ -38,14 +38,14 @@ class EditOrderItem extends React.Component {
     }
     console.log(PersonIDError, CarIDError, OrderDateError);
     if (PersonIDError || CarIDError || OrderDateError) {
-    //   this.setState({ CarIDError, PersonIDError, OrderDateError });
+      this.setState({ CarIDError, PersonIDError, OrderDateError });
       return false;
     }
 
     return true;
   }
 
-  PostForm(e) {
+  PostForm=(e)=> {
     e.preventDefault();
     const isValid = this.validate();
 
@@ -65,9 +65,10 @@ class EditOrderItem extends React.Component {
     if (!this.props.Persons && this.props.CurrentPerson && this.props.CurrentOrder) {
       this.props.dispatch(findPersonsAction(this.state.CurrentName));
     }
-
     const { errors } = this.state;
     if (this.props.Persons && this.props.CurrentPerson && this.props.CurrentOrder) {
+      console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
       return (
         <div className="mt-2 row">
           <div className="col-2 offset-5 card border-rounded p-2">
@@ -127,6 +128,7 @@ class EditOrderItem extends React.Component {
                     {
                       this.props.Persons.map((person) => (
                         <button
+                          key={person.personID}
                           type="button"
                           value={person.personID}
                           className="btn d-block btn-secondary w-100"
@@ -163,7 +165,7 @@ class EditOrderItem extends React.Component {
                         if (car.Id === this.props.CurrentOrder.carID) {
                           return (<option selected="selected" value={car.Id}>{car.Name}</option>);
                         }
-                        return (<option value={car.Id}>{car.Name}</option>);
+                        return (<option key={car.Id} value={car.Id}>{car.Name}</option>);
                       })
                     }
                   </select>
@@ -182,7 +184,6 @@ class EditOrderItem extends React.Component {
                     className="form-control"
                   />
                 </div>
-
                 <button onClick={this.PostForm} className="btn btn-outline-primary" type="submit">Send</button>
               </form>
             </div>
@@ -190,7 +191,6 @@ class EditOrderItem extends React.Component {
         </div>
       );
     }
-
     return (<div>Loading...</div>);
   }
 }

@@ -7,6 +7,7 @@ export default class TableBody extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
+    this.state={IdError:''}
   }
 
   render() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import { CreateTableHead } from '../../util/TableBuiler.jsx';
+import CreateTableHead from '../../util/TableBuiler';
 
 export default class TableHead extends React.Component {
   render() {

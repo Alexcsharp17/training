@@ -1,30 +1,27 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es6": true
     },
     "extends": [
-        "plugin:react/recommended",
-        "airbnb"
+        "eslint:recommended",
+        "plugin:react/recommended"
     ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
         },
-        "ecmaVersion": 12,
+        "ecmaVersion": 2018,
         "sourceType": "module"
     },
     "plugins": [
         "react"
     ],
     "rules": {
-        "linebreak-style": 0,
-        "react/prefer-stateless-function":0,
-        "react/destructuring-assignment":0,
-        "react/prop-types": 0,
-        "import/no-named-as-default": 0,
-        "no-param-reassign":0,
-        "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
-        "no-restricted-properties":0
+        "react/prop-types": 0
     }
 }

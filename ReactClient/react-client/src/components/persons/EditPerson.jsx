@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { connect } from 'react-redux';
 import { addPersonAction, getPersonAction, setCurrentPerson } from '../../redux/actions';
 
-class editPersonItem extends React.Component {
+class EditPersonItem extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
@@ -12,7 +12,7 @@ class editPersonItem extends React.Component {
     };
   }
 
-  validate() {
+  validate=()=> {
     let FirstNameError = '';
     const LastNameError = '';
     let PhoneError = '';
@@ -37,7 +37,7 @@ class editPersonItem extends React.Component {
     return true;
   }
 
-  PostForm(e) {
+  PostForm=(e)=> {
     e.preventDefault();
     const isValid = this.validate();
     if (isValid) {
@@ -46,6 +46,7 @@ class editPersonItem extends React.Component {
   }
 
   render() {
+    
     const { errors } = this.state;
     console.log('CurrentPers', this.props.CurrentPerson);
     if (!this.props.CurrentPerson) {
@@ -61,9 +62,9 @@ class editPersonItem extends React.Component {
                 <div>
                   {
                     Object.keys(errors).map((key) => (
-                      <div>
+                      <div key={key}>
                         {
-                          errors[key].map((e) => (<p className="text-danger">{e}</p>))
+                          errors[key].map((e) => (<p key={key} className="text-danger">{e}</p>))
                         }
                       </div>
                     ))
@@ -157,7 +158,6 @@ class editPersonItem extends React.Component {
         </div>
       );
     }
-
     return (<div>Loading...</div>);
   }
 }
@@ -166,4 +166,4 @@ const mapStateToProps = (state) => ({
   CurrentPerson: state.CurrentPerson,
 });
 
-export default connect(mapStateToProps)(editPersonItem);
+export default connect(mapStateToProps)(EditPersonItem);

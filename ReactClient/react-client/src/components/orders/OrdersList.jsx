@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import EntityTableItem from '../entitiesTable/EntityTableItem';
 import { getOrdersAction, getOrdersCountAction } from '../../redux/actions';
 import countPages from '../../util/PaginationHelper';
-import { defValueChecker } from '../../util/SortingHelper';
+import  defValueChecker  from '../../util/SortingHelper';
 
 class OrdersList extends React.Component {
   constructor() {
@@ -12,13 +12,13 @@ class OrdersList extends React.Component {
     this.state = { CurrentPage: 1, CurerentSort: '@PersonID' };
   }
 
-  sortData(page, sort) {
+  sortData=(page, sort)=> {
     const { selectPage, selectSort } = defValueChecker(page, sort,
       this.props.Pagination.CurrentPage, this.props.Pagination.CurrentSort);
     this.props.dispatch(getOrdersAction(selectPage, selectSort));
   }
 
-  render() {
+  render(){
     const fields = ['OrderID', 'OrderDate', 'CarID', 'PersonID'];
     if (!this.props.ItemsCount) {
       this.props.dispatch(getOrdersCountAction());
