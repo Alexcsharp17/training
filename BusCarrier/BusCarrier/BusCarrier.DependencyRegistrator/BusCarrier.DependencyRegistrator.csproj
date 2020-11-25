@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BusCarrier.BLL\BusCarrier.BLL.csproj" />
+    <ProjectReference Include="..\BusCarrier.DAL\BusCarrier.DAL.csproj" />
+    <ProjectReference Include="..\BusCarrier.Domain\BusCarrier.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
