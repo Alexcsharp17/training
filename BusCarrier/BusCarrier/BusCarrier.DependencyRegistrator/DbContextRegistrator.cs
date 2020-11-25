@@ -11,7 +11,7 @@ namespace BusCarrier.DependencyRegistrator
             services.AddScoped<DbContext, ApplicationContext>();
 
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseNpgsql("Host=localhost;Port=5432;Database=BusCarrier;Username=postgres;Password=password"));
+                options.UseNpgsql(connection));
         }
     }
 }
