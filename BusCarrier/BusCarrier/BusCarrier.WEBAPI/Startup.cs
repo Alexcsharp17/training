@@ -39,7 +39,7 @@ namespace BusCarrier.WEBAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors("AllowAnyOrigin");
             app.UseHttpsRedirection();
 
             app.UseRouting();
