@@ -10,6 +10,7 @@ namespace BusCarrier.DAL.Data
         public DbSet<Route> Routes { get; set; }
         public DbSet<RouteTemplate> RouteTemplates { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<ServiceTemplate> ServiceTemplates { get; set; }
         public DbSet<Station> Stations { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)

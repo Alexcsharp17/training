@@ -61,9 +61,14 @@ namespace BusCarrier.DAL.Repositories
             }
         }
 
+        public async Task<List<T>> GetAll()
+        {
+           return  await this.set.ToListAsync();
+        }
+
         public void Dispose()
         {
-            this.context.Dispose();
+            //this.context.Dispose();
         }
     }
 }

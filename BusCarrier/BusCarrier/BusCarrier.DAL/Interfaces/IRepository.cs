@@ -21,5 +21,6 @@ namespace BusCarrier.DAL.Interfaces
         void Update(T entity);
 
         Task<int> SaveAsync();
+        Task<List<T>> GetAll();
     }
 }

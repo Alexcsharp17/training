@@ -63,18 +63,17 @@ namespace BusCarrier.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Services",
+                name: "ServiceTemplates",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Image = table.Column<string>(type: "text", nullable: true)
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Services", x => x.Id);
+                    table.PrimaryKey("PK_ServiceTemplates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -232,6 +231,25 @@ namespace BusCarrier.DAL.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Services",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ServiceTemplateId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Services", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Services_ServiceTemplates_ServiceTemplateId",
+                        column: x => x.ServiceTemplateId,
+                        principalTable: "ServiceTemplates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -275,6 +293,11 @@ namespace BusCarrier.DAL.Migrations
                 column: "RouteTemplateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Services_ServiceTemplateId",
+                table: "Services",
+                column: "ServiceTemplateId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Stations_RouteTemplateId",
                 table: "Stations",
                 column: "RouteTemplateId");
@@ -316,6 +339,9 @@ namespace BusCarrier.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "ServiceTemplates");
 
             migrationBuilder.DropTable(
                 name: "RouteTemplates");

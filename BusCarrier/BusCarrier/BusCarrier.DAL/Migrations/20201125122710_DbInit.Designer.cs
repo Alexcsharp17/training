@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BusCarrier.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20201125083326_DbInit")]
+    [Migration("20201125122710_DbInit")]
     partial class DbInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,10 +66,24 @@ namespace BusCarrier.DAL.Migrations
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
+                    b.Property<int>("ServiceTemplateId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Image")
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceTemplateId");
+
+                    b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("BusCarrier.Domain.Entities.ServiceTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("Description")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -77,7 +91,7 @@ namespace BusCarrier.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services");
+                    b.ToTable("ServiceTemplates");
                 });
 
             modelBuilder.Entity("BusCarrier.Domain.Entities.Station", b =>
@@ -312,6 +326,17 @@ namespace BusCarrier.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("RouteTemplate");
+                });
+
+            modelBuilder.Entity("BusCarrier.Domain.Entities.Service", b =>
+                {
+                    b.HasOne("BusCarrier.Domain.Entities.ServiceTemplate", "ServiceTemplate")
+                        .WithMany()
+                        .HasForeignKey("ServiceTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ServiceTemplate");
                 });
 
             modelBuilder.Entity("BusCarrier.Domain.Entities.Station", b =>
