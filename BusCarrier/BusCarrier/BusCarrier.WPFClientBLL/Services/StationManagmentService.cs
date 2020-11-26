@@ -7,10 +7,10 @@ namespace BusCarrier.WPFClientBLL.Services
 {
     public class StationManagmentService
     {
-        private IBusCarrierWebApiClient webApiClient;
-        public StationManagmentService(IBusCarrierWebApiClient webApiClient)
+        private IStationsWebApiClient stationsWebApiClient;
+        public StationManagmentService(IStationsWebApiClient stationsWebApiClient)
         {
-            this.webApiClient = webApiClient;
+            this.stationsWebApiClient=stationsWebApiClient;
         }
     }
 }

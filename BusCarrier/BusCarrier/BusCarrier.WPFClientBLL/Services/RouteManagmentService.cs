@@ -7,10 +7,10 @@ namespace BusCarrier.WPFClientBLL.Services
 {
     public class RouteManagmentService
     {
-        private IBusCarrierWebApiClient webApiClient;
-        public RouteManagmentService(IBusCarrierWebApiClient webApiClient)
+        private IRoutesWebApiClient routesWebApiClient;
+        public RouteManagmentService(IRoutesWebApiClient routesWebApiClient)
         {
-            this.webApiClient = webApiClient;
+            this.routesWebApiClient = routesWebApiClient;
         }
     }
 }

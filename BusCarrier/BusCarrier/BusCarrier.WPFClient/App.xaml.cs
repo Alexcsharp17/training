@@ -28,6 +28,7 @@ namespace BusCarrier.WPFClient
                 })
                 .Build();
         }
+
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<WebApisModel>(sp => new WebApisModel
@@ -41,11 +42,13 @@ namespace BusCarrier.WPFClient
             services.AddScoped<MainViewModel>();
             services.AddScoped<MainWindow>();
         }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             var locator = (ViewModelLocator)Current.Resources["Locator"];
             locator.SetUp(host.Services.GetRequiredService<MainViewModel>());
         }
+
         protected override void OnExit(ExitEventArgs e)
         {
             host.Dispose();
