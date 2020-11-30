@@ -19,7 +19,7 @@ namespace BusCarrier.WEBAPI.Controllers
         {
             this.routeService = routeService;
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetRoute([FromQuery] int id)
         {
             try
@@ -31,7 +31,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetRoutes()
         {
             try
@@ -44,7 +44,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> AddRoute([FromBody] Route route)
         {
             try
@@ -58,7 +58,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("[action]")]
         public async Task<IActionResult> UpdateRoute([FromBody] Route route)
         {
             try
@@ -71,7 +71,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete]
+        [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteRoute([FromQuery] int id)
         {
             try
@@ -84,7 +84,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetRouteTemplate([FromQuery] int id)
         {
             try
@@ -96,7 +96,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetRouteTemplates()
         {
             try
@@ -109,7 +109,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> AddRouteTemplate([FromBody] RouteTemplate routeTemplate)
         {
             try
@@ -123,7 +123,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("[action]")]
         public async Task<IActionResult> UpdateRouteTemplate([FromBody] RouteTemplate routeTemplate)
         {
             try
@@ -136,7 +136,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete]
+        [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteRouteTemplate([FromQuery] int id)
         {
             try

@@ -21,4 +21,8 @@
     <ProjectReference Include="..\BusCarrier.Domain\BusCarrier.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="EntitiesConfiguration\" />
+  </ItemGroup>
+
 </Project>

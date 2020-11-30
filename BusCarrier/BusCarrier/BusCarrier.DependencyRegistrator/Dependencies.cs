@@ -2,6 +2,8 @@
 using BusCarrier.BLL.Services;
 using BusCarrier.DAL.Interfaces;
 using BusCarrier.DAL.Repositories;
+using BusCarrier.Util.Config;
+using BusCarrier.Util.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -18,6 +20,10 @@ namespace BusCarrier.DependencyRegistrator
             services.AddScoped<IStationRepository, StationRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<IStationService, StationService>();
+
+            services.AddScoped<IMailSender, MailSender>();
+            services.AddScoped<IMessageService, MessageService>();
+
         }
     }
 }

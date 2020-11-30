@@ -1,4 +1,5 @@
 ﻿using BusCarrier.DAL.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,9 @@ namespace BusCarrier.DependencyRegistrator
 
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseNpgsql(connection));
+            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
         }
     }
 }

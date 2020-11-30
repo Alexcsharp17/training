@@ -2,11 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusCarrier.DAL.Data;
 using BusCarrier.DependencyRegistrator;
+using BusCarrier.Util.Config;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,6 +21,7 @@ namespace BusCarrier.WEBAPI
 {
     public class Startup
     {
+        private const string GMAIL = "Gmail";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,7 +34,20 @@ namespace BusCarrier.WEBAPI
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             DbContextRegistrator.AddDbContext(services, connection);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    //options.Authority = SelfOriginUrl;
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters.ValidateAudience = false;
+                });
+
+            services.AddAuthorization();
+            services.Configure<EmailConfig>(options =>
+                Configuration.GetSection(GMAIL).Bind(options));
+            
             Dependencies.InjectDependencies(services, Configuration);
+            
             services.AddControllers();
         }
 
@@ -51,7 +70,7 @@ namespace BusCarrier.WEBAPI
                 endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "api/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

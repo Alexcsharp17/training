@@ -18,5 +18,17 @@ namespace BusCarrier.DAL.Data
             Database.EnsureCreated();
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<IdentityRole<int>>().HasData(
+                new IdentityRole<int>[]
+                {
+                    new IdentityRole<int>() {Id= 1,Name="Admin"},
+                    new IdentityRole<int>() {Id= 2,Name="User"},
+                    new IdentityRole<int>() {Id= 3,Name="Manager"}
+                });
+        }
+
     }
 }

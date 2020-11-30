@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BusCarrier.WEBAPI.Controllers
 {
-    public class UserController : Controller
+    public class ManageAccountController : Controller
     {
 
     }

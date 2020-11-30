@@ -19,7 +19,7 @@ namespace BusCarrier.WEBAPI.Controllers
         {
             this.stationService = stationService;
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetStation([FromQuery]int id)
         {
             try
@@ -31,7 +31,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetStations()
         {
             try
@@ -44,7 +44,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> AddStation([FromBody]Station station)
         {
             try
@@ -58,7 +58,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("[action]")]
         public async Task<IActionResult> UpdateStation([FromBody] Station station)
         {
             try
@@ -71,7 +71,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete]
+        [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteStation([FromQuery] int id)
         {
             try
@@ -85,7 +85,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetService([FromQuery] int id)
         {
             try
@@ -97,7 +97,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetServices()
         {
             try
@@ -110,7 +110,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> AddService([FromBody] Service service)
         {
             try
@@ -124,7 +124,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("[action]")]
         public async Task<IActionResult> UpdateService([FromBody] Service service)
         {
             try
@@ -137,7 +137,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete]
+        [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteService([FromQuery] int id)
         {
             try
@@ -150,7 +150,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetServiceTemplate([FromQuery] int id)
         {
             try
@@ -162,7 +162,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetServiceTemplates()
         {
             try
@@ -175,7 +175,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> AddServiceTemplate([FromBody] ServiceTemplate serviceTemplate)
         {
             try
@@ -189,7 +189,7 @@ namespace BusCarrier.WEBAPI.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("[action]")]
         public async Task<IActionResult> UpdateServiceTemplate([FromBody] ServiceTemplate serviceTemplate)
         {
             try
@@ -202,7 +202,7 @@ namespace BusCarrier.WEBAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete]
+        [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteServiceTemplate([FromQuery] int id)
         {
             try

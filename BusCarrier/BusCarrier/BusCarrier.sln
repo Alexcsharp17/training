@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusCarrier.DependencyRegist
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusCarrier.Domain", "BusCarrier.Domain\BusCarrier.Domain.csproj", "{776DE001-D480-4AF8-A491-204F092B1FEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusCarrier.WPFClient", "BusCarrier.WPFClient\BusCarrier.WPFClient.csproj", "{F65F5483-F915-4BC1-84AB-F19DCEE43C0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusCarrier.WPFClient", "BusCarrier.WPFClient\BusCarrier.WPFClient.csproj", "{F65F5483-F915-4BC1-84AB-F19DCEE43C0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusCarrier.WPFClientBLL", "BusCarrier.WPFClientBLL\BusCarrier.WPFClientBLL.csproj", "{275AED98-0877-47DC-A8A7-4F1C41568058}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusCarrier.WPFClientBLL", "BusCarrier.WPFClientBLL\BusCarrier.WPFClientBLL.csproj", "{275AED98-0877-47DC-A8A7-4F1C41568058}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusCarrier.Util", "BusCarrier.Util\BusCarrier.Util.csproj", "{7F9E2D20-1A66-40D9-8646-DF4D3D18EC08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{275AED98-0877-47DC-A8A7-4F1C41568058}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{275AED98-0877-47DC-A8A7-4F1C41568058}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{275AED98-0877-47DC-A8A7-4F1C41568058}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F9E2D20-1A66-40D9-8646-DF4D3D18EC08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F9E2D20-1A66-40D9-8646-DF4D3D18EC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F9E2D20-1A66-40D9-8646-DF4D3D18EC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F9E2D20-1A66-40D9-8646-DF4D3D18EC08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
