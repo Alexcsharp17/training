@@ -15,11 +15,12 @@ namespace BusCarrier.WPFClient.Views
     /// <summary>
     /// Interaction logic for RoutesView.xaml
     /// </summary>
-    public partial class RoutesView : Window
+    public partial class RoutesView : UserControl
     {
         public RoutesView()
         {
             InitializeComponent();
+            WebBrowser.Navigate("D:\\test2.html");
         }
     }
 }

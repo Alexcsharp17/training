@@ -3,10 +3,60 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BusCarrier.WPFClient"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:local="clr-namespace:BusCarrier.WPFClient" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        DataContext="{Binding MainViewModel,
+                              Source={StaticResource Locator}}"
+        mc:Ignorable="d" Height="600" Width="1024" ResizeMode="NoResize" WindowStyle="None">
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2" Style="{StaticResource MainContainer}" >
+            <StackPanel Style="{StaticResource ButtonsSection}">
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"  Width="25" Height="25" Background="{x:Null}">
+                    <materialDesign:PackIcon  Kind="Account" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White"/>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"  Width="25" Height="25" Background="{x:Null}">
+                    <materialDesign:PackIcon  Kind="Bell" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White"/>
+                </Button>
+                <Button x:Name="closeButton" Style="{StaticResource MaterialDesignFloatingActionMiniButton}"  Width="25" Height="25" Background="{x:Null}"  Click="closeButton_Click">
+                    <materialDesign:PackIcon  Kind="Power" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White" />
+                </Button>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1" Style="{StaticResource SidebarContainer}">
+            <StackPanel Style="{StaticResource SideBarTabContainer}" >
+                <Button Style="{StaticResource SideBarButton}" Command="{Binding DashboardViewCommand}">
+                    <StackPanel Style="{StaticResource SideBarTab}">
+                        <materialDesign:PackIcon Kind="ViewDashboard" />
+                        <TextBlock Text="Dashboard" Style="{StaticResource SideBarTabText}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SideBarTabContainer}" >
+                <Button Style="{StaticResource SideBarButton}" Command="{Binding RoutesViewCommand}">
+                    <StackPanel Style="{StaticResource SideBarTab}">
+                        <materialDesign:PackIcon Kind="TruckDelivery" />
+                        <TextBlock Text="Routes" Style="{StaticResource SideBarTabText}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SideBarTabContainer}" >
+                <Button Style="{StaticResource SideBarButton}" Command="{Binding StationsViewCommand}">
+                    <StackPanel Style="{StaticResource SideBarTab}">
+                        <materialDesign:PackIcon Kind="BusStop" />
+                        <TextBlock Text="Stations" Style="{StaticResource SideBarTabText}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <ContentControl Content="{Binding CurrentViewModel}" />
+        </StackPanel>
     </Grid>
 </Window>

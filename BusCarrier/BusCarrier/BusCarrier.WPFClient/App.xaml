@@ -3,13 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:BusCarrier.WPFClient.ViewModels"
              xmlns:lc ="clr-namespace:BusCarrier.WPFClient"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:BusCarrier.WPFClient"
              xmlns:views="clr-namespace:BusCarrier.WPFClient.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary >
             <ResourceDictionary.MergedDictionaries>
-                
+                <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary   Source="ResourceDictionaries/Styles/HeaderStyles.xaml" />
+                <ResourceDictionary   Source="ResourceDictionaries/Styles/SidebarStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
                 <views:DashboardView />

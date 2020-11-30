@@ -16,11 +16,19 @@ namespace BusCarrier.WPFClient.Views
     /// <summary>
     /// Interaction logic for StationsView.xaml
     /// </summary>
-    public partial class StationsView : Page
+    public partial class StationsView : UserControl
     {
         public StationsView()
         {
             InitializeComponent();
+            var window = new Window()
+            {
+                Content = new WebBrowser { Source = new Uri("D:\\test2.html") },
+                Width = 700,
+                Height = 500
+            };
+            
+            window.Show();
         }
     }
 }

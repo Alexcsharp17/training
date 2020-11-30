@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    >
+    
+    <Style x:Key="MainContainer">
+        <Setter Property="Grid.Background" Value="#FF8522BD" />
+    </Style>
+    <Style x:Key="ButtonsSection" >
+        <Setter Property="StackPanel.Orientation" Value="Horizontal"/>
+        <Setter Property="StackPanel.HorizontalAlignment" Value="Right" />
+    </Style>
+    <Style x:Key="AppControlButtons">
+        <Setter Property="Button.Height"  Value="25"/>
+        <Setter Property="Button.Width" Value="25" />
+        <Setter Property="Button.Background" Value="{x:Null}"/>
+    </Style>
+
+</ResourceDictionary>
