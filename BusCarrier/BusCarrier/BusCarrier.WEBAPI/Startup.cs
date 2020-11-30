@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BusCarrier.DAL.Data;
 using BusCarrier.DependencyRegistrator;
 using BusCarrier.Util.Config;
+using BusCarrier.WEBAPI.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,12 +17,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BusCarrier.WEBAPI
 {
     public class Startup
     {
         private const string GMAIL = "Gmail";
+        private const string SelfOriginUrl = "https://localhost:44304";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,9 +40,30 @@ namespace BusCarrier.WEBAPI
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    //options.Authority = SelfOriginUrl;
+                    options.Authority = SelfOriginUrl;
                     options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters.ValidateAudience = false;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        // sets nessesety of issuer validation
+                        ValidateIssuer = true,
+
+                        // string sets valid issuer
+                        ValidIssuer = AuthOptions.ISSUER,
+
+                        // sets nessesety of token audience validation
+                        ValidateAudience = true,
+
+                        // sets valid audience
+                        ValidAudience = AuthOptions.AUDIENCE,
+
+                        // будет ли валидироваться время существования
+                        ValidateLifetime = true,
+
+                        // sets security key
+                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        // sets nesseseti of security key validation
+                        ValidateIssuerSigningKey = true,
+                    };
                 });
 
             services.AddAuthorization();
