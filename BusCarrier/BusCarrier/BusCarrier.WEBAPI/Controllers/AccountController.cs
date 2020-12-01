@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusCarrier.BLL.Interfaces;
+using BusCarrier.WEBAPI.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -30,23 +31,22 @@ namespace BusCarrier.WEBAPI.Controllers
         }
         [HttpGet("[action]")]
         public async Task<IActionResult> AddUser([FromBody] IdentityUser<int> user,string password)
-        { 
+        {  
             var res = await userManager.CreateAsync(user,password);
-           try
-           {
-               await messageService.RegisterEmailConfirm(user, Url, HttpContext, "PleaseConfirmEmail", "ConfirmEmail");
-               if (res.Succeeded)
-               {
-                   await messageService.RegisterEmailConfirm(user, Url, HttpContext, "PleaseConfirmEmail", "ConfirmEmail");
-                   return Ok(res);
-               }
-               throw new Exception(res.ToString());
+            try
+            {
+                if (res.Succeeded)
+                {
+                    await messageService.RegisterEmailConfirm(user, Url, HttpContext, EmailContent.SUBJECT , EmailContent.TEXT);
+                    return Ok(res);
+                }
+                throw new Exception(res.ToString());
 
             }
-           catch (Exception e)
-           {
-               return BadRequest(e.Message);
-           }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
            
         }
         [HttpDelete("[action]")]
