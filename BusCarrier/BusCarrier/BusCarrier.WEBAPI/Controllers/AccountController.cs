@@ -28,10 +28,10 @@ namespace BusCarrier.WEBAPI.Controllers
             this.signInManager = signInManager;
             this.messageService = messageService;
         }
-        [HttpPost("[action]")]
-        public async Task<IActionResult> AddUser([FromQuery] IdentityUser<int> user)
-        {
-           var res = await userManager.CreateAsync(user);
+        [HttpGet("[action]")]
+        public async Task<IActionResult> AddUser([FromBody] IdentityUser<int> user,string password)
+        { 
+            var res = await userManager.CreateAsync(user,password);
            try
            {
                await messageService.RegisterEmailConfirm(user, Url, HttpContext, "PleaseConfirmEmail", "ConfirmEmail");
@@ -151,9 +151,7 @@ namespace BusCarrier.WEBAPI.Controllers
             {
                 await signInManager.SignInAsync(user, false);
             }
-
             return Ok();
         }
-
     }
 }

@@ -9,8 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BusCarrier.WEBAPI.Controllers
 {
-    [Route("api/[controller]")]
+    
     [ApiController]
+    [Route("api/[controller]")]
     [AllowAnonymous]
     public class StationController : Controller
     {
