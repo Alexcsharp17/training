@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.WebApi", "AuthServer.WebApi\AuthServer.WebApi.csproj", "{87BFC1B8-76D7-4057-8C02-AE3669B92DC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer.WebApi", "AuthServer.WebApi\AuthServer.WebApi.csproj", "{87BFC1B8-76D7-4057-8C02-AE3669B92DC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.BLL", "AuthServer.BLL\AuthServer.BLL.csproj", "{4D688E45-0CAE-471C-89A5-12996E3DCC8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer.BLL", "AuthServer.BLL\AuthServer.BLL.csproj", "{4D688E45-0CAE-471C-89A5-12996E3DCC8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.DAL", "AuthServer.DAL\AuthServer.DAL.csproj", "{936712CF-969C-4707-B07C-26D95930FC9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer.DAL", "AuthServer.DAL\AuthServer.DAL.csproj", "{936712CF-969C-4707-B07C-26D95930FC9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.DependencyRegistrator", "AuthServer.DependencyRegistrator\AuthServer.DependencyRegistrator.csproj", "{E0D324BD-3042-4687-AD7B-FDFFE34C7F59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer.DependencyRegistrator", "AuthServer.DependencyRegistrator\AuthServer.DependencyRegistrator.csproj", "{E0D324BD-3042-4687-AD7B-FDFFE34C7F59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServer.Util", "AuthServer.Util\AuthServer.Util.csproj", "{8250AEE7-FF06-463C-B684-AE5037F6F486}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E0D324BD-3042-4687-AD7B-FDFFE34C7F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0D324BD-3042-4687-AD7B-FDFFE34C7F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0D324BD-3042-4687-AD7B-FDFFE34C7F59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8250AEE7-FF06-463C-B684-AE5037F6F486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8250AEE7-FF06-463C-B684-AE5037F6F486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8250AEE7-FF06-463C-B684-AE5037F6F486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8250AEE7-FF06-463C-B684-AE5037F6F486}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
