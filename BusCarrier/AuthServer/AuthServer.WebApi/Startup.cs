@@ -15,6 +15,7 @@ using AuthServer.DAL.Data;
 using AuthServer.DependencyRegistrator;
 using AuthServer.Util.Config;
 using AuthServer.WebApi.Mapper;
+using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -96,7 +97,10 @@ namespace AuthServer.WebApi
             {
                 config.UserInteraction.LoginUrl = LoginPagePath;
                 config.UserInteraction.LogoutUrl = LogoutPagePath;
-            });
+            })
+                .AddInMemoryCaching()
+                .AddClientStore<InMemoryClientStore>()
+                .AddResourceStore<InMemoryResourcesStore>();
 
         }
 
